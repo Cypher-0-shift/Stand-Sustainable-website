@@ -440,12 +440,22 @@ export default function StoryPage() {
             <span className="text-label-caps block text-center mb-10" style={{ color: 'var(--color-stone)' }}>
               {partnerStrip.label}
             </span>
-            <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-80 hover:opacity-100 transition-opacity duration-500 grayscale hover:grayscale-0">
-              {partnerStrip.partners.map((partner, index) => (
-                <div key={index} className="text-body-lg font-serif italic" style={{ color: 'var(--color-primary)' }}>
-                  {partner.name}
-                </div>
-              ))}
+            <div className="overflow-hidden w-full relative">
+              {/* Adding fade gradients on edges for a better marquee effect */}
+              <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-[var(--color-surface)] to-transparent z-10"></div>
+              <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-[var(--color-surface)] to-transparent z-10"></div>
+              
+              <div className="animate-marquee flex items-center gap-16 md:gap-24">
+                {[...partnerStrip.partners, ...partnerStrip.partners].map((partner, index) => (
+                  <div key={index} className="flex-shrink-0 flex items-center justify-center w-[160px] h-[80px]">
+                    <img 
+                      src={partner.logo} 
+                      alt={`${partner.name} Logo`} 
+                      className="max-w-full max-h-full object-contain transition-transform duration-300 hover:scale-110"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </FadeUp>
         </div>

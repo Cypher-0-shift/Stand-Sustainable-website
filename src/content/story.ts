@@ -74,13 +74,14 @@ export const sdgAlignment = {
 export const partnerStrip = {
   label: 'Trusted By',
   partners: [
-    { name: 'World Bank Group' },
-    { name: 'UNICEF' },
-    { name: 'The Rockefeller Foundation' },
-    { name: 'Gates Foundation' },
-    { name: 'USAID' },
-    { name: 'Global Environment Facility' },
-    { name: 'Ford Foundation' },
+    { name: 'Tata Group', logo: '/images/logos/tata.svg' },
+    { name: 'Reliance Industries', logo: '/images/logos/reliance.svg' },
+    { name: 'Mahindra', logo: '/images/logos/mahindra.svg' },
+    { name: 'Infosys', logo: '/images/logos/infosys.svg' },
+    { name: 'Wipro', logo: '/images/logos/wipro.svg' },
+    { name: 'ITC Limited', logo: '/images/logos/itc.svg' },
+    { name: 'HDFC Bank', logo: '/images/logos/hdfc.svg' },
+    { name: 'State Bank of India', logo: '/images/logos/sbi.svg' },
   ]
 };
 
