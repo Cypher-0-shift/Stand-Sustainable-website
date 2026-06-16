@@ -78,7 +78,7 @@ export default function TopNavBar() {
         <div className="hidden md:flex items-center gap-4">
           <Link
             href="/partner"
-            className="inline-flex items-center justify-center text-label-caps rounded-[6px] transition-colors duration-300 hover:opacity-90 border-2"
+            className="inline-flex items-center justify-center text-label-caps rounded-[6px] transition-colors duration-300 hover:opacity-90 border-2 whitespace-nowrap"
             style={{
               backgroundColor: 'transparent',
               color: isTransparent ? 'white' : 'var(--color-primary)',
@@ -86,7 +86,7 @@ export default function TopNavBar() {
               padding: '8px 18px', // Slightly less padding to account for border
             }}
           >
-            Partner
+            Partner With Us
           </Link>
           <Link
             href="/donate"
