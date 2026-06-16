@@ -6,6 +6,10 @@ export default function PartnerForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  const [selectedInterest, setSelectedInterest] = useState('CSR Implementation');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const interestOptions = ['CSR Implementation', 'Co-Funding', 'Knowledge Partnership', 'Other'];
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -56,20 +60,55 @@ export default function PartnerForm() {
           required
         />
       </div>
-      <div className="flex flex-col gap-2">
-        <label htmlFor="interest" className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
+      <div className="flex flex-col gap-2 relative">
+        <label className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
           Area of Interest
         </label>
-        <select
-          id="interest"
-          className="w-full bg-transparent border-b p-3 focus:outline-none transition-colors appearance-none cursor-pointer"
+        <div 
+          className="w-full bg-transparent border-b p-3 flex justify-between items-center cursor-pointer transition-colors"
           style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         >
-          <option>CSR Implementation</option>
-          <option>Co-Funding</option>
-          <option>Knowledge Partnership</option>
-          <option>Other</option>
-        </select>
+          <span>{selectedInterest}</span>
+          <span className="material-symbols-outlined transition-transform duration-200" style={{ transform: isDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+            expand_more
+          </span>
+        </div>
+        
+        {isDropdownOpen && (
+          <div 
+            className="absolute top-[100%] left-0 w-full z-10 mt-1 rounded-[6px] shadow-lg border overflow-hidden bg-white"
+            style={{ borderColor: 'var(--color-alabaster)' }}
+          >
+            {interestOptions.map((option) => (
+              <div
+                key={option}
+                className="p-4 cursor-pointer transition-colors"
+                style={{ 
+                  color: selectedInterest === option ? 'var(--color-primary)' : 'var(--color-on-surface-variant)',
+                  fontWeight: selectedInterest === option ? 600 : 400,
+                  backgroundColor: selectedInterest === option ? 'var(--color-surface)' : 'transparent'
+                }}
+                onClick={() => {
+                  setSelectedInterest(option);
+                  setIsDropdownOpen(false);
+                }}
+                onMouseEnter={(e) => {
+                  if (selectedInterest !== option) {
+                    e.currentTarget.style.backgroundColor = 'var(--color-surface-linen)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (selectedInterest !== option) {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                  }
+                }}
+              >
+                {option}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       <div className="flex flex-col gap-2">
         <label htmlFor="message" className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
