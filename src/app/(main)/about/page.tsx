@@ -21,45 +21,40 @@ export default function AboutPage() {
   return (
     <>
       {/* ====================================================
-          SECTION 1 — MISSION & VISION
-          Centered full-width editorial with background image at 10% opacity
+          SECTION 1 — MISSION & VISION (DARK HERO)
           ==================================================== */}
-      <section
-        className="relative py-16 md:py-24 px-6 md:px-16 overflow-hidden"
-        style={{
-          marginTop: 'var(--spacing-nav-height)',
-          backgroundColor: 'var(--color-surface)',
-        }}
-      >
-        {/* Background Image at 10% opacity */}
-        <div className="absolute inset-0 opacity-[0.06]">
+      <section className="relative pt-40 pb-24 md:pt-56 md:pb-32 px-6 md:px-16 overflow-hidden min-h-[60vh] flex items-center">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
           <Image
             src={missionSection.backgroundImage}
             alt=""
             fill
             className="object-cover"
-            aria-hidden="true"
+            priority
             unoptimized
           />
+          {/* Dark Overlay */}
+          <div className="absolute inset-0 bg-black/60 mix-blend-multiply"></div>
+          {/* Gradient overlay for smooth transition */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-surface)] via-transparent to-transparent"></div>
         </div>
 
-        <FadeUp className="relative z-10 max-w-3xl mx-auto text-center">
-          <h1
-            className="text-display-mobile md:text-display mb-8"
-            style={{
-              fontFamily: 'var(--font-display)',
-              color: 'var(--color-primary)',
-            }}
-          >
-            {missionSection.headline}
-          </h1>
-          <p
-            className="text-body-lg max-w-2xl mx-auto"
-            style={{ color: 'var(--color-stone)' }}
-          >
-            {missionSection.body}
-          </p>
-        </FadeUp>
+        <div className="relative z-10 max-w-3xl mx-auto text-center">
+          <FadeUp>
+            <h1
+              className="text-display-mobile md:text-display text-white mb-8"
+              style={{ fontFamily: 'var(--font-display)' }}
+            >
+              {missionSection.headline}
+            </h1>
+            <p
+              className="text-body-lg text-white/90 max-w-2xl mx-auto"
+            >
+              {missionSection.body}
+            </p>
+          </FadeUp>
+        </div>
       </section>
 
       {/* ====================================================
