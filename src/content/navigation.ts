@@ -12,7 +12,6 @@ export const siteConfig = {
 
 export const navItems: NavItem[] = [
   { label: 'About', href: '/about' },
-  { label: 'Programs', href: '/programs' },
   { label: 'Projects & Impact', href: '/projects' },
   { label: 'Gallery', href: '/gallery' },
   { label: 'Reports', href: '/reports' },
@@ -22,7 +21,6 @@ export const navItems: NavItem[] = [
 export const mobileNavItems: NavItem[] = [
   { label: 'Home', href: '/' },
   { label: 'About Us', href: '/about' },
-  { label: 'Programs', href: '/programs' },
   { label: 'Projects & Impact', href: '/projects' },
   { label: 'Gallery', href: '/gallery' },
   { label: 'Reports & Transparency', href: '/reports' },
@@ -31,7 +29,6 @@ export const mobileNavItems: NavItem[] = [
 
 export const footerOrganizationLinks: FooterLink[] = [
   { label: 'About Us', href: '/about' },
-  { label: 'Programs', href: '/programs' },
   { label: 'Projects & Impact', href: '/projects' },
   { label: 'Gallery', href: '/gallery' },
 ];
