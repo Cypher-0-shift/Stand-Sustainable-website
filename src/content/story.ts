@@ -58,9 +58,9 @@ export const transitionCta = {
 };
 
 export const sdgAlignment = {
-  headline: 'Global Framework Alignment',
-  statement: 'Our interventions are structurally integrated with the United Nations Sustainable Development Goals.',
-  note: 'We do not treat the SDGs as a marketing framework. They are embedded in our theory of change and audit metrics.',
+  headline: 'Our Commitment to the SDGs',
+  statement: 'We are proud to align our grassroots initiatives with the United Nations Sustainable Development Goals.',
+  note: "These goals aren't just icons on a website for us. They represent the real, measurable change we are actively working towards in our communities every single day.",
   badges: [
     { number: '1', label: 'No Poverty', color: '#E5243B' },
     { number: '4', label: 'Quality Education', color: '#C5192D' },
