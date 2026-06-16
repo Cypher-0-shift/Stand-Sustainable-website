@@ -30,12 +30,12 @@ export default function PageHero({ headline, subtext, backgroundImage }: PageHer
         <div
           className="absolute inset-0"
           style={{
-            background: 'linear-gradient(to right, rgba(0, 40, 17, 0.8) 0%, rgba(0, 40, 17, 0.5) 40%, transparent 100%)',
+            background: 'linear-gradient(to bottom, rgba(0, 40, 17, 0.7) 0%, rgba(0, 40, 17, 0.4) 100%)',
           }}
         />
-        <FadeUp className="relative z-10 max-w-4xl">
+        <FadeUp className="relative z-10 max-w-4xl mx-auto text-center w-full">
           <h1
-            className="text-display-mobile md:text-display mb-6"
+            className="text-display-mobile md:text-display mb-6 mx-auto"
             style={{
               fontFamily: 'var(--font-display)',
               color: 'var(--color-on-primary)',
@@ -45,7 +45,7 @@ export default function PageHero({ headline, subtext, backgroundImage }: PageHer
           </h1>
           {subtext && (
             <p
-              className="text-body-lg max-w-2xl"
+              className="text-body-lg max-w-2xl mx-auto"
               style={{ color: 'var(--color-on-primary)', opacity: 0.9 }}
             >
               {subtext}
