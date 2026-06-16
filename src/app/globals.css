@@ -1,0 +1,259 @@
+@import "tailwindcss";
+
+/* ============================================================
+   STAND SUSTAINABLE FOUNDATION — DESIGN SYSTEM
+   Tokens extracted from Stitch DESIGN.md + design.md
+   ============================================================ */
+
+@theme {
+  /* === Brand Colors (Forest Luxury Palette) === */
+  --color-primary: #002811;
+  --color-primary-container: #00401F;
+  --color-secondary: #1b6c42;
+  --color-surface-linen: #FAF7F2;
+  --color-accent-terracotta: #B5451B;
+  --color-ink: #1C1A17;
+  --color-stone: #6B6560;
+  --color-alabaster: #E8E3DC;
+
+  /* === Material Design 3 Surface System === */
+  --color-surface: #f8faf4;
+  --color-surface-dim: #d9dbd5;
+  --color-surface-bright: #f8faf4;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f2f4ef;
+  --color-surface-container: #edefe9;
+  --color-surface-container-high: #e7e9e3;
+  --color-surface-container-highest: #e1e3de;
+  --color-on-surface: #191c19;
+  --color-on-surface-variant: #414941;
+
+  /* === Interactive States === */
+  --color-surface-tint: #326944;
+  --color-outline: #717971;
+  --color-outline-variant: #c0c9bf;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #73ad81;
+  --color-primary-fixed: #b4f1c1;
+  --color-primary-fixed-dim: #99d4a6;
+  --color-secondary-fixed: #a5f4bf;
+  --color-secondary-fixed-dim: #89d7a5;
+  --color-on-secondary-fixed: #002110;
+  --color-on-primary-fixed: #00210d;
+  --color-inverse-surface: #2e312e;
+  --color-inverse-on-surface: #eff1ec;
+
+  /* === Error / Validation === */
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  /* === Tertiary === */
+  --color-tertiary: #420f19;
+  --color-tertiary-container: #5d242d;
+
+  /* === Typography — Font Families === */
+  --font-display: "Source Serif 4", Georgia, serif;
+  --font-section-header: "Source Serif 4", Georgia, serif;
+  --font-impact-number: "Source Serif 4", Georgia, serif;
+  --font-body-lg: "Public Sans", system-ui, sans-serif;
+  --font-body-md: "Public Sans", system-ui, sans-serif;
+  --font-label-caps: "Public Sans", system-ui, sans-serif;
+
+  /* === Spacing === */
+  --spacing-base: 8px;
+  --spacing-gutter: 24px;
+  --spacing-margin-mobile: 24px;
+  --spacing-margin-desktop: 64px;
+  --spacing-nav-height: 72px;
+
+  /* === Border Radius (Institutional, not pill-shaped) === */
+  --radius-sm: 4px;
+  --radius-DEFAULT: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+
+  /* === Shadows === */
+  --shadow-ambient: 0 4px 24px rgba(28, 26, 23, 0.04);
+  --shadow-card: 0 1px 3px rgba(28, 26, 23, 0.08);
+
+  /* === Motion (Brand Easing) === */
+  --ease-stand: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-surface-linen);
+    color: var(--color-on-surface);
+    font-family: var(--font-body-lg);
+    font-size: 18px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Custom scrollbar (from Stitch) */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--color-surface-linen); }
+  ::-webkit-scrollbar-thumb { background: var(--color-outline-variant); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-outline); }
+
+  /* Selection color */
+  ::selection {
+    background-color: var(--color-primary-fixed);
+    color: var(--color-on-primary-fixed);
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ============================================================
+   TYPOGRAPHY UTILITY CLASSES
+   (Matching Stitch Tailwind config fontSize entries)
+   ============================================================ */
+
+@layer utilities {
+  .text-display {
+    font-family: var(--font-display);
+    font-size: 80px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 900;
+  }
+
+  .text-display-mobile {
+    font-family: var(--font-display);
+    font-size: 48px;
+    line-height: 1.1;
+    font-weight: 900;
+  }
+
+  .text-section-header {
+    font-family: var(--font-section-header);
+    font-size: 56px;
+    line-height: 1.2;
+    font-weight: 700;
+  }
+
+  .text-section-header-mobile {
+    font-family: var(--font-section-header);
+    font-size: 32px;
+    line-height: 1.2;
+    font-weight: 700;
+  }
+
+  .text-impact-number {
+    font-family: var(--font-impact-number);
+    font-size: 40px;
+    line-height: 1;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .text-body-lg {
+    font-family: var(--font-body-lg);
+    font-size: 18px;
+    line-height: 1.7;
+    font-weight: 400;
+  }
+
+  .text-body-md {
+    font-family: var(--font-body-md);
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  .text-label-caps {
+    font-family: var(--font-label-caps);
+    font-size: 13px;
+    line-height: 1.4;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  /* === Animation Utilities === */
+
+  /* Fade-up entrance animation (IntersectionObserver controlled) */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s var(--ease-stand), transform 0.8s var(--ease-stand);
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Stagger delays */
+  .stagger-1 { transition-delay: 120ms; }
+  .stagger-2 { transition-delay: 240ms; }
+  .stagger-3 { transition-delay: 360ms; }
+  .stagger-4 { transition-delay: 480ms; }
+
+  /* Image hover scale (used inside overflow-hidden containers) */
+  .img-hover-scale {
+    transition: transform 0.6s var(--ease-stand);
+  }
+  .group:hover .img-hover-scale,
+  .group:focus-within .img-hover-scale {
+    transform: scale(1.05);
+  }
+
+  /* Underline link reveal animation */
+  .underline-reveal {
+    position: relative;
+    display: inline-block;
+  }
+  .underline-reveal::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 1px;
+    bottom: 0;
+    left: 0;
+    background-color: currentColor;
+    transform-origin: bottom right;
+    transition: transform 0.3s var(--ease-stand);
+  }
+  .underline-reveal:hover::after,
+  .underline-reveal:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+  }
+
+  /* Ambient shadow for elevated cards */
+  .ambient-shadow {
+    box-shadow: var(--shadow-ambient);
+  }
+}
+
+/* ============================================================
+   HIDE SCROLLBAR GLOBALLY
+   For an immersive edge-to-edge image display
+   ============================================================ */
+::-webkit-scrollbar {
+  display: none;
+}
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
