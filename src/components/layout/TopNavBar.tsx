@@ -13,8 +13,9 @@ export default function TopNavBar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // The navbar is always transparent and absolute (not fixed) so it rests purely on the hero image.
-  const isTransparent = true;
+  // Determine if the text should be white based on the page's hero image
+  // Home and Projects pages have dark hero images.
+  const useWhiteText = pathname === '/' || pathname.startsWith('/projects');
 
   return (
     <>
@@ -30,8 +31,8 @@ export default function TopNavBar() {
         {/* Logo */}
         <Link
           href="/"
-          className="text-section-header-mobile font-bold transition-colors duration-300 hover:opacity-80 text-white"
-          style={{ fontFamily: 'var(--font-section-header)' }}
+          className="text-section-header-mobile font-bold transition-colors duration-300 hover:opacity-80"
+          style={{ fontFamily: 'var(--font-section-header)', color: useWhiteText ? 'white' : 'var(--color-primary)' }}
         >
           {siteConfig.name}
         </Link>
@@ -51,10 +52,10 @@ export default function TopNavBar() {
                 }`}
                 style={{
                   color: isActive 
-                    ? (isTransparent ? 'white' : 'var(--color-primary)')
-                    : (isTransparent ? 'rgba(255,255,255,0.85)' : 'var(--color-on-surface-variant)'),
+                    ? (useWhiteText ? 'white' : 'var(--color-primary)')
+                    : (useWhiteText ? 'rgba(255,255,255,0.85)' : 'var(--color-on-surface-variant)'),
                   borderColor: isActive 
-                    ? (isTransparent ? 'white' : 'var(--color-primary)') 
+                    ? (useWhiteText ? 'white' : 'var(--color-primary)') 
                     : 'transparent',
                 }}
               >
@@ -71,8 +72,8 @@ export default function TopNavBar() {
             className="inline-flex items-center justify-center text-label-caps rounded-[6px] transition-colors duration-300 hover:opacity-90 border-2 whitespace-nowrap"
             style={{
               backgroundColor: 'transparent',
-              color: isTransparent ? 'white' : 'var(--color-primary)',
-              borderColor: isTransparent ? 'white' : 'var(--color-primary)',
+              color: useWhiteText ? 'white' : 'var(--color-primary)',
+              borderColor: useWhiteText ? 'white' : 'var(--color-primary)',
               padding: '8px 18px', // Slightly less padding to account for border
             }}
           >
@@ -82,8 +83,8 @@ export default function TopNavBar() {
             href="/donate"
             className="inline-flex items-center justify-center text-label-caps rounded-[6px] transition-colors duration-300 hover:opacity-90"
             style={{
-              backgroundColor: isTransparent ? 'white' : 'var(--color-primary)',
-              color: isTransparent ? 'var(--color-primary)' : 'var(--color-on-primary)',
+              backgroundColor: useWhiteText ? 'white' : 'var(--color-primary)',
+              color: useWhiteText ? 'var(--color-primary)' : 'var(--color-on-primary)',
               padding: '10px 20px',
             }}
           >
@@ -94,7 +95,7 @@ export default function TopNavBar() {
         {/* Mobile Hamburger */}
         <button
           className="md:hidden transition-colors"
-          style={{ color: isTransparent ? 'white' : 'var(--color-primary)' }}
+          style={{ color: useWhiteText ? 'white' : 'var(--color-primary)' }}
           onClick={() => setMobileOpen(true)}
           aria-label="Open menu"
         >
