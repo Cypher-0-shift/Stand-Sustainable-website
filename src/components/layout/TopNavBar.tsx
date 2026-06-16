@@ -12,36 +12,26 @@ import { navItems, mobileNavItems, siteConfig } from '@/content/navigation';
 export default function TopNavBar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const isHome = pathname === '/';
-  const isTransparent = isHome && !isScrolled;
+  // The navbar is always transparent and absolute (not fixed) so it rests purely on the hero image.
+  const isTransparent = true;
 
   return (
     <>
       <header
-        className="fixed top-0 w-full z-50 flex justify-between items-center transition-all duration-300"
+        className="absolute top-0 w-full z-50 flex justify-between items-center"
         style={{
           height: 'var(--spacing-nav-height)',
           paddingLeft: 'var(--spacing-margin-mobile)',
           paddingRight: 'var(--spacing-margin-mobile)',
-          backgroundColor: isTransparent ? 'transparent' : 'rgba(250, 247, 242, 0.8)',
-          backdropFilter: isTransparent ? 'none' : 'blur(12px)',
-          WebkitBackdropFilter: isTransparent ? 'none' : 'blur(12px)',
-          borderBottom: isTransparent ? '1px solid transparent' : '1px solid var(--color-alabaster)',
+          backgroundColor: 'transparent',
         }}
       >
         {/* Logo */}
         <Link
           href="/"
-          className="text-section-header-mobile font-bold transition-colors duration-300 hover:opacity-80"
-          style={{ fontFamily: 'var(--font-section-header)', color: isTransparent ? 'white' : 'var(--color-primary)' }}
+          className="text-section-header-mobile font-bold transition-colors duration-300 hover:opacity-80 text-white"
+          style={{ fontFamily: 'var(--font-section-header)' }}
         >
           {siteConfig.name}
         </Link>
