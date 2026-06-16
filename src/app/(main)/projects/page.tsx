@@ -59,30 +59,34 @@ export default function ProjectsPage() {
               Core Programs
             </h2>
           </FadeUp>
-          {programsList.map((program, index) => (
-            <div key={program.title} className="flex flex-col gap-10 md:gap-16">
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-[var(--spacing-gutter)] items-stretch">
-                {/* Program Title & Overview */}
-                <FadeUp className="md:col-span-6 lg:col-span-7 flex flex-col justify-center" delay={index === 0 ? 120 : 0}>
-                  <h3
-                    className="text-display-mobile md:text-display mb-6"
-                    style={{ fontFamily: 'var(--font-display)', color: 'var(--color-primary)' }}
-                  >
-                    {program.title}
-                  </h3>
-                  <p className="text-body-lg" style={{ color: 'var(--color-stone)' }}>
-                    {program.overview}
-                  </p>
-                </FadeUp>
+          {programsList.map((program, index) => {
+            const isImageRight = index % 2 === 0;
+            return (
+              <div key={program.title} className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 items-center mb-16 md:mb-24 last:mb-0">
+                {/* Content Side (Text + Card) */}
+                <FadeUp 
+                  className={`md:col-span-7 flex flex-col gap-8 ${isImageRight ? 'md:order-1' : 'md:order-2'}`} 
+                  delay={index === 0 ? 120 : 0}
+                >
+                  <div>
+                    <h3
+                      className="text-display-mobile md:text-display mb-4"
+                      style={{ fontFamily: 'var(--font-display)', color: 'var(--color-primary)' }}
+                    >
+                      {program.title}
+                    </h3>
+                    <p className="text-body-lg" style={{ color: 'var(--color-stone)' }}>
+                      {program.overview}
+                    </p>
+                  </div>
 
-                {/* Program Details Card */}
-                <FadeUp className="md:col-span-6 lg:col-span-5 mt-8 md:mt-0" delay={index === 0 ? 240 : 120}>
+                  {/* Program Details Card */}
                   <div
-                    className="p-8 md:p-10 rounded-[6px] ambient-shadow border h-full flex flex-col justify-center bg-white"
+                    className="p-8 md:p-10 rounded-[6px] ambient-shadow border bg-white"
                     style={{ borderColor: 'var(--color-alabaster)' }}
                   >
-                    <div className="mb-8">
-                      <h4 className="text-label-caps tracking-widest mb-4 border-b pb-2" style={{ color: 'var(--color-accent-terracotta)', borderColor: 'var(--color-alabaster)' }}>
+                    <div className="mb-6">
+                      <h4 className="text-label-caps tracking-widest mb-3 border-b pb-2" style={{ color: 'var(--color-accent-terracotta)', borderColor: 'var(--color-alabaster)' }}>
                         Key Objectives
                       </h4>
                       <ul className="list-disc list-inside space-y-2 text-body-md" style={{ color: 'var(--color-on-surface-variant)' }}>
@@ -92,7 +96,7 @@ export default function ProjectsPage() {
                       </ul>
                     </div>
                     <div>
-                      <h4 className="text-label-caps tracking-widest mb-4 border-b pb-2" style={{ color: 'var(--color-primary)', borderColor: 'var(--color-alabaster)' }}>
+                      <h4 className="text-label-caps tracking-widest mb-3 border-b pb-2" style={{ color: 'var(--color-primary)', borderColor: 'var(--color-alabaster)' }}>
                         Measured Outcomes
                       </h4>
                       <p className="text-body-md font-semibold" style={{ color: 'var(--color-primary)' }}>
@@ -101,18 +105,21 @@ export default function ProjectsPage() {
                     </div>
                   </div>
                 </FadeUp>
-              </div>
 
-              {/* Full Width Image below */}
-              {program.image && (
-                <FadeUp delay={index === 0 ? 300 : 120}>
-                  <div className="relative w-full aspect-[21/9] md:aspect-[3/1] rounded-[6px] overflow-hidden ambient-shadow">
-                    <Image src={program.image} alt={program.title} fill className="object-cover" sizes="100vw" unoptimized />
-                  </div>
+                {/* Image Side */}
+                <FadeUp 
+                  className={`md:col-span-5 ${isImageRight ? 'md:order-2' : 'md:order-1'}`} 
+                  delay={index === 0 ? 240 : 120}
+                >
+                  {program.image && (
+                    <div className="relative w-full aspect-[4/3] rounded-[6px] overflow-hidden ambient-shadow">
+                      <Image src={program.image} alt={program.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" unoptimized />
+                    </div>
+                  )}
                 </FadeUp>
-              )}
-            </div>
-          ))}
+              </div>
+            );
+          })}
         </div>
       </section>
 

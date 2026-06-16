@@ -10,7 +10,7 @@ export const programsList = [
     overview: 'Transforming rural education infrastructure and providing specialized vocational training for the digital economy.',
     objectives: ['Build 50 modern learning centers by 2028', 'Train 10,000 educators in modern pedagogy'],
     outcomes: 'Increased literacy rates by 40% in partner districts. Placed over 5,000 youth in sustainable careers.',
-    image: 'https://images.unsplash.com/photo-1524069290683-0457abfe42c3?q=80&w=2070&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=2070&auto=format&fit=crop', // Kids in classroom
   },
   {
     title: 'Sustainable Agriculture',
