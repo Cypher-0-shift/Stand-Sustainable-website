@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import PageHero from '@/components/layout/PageHero';
 import FadeUp from '@/components/feedback/FadeUp';
+import ContactForm from '@/components/forms/ContactForm';
 import { contactHero, officeLocations } from '@/content/contact';
 
 export const metadata: Metadata = {
@@ -90,63 +91,7 @@ export default function ContactPage() {
               >
                 Send a Message
               </h2>
-              <form className="flex flex-col gap-6">
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="name" className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
-                    Full Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    className="w-full bg-transparent border-b p-3 focus:outline-none transition-colors"
-                    style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
-                    required
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="email" className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    className="w-full bg-transparent border-b p-3 focus:outline-none transition-colors"
-                    style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
-                    required
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="subject" className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
-                    Subject
-                  </label>
-                  <input
-                    type="text"
-                    id="subject"
-                    className="w-full bg-transparent border-b p-3 focus:outline-none transition-colors"
-                    style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
-                    required
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="message" className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    rows={4}
-                    className="w-full bg-transparent border-b p-3 focus:outline-none transition-colors resize-none"
-                    style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
-                    required
-                  ></textarea>
-                </div>
-                <button
-                  type="submit"
-                  className="mt-6 w-full text-center text-label-caps rounded-[6px] py-4 transition-opacity hover:opacity-90"
-                  style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-on-primary)' }}
-                >
-                  Send Message
-                </button>
-              </form>
+              <ContactForm />
             </div>
           </FadeUp>
         </div>

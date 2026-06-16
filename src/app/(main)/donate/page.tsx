@@ -20,11 +20,17 @@ export default function DonatePage() {
   const [frequency, setFrequency] = useState('one-time');
   const [selectedAmount, setSelectedAmount] = useState<number | 'custom'>(1000);
   const [customAmount, setCustomAmount] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setShowThankYou(true);
+    setIsSubmitting(true);
+    // Simulate payment gateway routing / network request
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setShowThankYou(true);
+    }, 2000);
   };
 
   return (

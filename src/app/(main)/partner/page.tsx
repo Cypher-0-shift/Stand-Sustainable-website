@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import PageHero from '@/components/layout/PageHero';
 import FadeUp from '@/components/feedback/FadeUp';
+import PartnerForm from '@/components/forms/PartnerForm';
 import { partnerHero, partnerModels } from '@/content/partner';
 
 export const metadata: Metadata = {
@@ -70,66 +71,7 @@ export default function PartnerPage() {
               >
                 Start a Conversation
               </h2>
-              <form className="flex flex-col gap-6">
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="name" className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
-                    Organization Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    className="w-full bg-transparent border-b p-3 focus:outline-none transition-colors"
-                    style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
-                    required
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="email" className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
-                    Official Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    className="w-full bg-transparent border-b p-3 focus:outline-none transition-colors"
-                    style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
-                    required
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="interest" className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
-                    Area of Interest
-                  </label>
-                  <select
-                    id="interest"
-                    className="w-full bg-transparent border-b p-3 focus:outline-none transition-colors appearance-none"
-                    style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
-                  >
-                    <option>CSR Implementation</option>
-                    <option>Co-Funding</option>
-                    <option>Knowledge Partnership</option>
-                    <option>Other</option>
-                  </select>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="message" className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    rows={4}
-                    className="w-full bg-transparent border-b p-3 focus:outline-none transition-colors resize-none"
-                    style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
-                    required
-                  ></textarea>
-                </div>
-                <button
-                  type="submit"
-                  className="mt-6 w-full text-center text-label-caps rounded-[6px] py-4 transition-opacity hover:opacity-90"
-                  style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-on-primary)' }}
-                >
-                  Submit Inquiry
-                </button>
-              </form>
+              <PartnerForm />
             </div>
           </FadeUp>
         </div>
