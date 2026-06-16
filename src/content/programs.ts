@@ -33,5 +33,4 @@ export const programsList = [
     outcomes: 'Restored 500 hectares of vital coastal mangroves. Provided reliable clean energy to 45 communities.',
     image: 'https://images.unsplash.com/photo-1473448912268-2022ce9509d8?q=80&w=2041&auto=format&fit=crop',
   },
-
-
+];
