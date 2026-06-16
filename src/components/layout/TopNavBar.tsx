@@ -14,8 +14,8 @@ export default function TopNavBar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   // Determine if the text should be white based on the page's hero image
-  // Almost all pages use a dark cinematic hero image, except legal pages.
-  const isLightHero = pathname.startsWith('/terms') || pathname.startsWith('/privacy');
+  // Almost all pages use a dark cinematic hero image, except legal pages and donate.
+  const isLightHero = pathname.startsWith('/terms') || pathname.startsWith('/privacy') || pathname.startsWith('/donate');
   const useWhiteText = !isLightHero;
 
   return (
