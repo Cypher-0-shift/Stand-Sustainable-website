@@ -388,34 +388,56 @@ export default function StoryPage() {
       {/* ====================================================
           PHASE 6 — SDG ALIGNMENT
           ==================================================== */}
-      <section className="py-16 md:py-24 px-6 md:px-16 bg-white">
-        <div className="max-w-screen-xl mx-auto">
-          <FadeUp>
-            <h2
-              className="text-section-header-mobile md:text-section-header mb-4"
-              style={{ fontFamily: 'var(--font-section-header)', color: 'var(--color-primary)' }}
-            >
-              {sdgAlignment.headline}
-            </h2>
-            <p className="text-body-lg mb-12" style={{ color: 'var(--color-stone)' }}>
-              {sdgAlignment.statement}
-            </p>
-          </FadeUp>
+      <section className="py-20 md:py-32 px-6 md:px-16 overflow-hidden relative" style={{ backgroundColor: 'var(--color-primary)' }}>
+        {/* Background decorative elements */}
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[var(--color-accent-terracotta)] opacity-[0.03] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-white opacity-[0.03] rounded-full blur-3xl translate-y-1/3 -translate-x-1/3"></div>
+
+        <div className="max-w-screen-xl mx-auto relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-16 md:mb-24">
+            <FadeUp>
+              <h2
+                className="text-display-mobile md:text-display mb-6 text-white"
+                style={{ fontFamily: 'var(--font-display)' }}
+              >
+                {sdgAlignment.headline}
+              </h2>
+              <p className="text-body-lg text-white/80">
+                {sdgAlignment.statement}
+              </p>
+            </FadeUp>
+          </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-12">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6 mb-16">
             {sdgAlignment.badges.map((badge, index) => (
               <FadeUp key={badge.number} delay={index * 100}>
                 <div 
-                  className="flex flex-col p-6 rounded-[4px] border-t-4"
+                  className="group relative flex flex-col items-center justify-center p-8 md:p-6 rounded-2xl transition-all duration-500 hover:-translate-y-2 cursor-default overflow-hidden h-[180px] md:h-[160px]"
                   style={{ 
-                    backgroundColor: 'rgba(250, 247, 242, 0.8)', // Linen with opacity
-                    borderColor: badge.color
+                    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
                   }}
                 >
-                  <span className="text-display-mobile font-bold mb-2" style={{ color: badge.color }}>
-                    {badge.number}
-                  </span>
-                  <span className="text-label-caps" style={{ fontSize: '14px', color: 'var(--color-primary)' }}>
+                  {/* Hover Glow Effect */}
+                  <div 
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{ background: `radial-gradient(circle at center, ${badge.color}40 0%, transparent 70%)` }}
+                  ></div>
+                  
+                  {/* Indicator Line */}
+                  <div 
+                    className="absolute top-0 left-0 w-full h-1.5 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"
+                    style={{ backgroundColor: badge.color }}
+                  ></div>
+
+                  <div 
+                    className="relative text-display-mobile font-bold mb-3 transition-colors duration-500" 
+                    style={{ color: 'rgba(255,255,255,0.3)' }}
+                  >
+                    <span className="text-[12px] md:text-[14px] absolute -top-2 -left-6 md:-left-8 opacity-50 font-sans tracking-widest uppercase">SDG</span>
+                    <span className="group-hover:text-white transition-colors duration-300 text-5xl md:text-4xl">{badge.number}</span>
+                  </div>
+                  <span className="text-label-caps text-center text-white/60 group-hover:text-white transition-colors duration-300 mt-2" style={{ fontSize: '13px' }}>
                     {badge.label}
                   </span>
                 </div>
@@ -423,11 +445,16 @@ export default function StoryPage() {
             ))}
           </div>
           
-          <FadeUp delay={400}>
-            <p className="text-body-md" style={{ color: 'var(--color-on-surface-variant)', maxWidth: '800px' }}>
-              {sdgAlignment.note}
-            </p>
-          </FadeUp>
+          <div className="flex justify-center">
+            <FadeUp delay={400}>
+              <div className="inline-flex flex-col md:flex-row items-center gap-4 py-6 px-8 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-sm text-center md:text-left">
+                <span className="material-symbols-outlined text-white/40 text-[32px]">public</span>
+                <p className="text-body-sm text-white/70 max-w-xl">
+                  {sdgAlignment.note}
+                </p>
+              </div>
+            </FadeUp>
+          </div>
         </div>
       </section>
 
