@@ -28,11 +28,11 @@ export default function ProjectsPage() {
       <section className="py-16 md:py-24 px-6 md:px-16" style={{ backgroundColor: 'var(--color-surface)' }}>
         <div className="max-w-screen-2xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-[var(--spacing-gutter)]">
-            <FadeUp className="md:col-span-12 mb-16 text-center">
-              <h2 className="text-display-mobile md:text-display max-w-4xl mx-auto" style={{ fontFamily: 'var(--font-display)', color: 'var(--color-primary)' }}>
+            <FadeUp className="md:col-span-12 mb-16">
+              <h2 className="text-display-mobile md:text-display max-w-4xl" style={{ fontFamily: 'var(--font-display)', color: 'var(--color-primary)' }}>
                 {proofIntro.headline}<br />{proofIntro.headlineLine2}
               </h2>
-              <p className="text-body-lg mt-6 max-w-2xl mx-auto" style={{ color: 'var(--color-stone)' }}>
+              <p className="text-body-lg mt-6 max-w-2xl" style={{ color: 'var(--color-stone)' }}>
                 {proofIntro.body}
               </p>
             </FadeUp>
@@ -54,7 +54,7 @@ export default function ProjectsPage() {
         style={{ backgroundColor: 'var(--color-surface-linen)' }}
       >
         <div className="max-w-screen-2xl mx-auto flex flex-col gap-16 md:gap-24">
-          <FadeUp className="border-b pb-4 mb-4 text-center" style={{ borderColor: 'var(--color-alabaster)' }}>
+          <FadeUp className="border-b pb-4 mb-4" style={{ borderColor: 'var(--color-alabaster)' }}>
             <h2 className="text-section-header-mobile md:text-section-header" style={{ fontFamily: 'var(--font-section-header)', color: 'var(--color-primary)' }}>
               Core Programs
             </h2>
@@ -62,14 +62,14 @@ export default function ProjectsPage() {
           {programsList.map((program, index) => (
             <div key={program.title} className="grid grid-cols-1 md:grid-cols-12 gap-[var(--spacing-gutter)] items-start">
               {/* Program Title & Overview */}
-              <FadeUp className="md:col-span-5 text-center md:text-left" delay={index === 0 ? 120 : 0}>
+              <FadeUp className="md:col-span-5" delay={index === 0 ? 120 : 0}>
                 <h3
                   className="text-display-mobile md:text-display mb-6"
                   style={{ fontFamily: 'var(--font-display)', color: 'var(--color-primary)' }}
                 >
                   {program.title}
                 </h3>
-                <p className="text-body-lg mb-8 mx-auto" style={{ color: 'var(--color-stone)' }}>
+                <p className="text-body-lg mb-8" style={{ color: 'var(--color-stone)' }}>
                   {program.overview}
                 </p>
                 {program.image && (
@@ -85,17 +85,17 @@ export default function ProjectsPage() {
                   className="p-8 md:p-12 rounded-[6px] ambient-shadow border h-full flex flex-col justify-center"
                   style={{ backgroundColor: 'var(--color-surface-container-lowest)', borderColor: 'var(--color-alabaster)' }}
                 >
-                  <div className="mb-8 text-center md:text-left">
+                  <div className="mb-8">
                     <h4 className="text-label-caps tracking-widest mb-4 border-b pb-2" style={{ color: 'var(--color-accent-terracotta)', borderColor: 'var(--color-alabaster)' }}>
                       Key Objectives
                     </h4>
-                    <ul className="list-disc list-inside space-y-2 text-body-md inline-block text-left" style={{ color: 'var(--color-on-surface-variant)' }}>
+                    <ul className="list-disc list-inside space-y-2 text-body-md" style={{ color: 'var(--color-on-surface-variant)' }}>
                       {program.objectives.map((obj, i) => (
                         <li key={i}>{obj}</li>
                       ))}
                     </ul>
                   </div>
-                  <div className="text-center md:text-left">
+                  <div>
                     <h4 className="text-label-caps tracking-widest mb-4 border-b pb-2" style={{ color: 'var(--color-primary)', borderColor: 'var(--color-alabaster)' }}>
                       Measured Outcomes
                     </h4>
@@ -115,11 +115,11 @@ export default function ProjectsPage() {
           ==================================================== */}
       <section className="py-16 md:py-24 px-6 md:px-16 border-t" style={{ backgroundColor: 'var(--color-surface-linen)', borderColor: 'var(--color-alabaster)' }}>
         <div className="max-w-screen-2xl mx-auto">
-          <FadeUp className="flex flex-col items-center justify-center border-b pb-4 mb-12 text-center" style={{ borderColor: 'var(--color-alabaster)' }}>
+          <FadeUp className="flex items-baseline justify-between border-b pb-4 mb-12" style={{ borderColor: 'var(--color-alabaster)' }}>
             <h2 className="text-section-header-mobile md:text-section-header" style={{ fontFamily: 'var(--font-section-header)', color: 'var(--color-primary)' }}>
               {projectsSection.headline}
             </h2>
-            <span className="text-label-caps mt-2" style={{ color: 'var(--color-stone)' }}>
+            <span className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
               {projectsSection.subLabel}
             </span>
           </FadeUp>
@@ -133,12 +133,12 @@ export default function ProjectsPage() {
                     <span className="text-label-caps" style={{ color: 'var(--color-primary)' }}>{heroProject.location} · {heroProject.year}</span>
                   </div>
                 </div>
-                <div className="p-6 flex-grow flex flex-col justify-between text-center">
+                <div className="p-6 flex-grow flex flex-col justify-between">
                   <div>
                     <h3 className="text-section-header-mobile mb-3" style={{ fontFamily: 'var(--font-section-header)', color: 'var(--color-primary)' }}>{heroProject.title}</h3>
-                    <p className="text-body-md mx-auto" style={{ color: 'var(--color-on-surface-variant)' }}>{heroProject.description}</p>
+                    <p className="text-body-md" style={{ color: 'var(--color-on-surface-variant)' }}>{heroProject.description}</p>
                   </div>
-                  <div className="mt-6 flex items-center justify-center text-label-caps transition-colors group-hover:opacity-80" style={{ color: 'var(--color-accent-terracotta)' }}>
+                  <div className="mt-6 flex items-center text-label-caps transition-colors group-hover:opacity-80" style={{ color: 'var(--color-accent-terracotta)' }}>
                     <span>{heroProject.ctaLabel}</span>
                     <span className="material-symbols-outlined ml-1 text-[16px]">arrow_forward</span>
                   </div>
@@ -155,9 +155,9 @@ export default function ProjectsPage() {
                       <span className="text-label-caps tracking-wider" style={{ fontSize: '10px', color: 'var(--color-primary)' }}>{project.location} · {project.year}</span>
                     </div>
                   </div>
-                  <div className="p-4 text-center">
-                    <h4 className="text-body-lg font-bold mb-2 mx-auto" style={{ color: 'var(--color-primary)' }}>{project.title}</h4>
-                    <p className="line-clamp-2 mx-auto" style={{ fontSize: '14px', color: 'var(--color-stone)' }}>{project.description}</p>
+                  <div className="p-4">
+                    <h4 className="text-body-lg font-bold mb-2" style={{ color: 'var(--color-primary)' }}>{project.title}</h4>
+                    <p className="line-clamp-2" style={{ fontSize: '14px', color: 'var(--color-stone)' }}>{project.description}</p>
                   </div>
                 </div>
               ))}
@@ -200,22 +200,22 @@ export default function ProjectsPage() {
                       </div>
                     </div>
                     
-                    <div className="p-6 flex flex-col flex-grow text-center">
-                      <div className="text-label-caps mb-2 mx-auto" style={{ color: 'var(--color-stone)', fontSize: '11px' }}>
+                    <div className="p-6 flex flex-col flex-grow">
+                      <div className="text-label-caps mb-2" style={{ color: 'var(--color-stone)', fontSize: '11px' }}>
                         {project.location} · {project.year}
                       </div>
-                      <h3 className="text-body-lg font-bold mb-3 mx-auto" style={{ color: 'var(--color-primary)' }}>
+                      <h3 className="text-body-lg font-bold mb-3" style={{ color: 'var(--color-primary)' }}>
                         {project.title}
                       </h3>
-                      <p className="text-body-md line-clamp-3 mb-6 flex-grow mx-auto" style={{ color: 'var(--color-on-surface-variant)' }}>
+                      <p className="text-body-md line-clamp-3 mb-6 flex-grow" style={{ color: 'var(--color-on-surface-variant)' }}>
                         {project.description}
                       </p>
                       
-                      <div className="flex items-center justify-center pt-4 border-t" style={{ borderColor: 'var(--color-alabaster)' }}>
+                      <div className="flex items-center justify-between pt-4 border-t" style={{ borderColor: 'var(--color-alabaster)' }}>
                         <span className="text-label-caps" style={{ color: 'var(--color-accent-terracotta)', fontSize: '11px' }}>
                           View Report
                         </span>
-                        <span className="material-symbols-outlined ml-1" style={{ color: 'var(--color-accent-terracotta)', fontSize: '16px' }}>
+                        <span className="material-symbols-outlined" style={{ color: 'var(--color-accent-terracotta)', fontSize: '16px' }}>
                           arrow_forward
                         </span>
                       </div>
