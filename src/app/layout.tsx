@@ -92,7 +92,7 @@ export default function RootLayout({
                   "description": "We are working on a social project to ensure sustainability among all vulnerable and marginalised communities, with a key focus on the Sustainable Development Goals.",
                   "contactPoint": {
                     "@type": "ContactPoint",
-                    "email": "contact@standsustainable.org",
+                    "email": "standsustainable@gmail.com",
                     "contactType": "customer support"
                   },
                   "sameAs": [

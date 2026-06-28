@@ -17,7 +17,7 @@ export default function MapEmbedWithConsent({ mapEmbedUrl, city }: MapEmbedWithC
         width="100%"
         height="250"
         style={{ border: 0, borderRadius: '6px' }}
-        allowFullScreen={false}
+        allowFullScreen
         loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"
         title={`Map of ${city} office`}

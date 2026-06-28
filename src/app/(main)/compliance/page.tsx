@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
 import PageHero from '@/components/layout/PageHero';
-import FadeUp from '@/components/feedback/FadeUp';
-import { complianceHero, complianceCategories } from '@/content/compliance';
 
 export const metadata: Metadata = {
   alternates: {
@@ -15,77 +13,39 @@ export default function CompliancePage() {
   return (
     <>
       <PageHero
-        headline={complianceHero.headline}
-        subtext={complianceHero.subtext}
-        backgroundImage={complianceHero.backgroundImage}
+        headline="Legal & Security Compliance"
+        subtext="Stand Sustainable Foundation maintains standards of institutional governance and transparency in all our operations."
       />
 
-      <section
-        className="py-16 md:py-24 px-6 md:px-16"
-        style={{ backgroundColor: 'var(--color-surface-linen)' }}
-      >
-        <div className="max-w-screen-xl mx-auto flex flex-col gap-16 md:gap-24">
-          {complianceCategories.map((category, index) => (
-            <div key={category.title} className="flex flex-col gap-8">
-              <FadeUp delay={index * 100}>
-                <h2
-                  className="text-section-header-mobile md:text-section-header mb-4 border-b pb-4"
-                  style={{
-                    fontFamily: 'var(--font-section-header)',
-                    color: 'var(--color-primary)',
-                    borderColor: 'var(--color-alabaster)'
-                  }}
-                >
-                  {category.title}
-                </h2>
-                <p className="text-body-lg" style={{ color: 'var(--color-stone)', maxWidth: '800px' }}>
-                  {category.description}
-                </p>
-              </FadeUp>
+      <section className="py-16 px-6 md:px-16" style={{ backgroundColor: 'var(--color-surface-linen)' }}>
+        <div className="max-w-4xl mx-auto prose prose-lg" style={{ color: 'var(--color-on-surface)' }}>
+          <h2>1. Legal & Regulatory Compliance</h2>
+          <p>
+            Stand Sustainable Foundation is a registered non-profit organization operating in India. We adhere to all local and national regulations to ensure transparency and accountability in our operations.
+          </p>
+          <ul>
+            <li><strong>NGO Registration:</strong> Stand Sustainable Foundation is registered as a Section 8 Company (Not for Profit) under the Companies Act, 2013. Registration Number: U85300DL2021NPL385921. Jurisdiction: Registrar of Companies, New Delhi, India.</li>
+            <li><strong>Cookie Policy:</strong> We use cookies to analyze website traffic and optimize your website experience. By accepting our use of cookies, your data will be aggregated with all other user data.</li>
+          </ul>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                {category.items.map((item, i) => (
-                  <FadeUp key={item.title} delay={100 + i * 100} className="h-full">
-                    <div 
-                      className="p-8 rounded-[6px] h-full flex flex-col ambient-shadow transition-transform duration-300 hover:-translate-y-1"
-                      style={{ backgroundColor: 'var(--color-surface-container-lowest)' }}
-                    >
-                      <div className="flex justify-between items-start mb-6">
-                        <div 
-                          className="w-12 h-12 rounded-full flex items-center justify-center"
-                          style={{ backgroundColor: 'var(--color-surface-linen)' }}
-                        >
-                          <span 
-                            className="material-symbols-outlined" aria-hidden="true"
-                            style={{ color: 'var(--color-accent-terracotta)', fontSize: '24px' }}
-                          >
-                            {item.icon}
-                          </span>
-                        </div>
-                        <span 
-                          className="text-label-caps px-3 py-1 rounded-full"
-                          style={{ 
-                            fontSize: '10px', 
-                            backgroundColor: 'rgba(0, 64, 31, 0.05)',
-                            color: 'var(--color-primary)' 
-                          }}
-                        >
-                          {item.status}
-                        </span>
-                      </div>
-                      
-                      <h3 className="text-body-lg font-bold mb-3" style={{ color: 'var(--color-primary)' }}>
-                        {item.title}
-                      </h3>
-                      <p className="text-body-md" style={{ color: 'var(--color-stone)' }}>
-                        {item.description}
-                      </p>
-                    </div>
-                  </FadeUp>
-                ))}
-              </div>
-            </div>
-          ))}
+          <h2>2. Data & Infrastructure Security</h2>
+          <p>
+            Our digital infrastructure is secured to protect the privacy of our visitors and supporters. We implement robust security measures to safeguard all personal and financial data.
+          </p>
+          <ul>
+            <li><strong>Payment Processing Security:</strong> All financial transactions are processed via secure, encrypted payment gateways. We do not store credit card data on our servers.</li>
+            <li><strong>Data Privacy:</strong> Visitor and supporter data is governed by strict privacy protocols to ensure the security and confidentiality of all personal information.</li>
+          </ul>
+
+          <h2>3. Contact Us</h2>
+          <p>
+            If you have any questions or concerns regarding our compliance standards or data security practices, please contact us:
+          </p>
+          <div className="p-6 bg-white rounded-[6px] border my-6" style={{ borderColor: 'var(--color-alabaster)' }}>
+            <p className="font-bold mb-1">Stand Sustainable Foundation</p>
+            <p>13/B, next to Social, Hauz Khas Village, Deer Park, Hauz Khas, New Delhi, Delhi 110016</p>
+            <p>Email: <a href="mailto:standsustainable@gmail.com" style={{ color: 'var(--color-primary)' }}>standsustainable@gmail.com</a></p>
+          </div>
         </div>
       </section>
     </>

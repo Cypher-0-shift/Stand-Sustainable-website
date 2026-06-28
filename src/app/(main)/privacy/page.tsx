@@ -63,8 +63,8 @@ export default function PrivacyPage() {
           <div className="p-6 bg-white rounded-[6px] border my-6" style={{ borderColor: 'var(--color-alabaster)' }}>
             <p className="font-bold mb-1">Grievance Officer</p>
             <p>Stand Sustainable Foundation</p>
-            <p>13 B Hauz Khas Village, New Delhi, India</p>
-            <p>Email: <a href="mailto:grievance@standsustainable.org" style={{ color: 'var(--color-primary)' }}>grievance@standsustainable.org</a></p>
+            <p>13/B, next to Social, Hauz Khas Village, Deer Park, Hauz Khas, New Delhi, Delhi 110016</p>
+            <p>Email: <a href="mailto:standsustainable@gmail.com" style={{ color: 'var(--color-primary)' }}>standsustainable@gmail.com</a></p>
           </div>
         </div>
       </section>
