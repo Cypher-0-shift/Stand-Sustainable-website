@@ -54,11 +54,10 @@ export default function DonatePage() {
 
         {/* Donation Flow Container */}
         <section
-          className="w-full max-w-2xl rounded-xl shadow-sm border relative z-10"
+          className="w-full max-w-2xl rounded-xl shadow-sm border relative z-10 p-4 md:p-6"
           style={{
             backgroundColor: 'var(--color-surface-container-lowest)',
             borderColor: 'var(--color-alabaster)',
-            padding: '24px',
           }}
         >
           <form onSubmit={handleSubmit} className="space-y-10" id="commitment-form">
@@ -180,7 +179,7 @@ export default function DonatePage() {
                         : 'transparent',
                     }}
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 w-full">
                       <span
                         className="text-2xl"
                         style={{
@@ -199,7 +198,7 @@ export default function DonatePage() {
                           setSelectedAmount('custom');
                         }}
                         onFocus={() => setSelectedAmount('custom')}
-                        className="bg-transparent border-b focus:ring-0 text-xl w-24 text-center outline-none"
+                        className="bg-transparent border-b outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent rounded-sm text-xl flex-1 min-w-0 text-center"
                         style={{
                           fontFamily: 'var(--font-impact-number)',
                           color: 'var(--color-primary)',
@@ -242,7 +241,7 @@ export default function DonatePage() {
                     id="fname"
                     type="text"
                     required
-                    className="w-full border rounded-xl px-4 py-3 text-body-md outline-none transition-shadow"
+                    className="w-full border rounded-xl px-4 py-3 text-body-md outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-shadow"
                     style={{
                       backgroundColor: 'var(--color-surface-linen)',
                       borderColor: 'var(--color-alabaster)',
@@ -261,7 +260,7 @@ export default function DonatePage() {
                     id="lname"
                     type="text"
                     required
-                    className="w-full border rounded-xl px-4 py-3 text-body-md outline-none transition-shadow"
+                    className="w-full border rounded-xl px-4 py-3 text-body-md outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-shadow"
                     style={{
                       backgroundColor: 'var(--color-surface-linen)',
                       borderColor: 'var(--color-alabaster)',
@@ -281,7 +280,7 @@ export default function DonatePage() {
                   id="email"
                   type="email"
                   required
-                  className="w-full border rounded-xl px-4 py-3 text-body-md outline-none transition-shadow"
+                  className="w-full border rounded-xl px-4 py-3 text-body-md outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-shadow"
                   style={{
                     backgroundColor: 'var(--color-surface-linen)',
                     borderColor: 'var(--color-alabaster)',
@@ -325,7 +324,7 @@ export default function DonatePage() {
               >
                 <div className="flex items-center gap-3">
                   <span
-                    className="material-symbols-outlined"
+                    className="material-symbols-outlined" aria-hidden="true"
                     style={{ color: 'var(--color-on-surface-variant)' }}
                   >
                     credit_card
@@ -335,7 +334,7 @@ export default function DonatePage() {
                   </span>
                 </div>
                 <span
-                  className="material-symbols-outlined text-sm"
+                  className="material-symbols-outlined text-sm" aria-hidden="true"
                   style={{ color: 'var(--color-stone)' }}
                 >
                   lock
@@ -354,13 +353,13 @@ export default function DonatePage() {
                 }}
               >
                 <span>Make a Commitment</span>
-                <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                <span className="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_forward</span>
               </button>
 
-              <div className="flex items-center gap-6 text-label-caps" style={{ fontSize: '11px', color: 'var(--color-stone)' }}>
+              <div className="flex items-center flex-wrap justify-center gap-x-6 gap-y-2 text-label-caps" style={{ fontSize: '11px', color: 'var(--color-stone)' }}>
                 {trustBadges.map((badge) => (
                   <div key={badge.label} className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[16px]">{badge.icon}</span>
+                    <span className="material-symbols-outlined text-[16px]" aria-hidden="true">{badge.icon}</span>
                     <span>{badge.label}</span>
                   </div>
                 ))}
@@ -404,7 +403,6 @@ export default function DonatePage() {
                 width={128}
                 height={128}
                 className="w-full h-full object-cover"
-                unoptimized
               />
             </div>
             <h2

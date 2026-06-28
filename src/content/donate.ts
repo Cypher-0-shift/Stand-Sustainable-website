@@ -2,11 +2,13 @@ import type { DonationAmount } from '@/types/content';
 
 /* ============================================================
    DONATE PAGE CONTENT
-   Source: Stitch commitment_stand_sustainable_foundation screen
+   Source: website-content-master.md
+   ⚠️ No dedicated donation page exists on the original site.
+      This page is preserved as a functional placeholder.
    ============================================================ */
 
 export const donateHero = {
-  headline: 'Your commitment builds a better architecture for tomorrow.',
+  headline: 'Your support helps us stand together for sustainability.',
 };
 
 export const donationAmounts: DonationAmount[] = [
@@ -22,17 +24,17 @@ export const frequencyOptions = [
 ] as const;
 
 export const trustBadges = [
-  { icon: 'verified', label: '501(c)(3) Certified' }, // ⚠️ INCORRECT — Indian NGO
+  { icon: 'verified', label: 'Registered NGO (India)' },
   { icon: 'security', label: 'Secure Encrypted Payment' },
 ];
 
 export const thankYouContent = {
   headline: 'Thank You.',
-  body: 'Your commitment has been secured. We\'ve sent a receipt to your email, along with details on how your contribution is building a better architecture for those who need it most.',
+  body: 'Your support has been received. We\'ve sent a receipt to your email, along with details on how your contribution is helping us work for sustainability in vulnerable and marginalised communities.',
   ctaLabel: 'Return Home',
   ctaHref: '/',
   image: '/images/hero_india.png',
-  imageAlt: 'Close-up portrait of a child smiling warmly in soft natural light',
+  imageAlt: 'Stand Sustainable Foundation community impact',
 };
 
 export const feeCoverOption = {

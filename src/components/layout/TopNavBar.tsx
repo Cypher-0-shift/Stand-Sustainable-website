@@ -12,21 +12,42 @@ import { navItems, mobileNavItems, siteConfig } from '@/content/navigation';
 export default function TopNavBar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileOpen]);
 
   // Determine if the text should be white based on the page's hero image
   // Almost all pages use a dark cinematic hero image, except legal pages and donate.
   const isLightHero = pathname.startsWith('/terms') || pathname.startsWith('/privacy') || pathname.startsWith('/donate');
-  const useWhiteText = !isLightHero;
+  const useWhiteText = !isLightHero && !isScrolled;
 
   return (
     <>
       <header
-        className="absolute top-0 w-full z-50 flex justify-between items-center"
+        className="fixed top-0 w-full z-50 flex justify-between items-center px-[var(--spacing-margin-mobile)] md:px-[var(--spacing-margin-desktop)]"
         style={{
           height: 'var(--spacing-nav-height)',
-          paddingLeft: 'var(--spacing-margin-mobile)',
-          paddingRight: 'var(--spacing-margin-mobile)',
-          backgroundColor: 'transparent',
+          backgroundColor: isScrolled ? 'rgba(248, 250, 244, 0.92)' : 'transparent',
+          backdropFilter: isScrolled ? 'blur(12px)' : 'none',
+          borderBottom: isScrolled ? '1px solid var(--color-alabaster)' : '1px solid transparent',
+          transition: 'background-color 0.3s ease, backdrop-filter 0.3s ease, border-color 0.3s ease',
         }}
       >
         {/* Logo */}
@@ -100,15 +121,50 @@ export default function TopNavBar() {
           onClick={() => setMobileOpen(true)}
           aria-label="Open menu"
         >
-          <span className="material-symbols-outlined text-[28px]">menu</span>
+          <span className="material-symbols-outlined text-[28px]" aria-hidden="true">menu</span>
         </button>
       </header>
 
       {/* Mobile Drawer */}
       {mobileOpen && (
         <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile Navigation"
           className="fixed inset-0 z-[100] flex flex-col p-10"
           style={{ backgroundColor: 'var(--color-primary-container)' }}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              setMobileOpen(false);
+            }
+            if (e.key === 'Tab') {
+              // Basic focus trap: just prevent leaving the drawer context
+              const focusableElements = e.currentTarget.querySelectorAll(
+                'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select'
+              );
+              const firstElement = focusableElements[0] as HTMLElement;
+              const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+              if (e.shiftKey) {
+                if (document.activeElement === firstElement) {
+                  lastElement.focus();
+                  e.preventDefault();
+                }
+              } else {
+                if (document.activeElement === lastElement) {
+                  firstElement.focus();
+                  e.preventDefault();
+                }
+              }
+            }
+          }}
+          // Auto-focus the first element when opening
+          ref={(el) => {
+            if (el && !el.contains(document.activeElement)) {
+              const firstButton = el.querySelector('button');
+              if (firstButton) firstButton.focus();
+            }
+          }}
         >
           <div className="flex justify-between items-center mb-16">
             <span
@@ -122,7 +178,7 @@ export default function TopNavBar() {
               style={{ color: 'var(--color-on-primary)' }}
               aria-label="Close menu"
             >
-              <span className="material-symbols-outlined text-[28px]">close</span>
+              <span className="material-symbols-outlined text-[28px]" aria-hidden="true">close</span>
             </button>
           </div>
           <nav className="flex flex-col gap-10">
@@ -168,12 +224,3 @@ export default function TopNavBar() {
   );
 }
 
-/* Desktop responsive padding override */
-const desktopPaddingStyle = `
-  @media (min-width: 768px) {
-    header {
-      padding-left: var(--spacing-margin-desktop) !important;
-      padding-right: var(--spacing-margin-desktop) !important;
-    }
-  }
-`;

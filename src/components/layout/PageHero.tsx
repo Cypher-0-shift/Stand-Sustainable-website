@@ -13,7 +13,7 @@ export default function PageHero({ headline, subtext, backgroundImage }: PageHer
   if (backgroundImage) {
     return (
       <section
-        className="relative pt-40 pb-24 md:pt-56 md:pb-32 px-6 md:px-16 overflow-hidden flex items-center"
+        className="relative pt-28 pb-16 md:pt-56 md:pb-32 px-6 md:px-16 overflow-hidden flex items-center"
         style={{
           minHeight: '50vh',
         }}
@@ -24,7 +24,6 @@ export default function PageHero({ headline, subtext, backgroundImage }: PageHer
           fill
           className="object-cover"
           aria-hidden="true"
-          unoptimized
         />
         {/* Gradient Overlay for text readability */}
         <div
@@ -59,7 +58,7 @@ export default function PageHero({ headline, subtext, backgroundImage }: PageHer
   // Fallback for pages without a hero background image
   return (
     <section
-      className="relative py-16 md:py-32 px-6 md:px-16 overflow-hidden flex items-center"
+      className="relative py-10 md:py-32 px-6 md:px-16 overflow-hidden flex items-center"
       style={{
         backgroundColor: 'var(--color-surface)',
         marginTop: 'var(--spacing-nav-height)',

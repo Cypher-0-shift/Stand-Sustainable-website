@@ -3,10 +3,14 @@ import PageHero from '@/components/layout/PageHero';
 import FadeUp from '@/components/feedback/FadeUp';
 import ContactForm from '@/components/forms/ContactForm';
 import { contactHero, officeLocations } from '@/content/contact';
+import MapEmbedWithConsent from '@/components/content/MapEmbedWithConsent';
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: '/contact',
+  },
   title: 'Contact Us — Stand Sustainable Foundation',
-  description: 'Get in touch with our headquarters or regional offices across India.',
+  description: 'Better yet, see us in person! We are happy to connect. Reach us at 13 B Hauz Khas Village, New Delhi.',
 };
 
 export default function ContactPage() {
@@ -51,22 +55,46 @@ export default function ContactPage() {
                     </div>
                     <div className="flex flex-col gap-3 text-body-md" style={{ color: 'var(--color-on-surface-variant)' }}>
                       <div className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[18px] mt-0.5">location_on</span>
+                        <span className="material-symbols-outlined text-[18px] mt-0.5" aria-hidden="true">location_on</span>
                         <span>{office.address}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="material-symbols-outlined text-[18px]">call</span>
+                        <span className="material-symbols-outlined text-[18px]" aria-hidden="true">call</span>
                         <a href={`tel:${office.phone.replace(/\s+/g, '')}`} className="hover:opacity-80 transition-opacity">
                           {office.phone}
                         </a>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="material-symbols-outlined text-[18px]">mail</span>
+                        <span className="material-symbols-outlined text-[18px]" aria-hidden="true">mail</span>
                         <a href={`mailto:${office.email}`} className="hover:opacity-80 transition-opacity">
                           {office.email}
                         </a>
                       </div>
                     </div>
+                    
+                    {office.mapEmbedUrl && (
+                      <div className="mt-6">
+                        <MapEmbedWithConsent mapEmbedUrl={office.mapEmbedUrl} city={office.city} />
+                      </div>
+                    )}
+                    
+                    {office.directionsUrl && (
+                      <div className="mt-4">
+                        <a
+                          href={office.directionsUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-[4px] font-bold transition-opacity hover:opacity-90"
+                          style={{
+                            backgroundColor: 'var(--color-primary)',
+                            color: 'white',
+                          }}
+                        >
+                          <span className="material-symbols-outlined text-[20px]" aria-hidden="true">directions</span>
+                          Get Directions
+                        </a>
+                      </div>
+                    )}
                   </div>
                 </FadeUp>
               ))}

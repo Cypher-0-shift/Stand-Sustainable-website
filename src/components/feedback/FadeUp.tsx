@@ -22,6 +22,11 @@ export default function FadeUp({ children, className = '', delay, style }: FadeU
     const el = ref.current;
     if (!el) return;
 
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.classList.add('visible');
+      return;
+    }
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {

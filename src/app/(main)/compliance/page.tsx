@@ -4,6 +4,9 @@ import FadeUp from '@/components/feedback/FadeUp';
 import { complianceHero, complianceCategories } from '@/content/compliance';
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: '/compliance',
+  },
   title: 'Legal & Security Compliance — Stand Sustainable Foundation',
   description: 'Our institutional governance, financial compliance, and data security standards.',
 };
@@ -53,7 +56,7 @@ export default function CompliancePage() {
                           style={{ backgroundColor: 'var(--color-surface-linen)' }}
                         >
                           <span 
-                            className="material-symbols-outlined"
+                            className="material-symbols-outlined" aria-hidden="true"
                             style={{ color: 'var(--color-accent-terracotta)', fontSize: '24px' }}
                           >
                             {item.icon}

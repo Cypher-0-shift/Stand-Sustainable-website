@@ -10,12 +10,18 @@ import { programsList } from '@/content/programs';
 
 export const metadata: Metadata = {
   title: 'Projects & Impact — Stand Sustainable Foundation',
-  description: 'A transparent ledger of our structural interventions and measurable impact across India.',
+  description: 'Our work for sustainability across India — programs in education, gender empowerment, skills and livelihood, and community engagement.',
+  alternates: {
+    canonical: '/projects',
+  },
 };
+
+import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd';
 
 export default function ProjectsPage() {
   return (
     <>
+      <BreadcrumbJsonLd items={[{ name: 'Projects', url: '/projects' }]} />
       <PageHero
         headline={projectsHero.headline}
         subtext={projectsHero.subtext}

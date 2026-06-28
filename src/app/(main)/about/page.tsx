@@ -2,40 +2,41 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import FadeUp from '@/components/feedback/FadeUp';
 import {
+  overviewSection,
   missionSection,
-  methodologySection,
-  leadershipSection,
-  leaders,
-  governanceSection,
-  governanceItems,
-  reportsSection,
-  annualReports,
+  historySection,
+  programsSection,
 } from '@/content/about';
 
 export const metadata: Metadata = {
-  title: 'About Us — Mission, Leadership & Governance',
-  description: 'Our commitment to radical transparency, disciplined methodology, and institutional integrity. Meet the leadership team and review governance standards.',
+  alternates: {
+    canonical: '/about',
+  },
+  title: 'About Us — Stand Sustainable Foundation',
+  description: 'Working for sustainability among all vulnerable and marginalised communities, with a key focus on the Sustainable Development Goals.',
 };
+
+import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd';
 
 export default function AboutPage() {
   return (
     <>
+      <BreadcrumbJsonLd items={[{ name: 'About Us', url: '/about' }]} />
       {/* ====================================================
-          SECTION 1 — MISSION & VISION (DARK HERO)
+          SECTION 1 — OVERVIEW (DARK HERO)
           ==================================================== */}
       <section className="relative pt-40 pb-24 md:pt-56 md:pb-32 px-6 md:px-16 overflow-hidden min-h-[60vh] flex items-center">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
-            src={missionSection.backgroundImage}
-            alt=""
+            src={overviewSection.backgroundImage}
+            alt="Organization Overview"
             fill
             className="object-cover"
             priority
-            unoptimized
           />
           {/* Dark Overlay */}
-          <div className="absolute inset-0 bg-black/60 mix-blend-multiply"></div>
+          <div className="absolute inset-0 bg-black/70 mix-blend-multiply"></div>
           {/* Gradient overlay for smooth transition */}
           <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-surface)] via-transparent to-transparent"></div>
         </div>
@@ -46,247 +47,109 @@ export default function AboutPage() {
               className="text-display-mobile md:text-display text-white mb-8"
               style={{ fontFamily: 'var(--font-display)' }}
             >
-              {missionSection.headline}
+              {overviewSection.headline}
             </h1>
-            <p
-              className="text-body-lg text-white/90 max-w-2xl mx-auto"
-            >
-              {missionSection.body}
+            <p className="text-body-lg text-white/90 max-w-2xl mx-auto">
+              {overviewSection.body}
             </p>
           </FadeUp>
         </div>
       </section>
 
       {/* ====================================================
-          SECTION 2 — HOW WE BUILD (METHODOLOGY)
-          Process flow diagram with 3 steps
+          SECTION 2 — MISSION & HISTORY
           ==================================================== */}
       <section
         className="py-16 md:py-24 px-6 md:px-16"
-        style={{
-          backgroundColor: 'var(--color-surface-linen)',
-        }}
+        style={{ backgroundColor: 'var(--color-surface-linen)' }}
       >
-        <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-[var(--spacing-gutter)]">
-          {/* Left Text */}
-          <FadeUp className="md:col-span-4">
-            <span
-              className="text-label-caps mb-6 block tracking-widest"
-              style={{ color: 'var(--color-accent-terracotta)' }}
-            >
-              Our Approach
-            </span>
-            <h2
-              className="text-section-header-mobile md:text-section-header mb-6"
-              style={{
-                fontFamily: 'var(--font-section-header)',
-                color: 'var(--color-primary)',
-              }}
-            >
-              {methodologySection.headline}
-            </h2>
-            <p className="text-body-lg" style={{ color: 'var(--color-stone)' }}>
-              {methodologySection.body}
-            </p>
+        <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-[var(--spacing-gutter)]">
+          {/* Mission */}
+          <FadeUp>
+            <div className="p-8 md:p-12 rounded-[6px] h-full" style={{ backgroundColor: 'var(--color-surface-container-lowest)' }}>
+              <span className="material-symbols-outlined mb-6 block" aria-hidden="true" style={{ fontSize: '40px', color: 'var(--color-primary)' }}>
+                flag
+              </span>
+              <h2
+                className="text-section-header-mobile mb-6"
+                style={{ fontFamily: 'var(--font-section-header)', color: 'var(--color-primary)' }}
+              >
+                {missionSection.headline}
+              </h2>
+              <p className="text-body-lg" style={{ color: 'var(--color-stone)' }}>
+                {missionSection.body}
+              </p>
+            </div>
           </FadeUp>
 
-          {/* Right — Methodology Steps */}
-          <FadeUp className="md:col-span-7 md:col-start-6" delay={120}>
-            <div className="flex flex-col md:flex-row gap-8 items-stretch">
-              {methodologySection.steps.map((step, index) => (
-                <div key={step.title} className="flex-1 flex flex-col items-center md:items-start">
-                  {/* Step */}
-                  <div
-                    className="flex items-center justify-center w-16 h-16 rounded-full mb-4"
-                    style={{ backgroundColor: 'var(--color-surface-container-low)' }}
-                  >
-                    <span
-                      className="material-symbols-outlined"
-                      style={{ fontSize: '28px', color: 'var(--color-primary)' }}
-                    >
-                      {step.icon}
-                    </span>
-                  </div>
-                  <h3
-                    className="text-body-lg font-bold mb-2 text-center md:text-left"
-                    style={{ color: 'var(--color-primary)' }}
-                  >
-                    {step.title}
-                  </h3>
-                  <p
-                    className="text-body-md text-center md:text-left"
-                    style={{ color: 'var(--color-on-surface-variant)' }}
-                  >
-                    {step.description}
-                  </p>
-                  {/* Connector chevron (not on last item) */}
-                  {index < methodologySection.steps.length - 1 && (
-                    <span
-                      className="material-symbols-outlined hidden md:block mt-6 mx-auto"
-                      style={{ color: 'var(--color-outline-variant)', fontSize: '20px' }}
-                    >
-                      chevron_right
-                    </span>
-                  )}
-                </div>
-              ))}
+          {/* History */}
+          <FadeUp delay={120}>
+            <div className="p-8 md:p-12 rounded-[6px] h-full" style={{ backgroundColor: 'var(--color-surface-container-lowest)' }}>
+              <span className="material-symbols-outlined mb-6 block" aria-hidden="true" style={{ fontSize: '40px', color: 'var(--color-primary)' }}>
+                history_edu
+              </span>
+              <h2
+                className="text-section-header-mobile mb-6"
+                style={{ fontFamily: 'var(--font-section-header)', color: 'var(--color-primary)' }}
+              >
+                {historySection.headline}
+              </h2>
+              <p className="text-body-lg" style={{ color: 'var(--color-stone)' }}>
+                {historySection.body}
+              </p>
             </div>
           </FadeUp>
         </div>
       </section>
 
       {/* ====================================================
-          SECTION 3 — LEADERSHIP
-          3-column portrait grid
+          SECTION 3 — OUR PROGRAMS
           ==================================================== */}
       <section
         className="py-16 md:py-24 px-6 md:px-16"
-        style={{
-          backgroundColor: 'var(--color-surface)',
-        }}
+        style={{ backgroundColor: 'var(--color-surface)' }}
       >
         <div className="max-w-screen-2xl mx-auto">
-          <FadeUp className="text-center mb-16">
+          <FadeUp className="text-center max-w-3xl mx-auto mb-16">
             <h2
-              className="text-section-header-mobile md:text-section-header mb-4"
-              style={{
-                fontFamily: 'var(--font-section-header)',
-                color: 'var(--color-primary)',
-              }}
+              className="text-section-header-mobile md:text-section-header mb-6"
+              style={{ fontFamily: 'var(--font-section-header)', color: 'var(--color-primary)' }}
             >
-              {leadershipSection.headline}
+              {programsSection.headline}
             </h2>
             <p className="text-body-lg" style={{ color: 'var(--color-stone)' }}>
-              {leadershipSection.body}
+              {programsSection.body}
             </p>
           </FadeUp>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-[var(--spacing-gutter)]">
-            {leaders.map((leader, index) => (
-              <FadeUp key={leader.name} delay={index * 120}>
-                <div className="group">
-                  <div className="relative overflow-hidden rounded-[6px] aspect-[3/4] mb-4">
-                    <Image
-                      src={leader.image}
-                      alt={leader.imageAlt}
-                      fill
-                      className="object-cover img-hover-scale"
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      unoptimized
-                    />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[var(--spacing-gutter)]">
+            {programsSection.programs.map((program, index) => (
+              <FadeUp key={program.title} delay={index * 100}>
+                <div 
+                  className="p-8 rounded-[6px] h-full flex flex-col ambient-shadow transition-transform duration-300 hover:-translate-y-2"
+                  style={{ backgroundColor: 'white' }}
+                >
+                  <div
+                    className="flex items-center justify-center w-14 h-14 rounded-full mb-6"
+                    style={{ backgroundColor: 'var(--color-surface-linen)' }}
+                  >
+                    <span className="material-symbols-outlined" aria-hidden="true" style={{ fontSize: '24px', color: 'var(--color-primary)' }}>
+                      {program.icon}
+                    </span>
                   </div>
                   <h3
-                    className="text-body-lg font-bold"
+                    className="text-body-lg font-bold mb-4"
                     style={{ color: 'var(--color-primary)' }}
                   >
-                    {leader.name}
+                    {program.title}
                   </h3>
-                  <p className="text-label-caps mt-1" style={{ color: 'var(--color-stone)' }}>
-                    {leader.title}
+                  <p className="text-body-md" style={{ color: 'var(--color-on-surface-variant)' }}>
+                    {program.description}
                   </p>
                 </div>
               </FadeUp>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ====================================================
-          SECTION 4 — GOVERNANCE & ANNUAL REPORTS
-          2-column bento layout
-          ==================================================== */}
-      <section
-        className="py-16 md:py-24 px-6 md:px-16"
-        style={{
-          backgroundColor: 'var(--color-primary-container)',
-        }}
-      >
-        <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-gutter)]">
-          {/* Governance Card */}
-          <FadeUp>
-            <div
-              className="p-8 md:p-12 rounded-[6px] h-full"
-              style={{ backgroundColor: 'var(--color-surface-container-lowest)' }}
-            >
-              <h2
-                className="text-section-header-mobile mb-6"
-                style={{
-                  fontFamily: 'var(--font-section-header)',
-                  color: 'var(--color-primary)',
-                }}
-              >
-                {governanceSection.headline}
-              </h2>
-              <p className="text-body-md mb-8" style={{ color: 'var(--color-on-surface-variant)' }}>
-                {governanceSection.body}
-              </p>
-              <div className="space-y-4">
-                {governanceItems.map((item) => (
-                  <div
-                    key={item.label}
-                    className="flex justify-between items-center py-3 border-b"
-                    style={{ borderColor: 'var(--color-alabaster)' }}
-                  >
-                    <span className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
-                      {item.label}
-                    </span>
-                    <span className="text-body-md font-semibold" style={{ color: 'var(--color-primary)' }}>
-                      {item.value}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </FadeUp>
-
-          {/* Annual Reports Card */}
-          <FadeUp delay={120}>
-            <div
-              className="p-8 md:p-12 rounded-[6px] h-full"
-              style={{ backgroundColor: 'var(--color-surface-container-lowest)' }}
-            >
-              <h2
-                className="text-section-header-mobile mb-6"
-                style={{
-                  fontFamily: 'var(--font-section-header)',
-                  color: 'var(--color-primary)',
-                }}
-              >
-                {reportsSection.headline}
-              </h2>
-              <p className="text-body-md mb-8" style={{ color: 'var(--color-on-surface-variant)' }}>
-                {reportsSection.body}
-              </p>
-              <div className="space-y-4">
-                {annualReports.map((report) => (
-                  <a
-                    key={report.year}
-                    href={report.href}
-                    className="flex justify-between items-center py-4 border-b transition-colors hover:opacity-80"
-                    style={{ borderColor: 'var(--color-alabaster)' }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span
-                        className="material-symbols-outlined"
-                        style={{ color: 'var(--color-accent-terracotta)' }}
-                      >
-                        picture_as_pdf
-                      </span>
-                      <span className="text-body-md font-semibold" style={{ color: 'var(--color-primary)' }}>
-                        {report.label}
-                      </span>
-                    </div>
-                    <span
-                      className="material-symbols-outlined text-[18px]"
-                      style={{ color: 'var(--color-stone)' }}
-                    >
-                      download
-                    </span>
-                  </a>
-                ))}
-              </div>
-            </div>
-          </FadeUp>
         </div>
       </section>
     </>

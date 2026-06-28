@@ -5,8 +5,11 @@ import PartnerForm from '@/components/forms/PartnerForm';
 import { partnerHero, partnerModels } from '@/content/partner';
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: '/partner',
+  },
   title: 'Partner With Us — Stand Sustainable Foundation',
-  description: 'Collaborate with us to deploy capital effectively for structural poverty alleviation.',
+  description: 'Partner with Government and non-Governmental agencies to support vulnerable and marginalised communities.',
 };
 
 export default function PartnerPage() {

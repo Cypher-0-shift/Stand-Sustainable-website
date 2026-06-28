@@ -16,7 +16,17 @@ import {
 } from '@/content/story';
 
 export const metadata: Metadata = {
-  title: 'Stand Sustainable Foundation — Dignity for Every Community, Forever',
+  title: 'Stand Sustainable Foundation — Lets Stand Together.',
+  description: 'We are working on a social project to ensure sustainability among all vulnerable and marginalised communities, with a key focus on the Sustainable Development Goals.',
+  openGraph: {
+    title: 'Stand Sustainable Foundation — Lets Stand Together.',
+    description: 'We are working on a social project to ensure sustainability among all vulnerable and marginalised communities, with a key focus on the Sustainable Development Goals.',
+    url: '/',
+    type: 'website',
+  },
+  alternates: {
+    canonical: '/',
+  },
 };
 
 export default function StoryPage() {
@@ -35,7 +45,6 @@ export default function StoryPage() {
           priority
           className="object-cover"
           sizes="100vw"
-          unoptimized
         />
         {/* Gradient Overlay — Forest Green left-to-right */}
         <div
@@ -73,7 +82,7 @@ export default function StoryPage() {
             <FadeUp delay={240}>
               <div className="flex flex-col sm:flex-row gap-4 mt-10">
                 <Link
-                  href="/impact"
+                  href="/projects"
                   className="inline-flex items-center justify-center text-label-caps rounded-[6px] transition-colors duration-300 border-2 border-transparent"
                   style={{
                     backgroundColor: 'var(--color-on-primary)',
@@ -82,17 +91,6 @@ export default function StoryPage() {
                   }}
                 >
                   Explore Our Work
-                </Link>
-                <Link
-                  href="/reports"
-                  className="inline-flex items-center justify-center text-label-caps rounded-[6px] transition-colors duration-300 border-2"
-                  style={{
-                    color: 'var(--color-on-primary)',
-                    borderColor: 'var(--color-on-primary)',
-                    padding: '14px 32px',
-                  }}
-                >
-                  View Impact Report
                 </Link>
               </div>
             </FadeUp>
@@ -151,7 +149,6 @@ export default function StoryPage() {
                 width={800}
                 height={600}
                 className="w-full h-auto object-cover img-hover-scale"
-                unoptimized
               />
             </div>
             <span
@@ -205,13 +202,13 @@ export default function StoryPage() {
               style={{ backgroundColor: 'var(--color-surface-container-low)' }}
             >
               <span
-                className="material-symbols-outlined absolute top-4 left-4"
+                className="material-symbols-outlined absolute top-4 left-4" aria-hidden="true"
                 style={{ fontSize: '48px', color: 'var(--color-primary-fixed-dim)', opacity: 0.3 }}
               >
                 format_quote
               </span>
               <blockquote
-                className="text-section-header-mobile relative z-10"
+                className="text-[24px] leading-[1.3] relative z-10"
                 style={{
                   fontFamily: 'var(--font-section-header)',
                   color: 'var(--color-primary)',
@@ -259,13 +256,10 @@ export default function StoryPage() {
 
           <FadeUp delay={120}>
             <div className="relative overflow-hidden rounded-[6px] group">
-              <Image
+              <img
                 src={methodology.image}
                 alt={methodology.imageAlt}
-                width={1280}
-                height={600}
-                className="w-full h-[400px] md:h-[600px] object-cover img-hover-scale"
-                unoptimized
+                className="w-full h-auto rounded-[6px] img-hover-scale transition-transform duration-500"
               />
             </div>
             <span
@@ -292,13 +286,13 @@ export default function StoryPage() {
           <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-[var(--spacing-gutter)] items-center">
             <FadeUp className="md:col-span-6">
               <span
-                className="material-symbols-outlined mb-4"
+                className="material-symbols-outlined mb-4" aria-hidden="true"
                 style={{ fontSize: '64px', color: 'var(--color-primary-fixed-dim)', opacity: 0.3 }}
               >
                 format_quote
               </span>
               <blockquote
-                className="text-section-header-mobile md:text-section-header mb-8"
+                className="text-[24px] md:text-[32px] leading-[1.3] mb-8"
                 style={{
                   fontFamily: 'var(--font-section-header)',
                   color: 'var(--color-on-primary)',
@@ -318,7 +312,6 @@ export default function StoryPage() {
                     width={48}
                     height={48}
                     className="w-full h-full object-cover"
-                    unoptimized
                   />
                 </div>
                 <div>
@@ -346,7 +339,6 @@ export default function StoryPage() {
                   width={600}
                   height={800}
                   className="w-full h-[500px] object-cover"
-                  unoptimized
                 />
               </div>
             </FadeUp>
@@ -380,7 +372,7 @@ export default function StoryPage() {
             style={{ color: 'var(--color-accent-terracotta)' }}
           >
             <span>{transitionCta.ctaLabel}</span>
-            <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+            <span className="material-symbols-outlined text-[16px]" aria-hidden="true">arrow_forward</span>
           </Link>
         </FadeUp>
       </section>
@@ -434,7 +426,7 @@ export default function StoryPage() {
                     className="relative text-display-mobile font-bold mb-3 transition-colors duration-500" 
                     style={{ color: 'rgba(255,255,255,0.3)' }}
                   >
-                    <span className="text-[12px] md:text-[14px] absolute -top-2 -left-6 md:-left-8 opacity-50 font-sans tracking-widest uppercase">SDG</span>
+                    <span className="text-[10px] md:text-[14px] absolute -top-2 -left-4 md:-left-8 opacity-50 font-sans tracking-widest uppercase">SDG</span>
                     <span className="group-hover:text-white transition-colors duration-300 text-5xl md:text-4xl">{badge.number}</span>
                   </div>
                   <span className="text-label-caps text-center text-white/60 group-hover:text-white transition-colors duration-300 mt-2" style={{ fontSize: '13px' }}>
@@ -448,7 +440,7 @@ export default function StoryPage() {
           <div className="flex justify-center">
             <FadeUp delay={400}>
               <div className="inline-flex flex-col md:flex-row items-center gap-4 py-6 px-8 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-sm text-center md:text-left">
-                <span className="material-symbols-outlined text-white/40 text-[32px]">public</span>
+                <span className="material-symbols-outlined text-white/40 text-[32px]" aria-hidden="true">public</span>
                 <p className="text-body-sm text-white/70 max-w-xl">
                   {sdgAlignment.note}
                 </p>
@@ -461,13 +453,14 @@ export default function StoryPage() {
       {/* ====================================================
           PHASE 7 — PARTNER TRUST STRIP
           ==================================================== */}
+      {partnerStrip.partners.length > 0 && (
       <section className="py-16 px-6 md:px-16 border-t" style={{ borderColor: 'var(--color-alabaster)', backgroundColor: 'var(--color-surface)' }}>
         <div className="max-w-screen-2xl mx-auto">
           <FadeUp>
             <span className="text-label-caps block text-center mb-10" style={{ color: 'var(--color-stone)' }}>
               {partnerStrip.label}
             </span>
-            <div className="overflow-hidden w-full relative">
+            <div className="overflow-hidden w-full relative" aria-label="Trusted partners">
               {/* Adding fade gradients on edges for a better marquee effect */}
               <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-[var(--color-surface)] to-transparent z-10"></div>
               <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-[var(--color-surface)] to-transparent z-10"></div>
@@ -487,6 +480,7 @@ export default function StoryPage() {
           </FadeUp>
         </div>
       </section>
+      )}
 
       {/* ====================================================
           PHASE 8 — EDITORIAL / NEWS
@@ -506,7 +500,7 @@ export default function StoryPage() {
               style={{ color: 'var(--color-accent-terracotta)' }}
             >
               <span>{editorialNews.ctaLabel}</span>
-              <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+              <span className="material-symbols-outlined text-[16px]" aria-hidden="true">arrow_forward</span>
             </Link>
           </FadeUp>
 
@@ -519,7 +513,6 @@ export default function StoryPage() {
                     alt={article.title}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    unoptimized
                   />
                 </div>
                 <span className="text-label-caps mb-3 block" style={{ color: 'var(--color-stone)', fontSize: '11px' }}>
@@ -542,7 +535,7 @@ export default function StoryPage() {
               style={{ color: 'var(--color-accent-terracotta)' }}
             >
               <span>{editorialNews.ctaLabel}</span>
-              <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+              <span className="material-symbols-outlined text-[16px]" aria-hidden="true">arrow_forward</span>
             </Link>
           </div>
         </div>

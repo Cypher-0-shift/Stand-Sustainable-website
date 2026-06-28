@@ -1,30 +1,40 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState } from 'react';
+import { sendPartnerEmail } from '@/actions/sendEmail';
+import { InputField, TextAreaField } from './FormFields';
 
 export default function PartnerForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [selectedInterest, setSelectedInterest] = useState('CSR Implementation');
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const interestOptions = ['CSR Implementation', 'Co-Funding', 'Knowledge Partnership', 'Other'];
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (formData: FormData) => {
     setIsSubmitting(true);
-    // Simulate network request
-    setTimeout(() => {
-      setIsSubmitting(false);
+    setErrorMessage('');
+    
+    // Add the custom selected interest to formData
+    formData.append('interest', selectedInterest);
+    
+    const response = await sendPartnerEmail(formData);
+    
+    setIsSubmitting(false);
+    
+    if (response.success) {
       setIsSuccess(true);
-    }, 1500);
+    } else {
+      setErrorMessage(response.message || 'Something went wrong. Please try again.');
+    }
   };
 
   if (isSuccess) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-center py-12">
         <div className="w-16 h-16 rounded-full flex items-center justify-center mb-6" style={{ backgroundColor: 'var(--color-surface-tint)' }}>
-          <span className="material-symbols-outlined text-[32px]" style={{ color: 'white' }}>check_circle</span>
+          <span className="material-symbols-outlined text-[32px]" aria-hidden="true" style={{ color: 'white' }}>check_circle</span>
         </div>
         <h3 className="text-section-header-mobile mb-4" style={{ fontFamily: 'var(--font-section-header)', color: 'var(--color-primary)' }}>Inquiry Received</h3>
         <p className="text-body-md" style={{ color: 'var(--color-stone)' }}>
@@ -35,92 +45,72 @@ export default function PartnerForm() {
   }
 
   return (
-    <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
-      <div className="flex flex-col gap-2">
-        <label htmlFor="name" className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
-          Organization Name
-        </label>
-        <input
-          type="text"
-          id="name"
-          className="w-full bg-transparent border-b p-3 focus:outline-none transition-colors"
-          style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
-          required
-        />
-      </div>
-      <div className="flex flex-col gap-2">
-        <label htmlFor="email" className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
-          Official Email
-        </label>
-        <input
-          type="email"
-          id="email"
-          className="w-full bg-transparent border-b p-3 focus:outline-none transition-colors"
-          style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
-          required
-        />
-      </div>
+    <form className="flex flex-col gap-6" action={handleSubmit}>
+      {errorMessage && (
+        <div className="bg-red-50 text-red-600 p-4 rounded-md text-sm">
+          {errorMessage}
+        </div>
+      )}
+      {/* Honeypot — invisible to humans, bots fill it and get silently rejected */}
+      <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+      <InputField
+        label="Organization Name"
+        type="text"
+        id="name"
+        name="name"
+        required
+      />
+      <InputField
+        label="Official Email"
+        type="email"
+        id="email"
+        name="email"
+        required
+      />
       <div className="flex flex-col gap-2 relative">
-        <label className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
+        <label htmlFor="interest" className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
           Area of Interest
         </label>
-        <div 
-          className="w-full bg-transparent border-b p-3 flex justify-between items-center cursor-pointer transition-colors"
-          style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
-          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-        >
-          <span>{selectedInterest}</span>
-          <span className="material-symbols-outlined transition-transform duration-200" style={{ transform: isDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+        <div className="relative w-full">
+          <select
+            id="interest"
+            name="interest"
+            value={selectedInterest}
+            onChange={(e) => setSelectedInterest(e.target.value)}
+            className="w-full bg-transparent border-b p-3 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent rounded-sm transition-colors appearance-none cursor-pointer"
+            style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
+            required
+          >
+            {interestOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true" style={{ color: 'var(--color-primary)' }}>
             expand_more
           </span>
         </div>
-        
-        {isDropdownOpen && (
-          <div 
-            className="absolute top-[100%] left-0 w-full z-10 mt-1 rounded-[6px] shadow-lg border overflow-hidden bg-white"
-            style={{ borderColor: 'var(--color-alabaster)' }}
-          >
-            {interestOptions.map((option) => (
-              <div
-                key={option}
-                className="p-4 cursor-pointer transition-colors"
-                style={{ 
-                  color: selectedInterest === option ? 'var(--color-primary)' : 'var(--color-on-surface-variant)',
-                  fontWeight: selectedInterest === option ? 600 : 400,
-                  backgroundColor: selectedInterest === option ? 'var(--color-surface)' : 'transparent'
-                }}
-                onClick={() => {
-                  setSelectedInterest(option);
-                  setIsDropdownOpen(false);
-                }}
-                onMouseEnter={(e) => {
-                  if (selectedInterest !== option) {
-                    e.currentTarget.style.backgroundColor = 'var(--color-surface-linen)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (selectedInterest !== option) {
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                  }
-                }}
-              >
-                {option}
-              </div>
-            ))}
-          </div>
-        )}
       </div>
-      <div className="flex flex-col gap-2">
-        <label htmlFor="message" className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
-          Message
-        </label>
-        <textarea
-          id="message"
-          rows={4}
-          className="w-full bg-transparent border-b p-3 focus:outline-none transition-colors resize-none"
-          style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
+      <TextAreaField
+        label="Message"
+        id="message"
+        name="message"
+        rows={4}
+        required
+      />
+      
+      <div className="flex items-start gap-3 mt-2">
+        <input
+          type="checkbox"
+          id="consent"
+          name="consent"
           required
-        ></textarea>
+          className="mt-1"
+        />
+        <label htmlFor="consent" className="text-body-sm" style={{ color: 'var(--color-on-surface-variant)' }}>
+          I agree to the <a href="/privacy" className="underline hover:opacity-80" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and consent to the processing of my personal data for the purpose of handling this inquiry in accordance with the DPDP Act 2023.
+        </label>
       </div>
       <button
         type="submit"
@@ -130,7 +120,7 @@ export default function PartnerForm() {
       >
         {isSubmitting ? (
           <>
-            <span className="material-symbols-outlined animate-spin mr-2" style={{ fontSize: '18px' }}>autorenew</span>
+            <span className="material-symbols-outlined animate-spin mr-2" aria-hidden="true" style={{ fontSize: '18px' }}>autorenew</span>
             Submitting...
           </>
         ) : 'Submit Inquiry'}

@@ -13,16 +13,15 @@ import {
 export default function Footer() {
   return (
     <footer
-      className="w-full border-t"
+      className="w-full border-t py-12 md:py-20 px-[var(--spacing-margin-mobile)]"
       style={{
         backgroundColor: 'var(--color-primary)',
         borderColor: 'var(--color-primary-container)',
-        padding: '80px var(--spacing-margin-mobile)',
       }}
     >
-      <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-[var(--spacing-gutter)]">
-        {/* Column 1: Brand */}
-        <div className="mb-8 md:mb-0">
+      <div className="max-w-screen-2xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-[var(--spacing-gutter)]">
+        {/* Column 1: Brand + Contact */}
+        <div className="col-span-2 md:col-span-1 mb-8 md:mb-0">
           <div
             className="text-section-header-mobile mb-4"
             style={{
@@ -33,11 +32,38 @@ export default function Footer() {
             {siteConfig.name}
           </div>
           <p
-            className="text-body-md text-sm max-w-xs"
+            className="text-body-md text-sm max-w-xs mb-6"
             style={{ color: 'var(--color-primary-fixed-dim)' }}
           >
             {siteConfig.tagline}
           </p>
+
+          {/* Contact Details */}
+          <div className="flex flex-col gap-3 text-sm" style={{ color: 'var(--color-primary-fixed-dim)' }}>
+            <a
+              href="https://www.google.com/maps/dir//13%2FB,+next+to+Social,+Hauz+Khas+Village,+Deer+Park,+Hauz+Khas,+New+Delhi,+Delhi+110016/@24.5900172,84.8239107,6353m/data=!3m1!1e3!4m8!4m7!1m0!1m5!1m1!1s0x390d1d8a830a42c3:0x7ba2904ce3b8044b!2m2!1d77.1942646!2d28.5546597?entry=ttu&g_ep=EgoyMDI2MDYyMy4wIKXMDSoASAFQAw%3D%3D"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-start gap-2 transition-colors duration-300 hover:text-white"
+            >
+              <span className="material-symbols-outlined text-[16px] mt-0.5" aria-hidden="true">location_on</span>
+              <span>13/B, next to Social, Hauz Khas Village, Deer Park, Hauz Khas, New Delhi, Delhi 110016</span>
+            </a>
+            <a
+              href="tel:011-47075730"
+              className="flex items-center gap-2 transition-colors duration-300 hover:text-white"
+            >
+              <span className="material-symbols-outlined text-[16px]" aria-hidden="true">call</span>
+              <span>011-47075730</span>
+            </a>
+            <a
+              href="mailto:standsustainable@gmail.com"
+              className="flex items-center gap-2 transition-colors duration-300 hover:text-white"
+            >
+              <span className="material-symbols-outlined text-[16px]" aria-hidden="true">mail</span>
+              <span>standsustainable@gmail.com</span>
+            </a>
+          </div>
         </div>
 
         {/* Column 2: Organization Links */}

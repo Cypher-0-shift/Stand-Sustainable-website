@@ -2,65 +2,57 @@ import type { TestimonialItem } from '@/types/content';
 
 /* ============================================================
    STORY PAGE CONTENT
-   Source: Stitch story_stand_sustainable_foundation screen
-   ⚠️ Items marked verified: false require client confirmation
+   Source: website-content-master.md
+   All content verified against https://standsustainable.org/
    ============================================================ */
 
 export const storyHero = {
-  headline: 'Dignity for every community,',
-  headlineItalic: 'forever.',
-  subtext: 'We are building a better architecture for poverty alleviation. One that values structural change over temporary relief.',
-  caption: 'Aaditya, Maharashtra, 2024',
-  image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2026&auto=format&fit=crop',
-  imageAlt: 'Portrait of an elderly Indian farmer in warm golden light, Maharashtra, India',
+  headline: 'Lets Stand',
+  headlineItalic: 'Together.',
+  subtext: 'We are working on social project to ensure sustainability among all vulnerable and marginalised community, with key focus on Sustainable Development Goals.',
+  caption: 'Stand Sustainable Foundation',
+  image: '/images/content/stock-8609.jpg',
+  imageAlt: 'Community sustainability initiative by Stand Sustainable Foundation',
 };
 
 export const scaleOfChallenge = {
-  headline: 'The architecture of poverty is deeply entrenched.',
-  body: 'For decades, the approach has been reactive. Band-aids applied to systemic wounds. But charity alone cannot dismantle generational cycles of deprivation. It requires an institutional overhaul.',
-  image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?q=80&w=2072&auto=format&fit=crop',
-  imageAlt: 'Rural infrastructure in Bihar, India showing community development',
-  caption: 'Rural Infrastructure, Bihar, 2023',
+  headline: 'Stand Up Against COVID',
+  body: 'We for past 1 year have been responding to COVID crisis in India. We have through our MHM program have been able raise 1500 re-usable pads for migrant workers and their family members. In the second wave of Covid-19 outbreak India is having an unprecedented impact on its people. There is a huge crisis of medical support leading chaos and confusion in the country. In the light of these challenges, Stand Sustainable Foundation with the help of its team and more than 50 volunteers is trying to support people in arranging Oxygen Cylinders, Concentrators, Medical devices, Hospital Beds, Ambulance support etc.',
+  image: '/images/content/mhm-training.jpg',
+  imageAlt: 'MHM Training program by Stand Sustainable Foundation',
+  caption: 'MHM Training Program',
 };
 
 export const traditionalSolutions = {
-  eyebrow: 'The Flaw in the System',
-  headline: 'Why traditional solutions fail',
-  body1: 'Dependency is not empowerment. When aid models focus strictly on immediate resource distribution, they inadvertently bypass the structural deficits that caused the need in the first place.',
-  body2: 'We examined decades of data across rural India. The conclusion was stark: without localized capacity building, financial capital dissipates. True sustainability requires infrastructure, knowledge transfer, and unwavering institutional support.',
+  eyebrow: 'Our Approach',
+  headline: 'Welcome',
+  body1: 'We are working on social project to ensure sustainability among all vulnerable and marginalised community, with key focus on Sustainable Development Goals.',
+  body2: 'We believe in mainstreaming of climate change, gender and access to education and livelihood as necessity in development projects.',
   pullQuote: '"It is not about giving what is lacking, but building what can last."',
 };
 
 export const methodology = {
-  eyebrow: 'Our Methodology',
-  headline: 'Capacity, not Charity',
-  body: 'We partner with local leaders to establish permanent agricultural and economic frameworks. By treating rural communities as institutional partners rather than beneficiaries, we engineer permanence.',
-  image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop',
-  imageAlt: 'Capacity building program showing agricultural training in Gujarat',
-  caption: 'Seed Program, Gujarat, 2024',
+  eyebrow: 'Our Mission',
+  headline: 'Making a Lasting Difference',
+  body: 'We focus on making the maximum positive effort for our community. Our members and volunteers provide the momentum that helps us affect change. Using data driven models, we provide solutions that make a long-lasting difference.',
+  image: '/images/content/mhm.jpg',
+  imageAlt: 'MHM program activity by Stand Sustainable Foundation',
+  caption: 'MHM Program, Stand Sustainable Foundation',
 };
 
-export const testimonial: TestimonialItem = {
-  quote: '"The foundation did not just bring water; they brought the engineering knowledge required for us to maintain it ourselves. True ownership changed everything."',
-  name: 'Meena Devi',
-  role: 'Village Council Head',
-  location: 'Rajasthan, India',
-  year: '2024',
-  image: 'https://images.unsplash.com/photo-1532372320572-cda25653a26d?q=80&w=2070&auto=format&fit=crop',
-  imageAlt: 'Portrait of Meena Devi',
-  verified: false,
-};
+/* Testimonials: NOT FOUND on the original website */
+export const testimonial: TestimonialItem | null = null;
 
 export const transitionCta = {
-  headline: 'The narrative is only as strong as its outcomes.',
-  ctaLabel: 'See the Evidence',
+  headline: 'See what we have accomplished together.',
+  ctaLabel: 'View Our Work',
   ctaHref: '/projects',
 };
 
 export const sdgAlignment = {
   headline: 'Our Commitment to the SDGs',
-  statement: 'We are proud to align our grassroots initiatives with the United Nations Sustainable Development Goals.',
-  note: "These goals aren't just icons on a website for us. They represent the real, measurable change we are actively working towards in our communities every single day.",
+  statement: 'We are proud to align our grassroots initiatives with the United Nations Sustainable Development Goals. Our focus areas include sustainability, community empowerment, gender equality, education access, and collaboration.',
+  note: "These goals represent the real, measurable change we are actively working towards in our communities every single day — through our programs in education, gender empowerment, skills and livelihood, and collaborations.",
   badges: [
     { number: '1', label: 'No Poverty', color: '#E5243B' },
     { number: '4', label: 'Quality Education', color: '#C5192D' },
@@ -71,49 +63,41 @@ export const sdgAlignment = {
   ]
 };
 
+/* Partners: NOT FOUND on the original website */
 export const partnerStrip = {
   label: 'Trusted By',
-  partners: [
-    { name: 'Tata Group', logo: '/images/logos/tata.svg' },
-    { name: 'Reliance Industries', logo: '/images/logos/reliance.svg' },
-    { name: 'Mahindra', logo: '/images/logos/mahindra.svg' },
-    { name: 'Infosys', logo: '/images/logos/infosys.svg' },
-    { name: 'Wipro', logo: '/images/logos/wipro.svg' },
-    { name: 'ITC Limited', logo: '/images/logos/itc.svg' },
-    { name: 'HDFC Bank', logo: '/images/logos/hdfc.svg' },
-    { name: 'State Bank of India', logo: '/images/logos/sbi.svg' },
-  ]
+  partners: [] as { name: string; logo: string }[],
 };
 
 export const editorialNews = {
-  headline: 'Institutional Perspective',
-  ctaLabel: 'All Publications',
-  ctaHref: '/reports',
+  headline: 'Our Programs',
+  ctaLabel: 'View All Programs',
+  ctaHref: '/projects',
   articles: [
     {
-      image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2026&auto=format&fit=crop',
-      category: 'Field Report',
-      title: 'Measuring the Multiplier Effect of Rural Micro-Grids',
-      excerpt: 'A 24-month longitudinal study on the economic acceleration following solar deployment in Rajasthan.'
+      image: '/images/content/icon-community.jpg',
+      category: 'Community Engagement',
+      title: 'Our Work',
+      excerpt: 'To effectively engage with the marginalised communities on sensitising various issues that can help them in realising their full potential.'
     },
     {
-      image: 'https://images.unsplash.com/photo-1524069290683-0457abfe42c3?q=80&w=2070&auto=format&fit=crop',
-      category: 'Policy Brief',
-      title: 'Digital Literacy as Core Infrastructure',
-      excerpt: 'Why internet access must be treated with the same urgency as clean water and electricity.'
+      image: '/images/content/icon-skill.jpg',
+      category: 'Livelihood',
+      title: 'Skill and Livelihood',
+      excerpt: 'To network with various skills based training Institutions including various vocational institutions to reach to vulnerable section of society.'
     },
     {
-      image: 'https://images.unsplash.com/photo-1473448912268-2022ce9509d8?q=80&w=2041&auto=format&fit=crop',
-      category: 'Opinion',
-      title: 'The End of the Savior Complex',
-      excerpt: 'Shifting power from global headquarters to local community cooperatives.'
+      image: '/images/content/icon-gender.jpg',
+      category: 'Empowerment',
+      title: 'Gender',
+      excerpt: 'Gender empowerment through access to resources.'
     }
   ]
 };
 
 export const actionCta = {
-  headline: 'Be the Catalyst.',
-  subStatement: 'Whether you represent an institutional partner or wish to contribute individually, this work requires your agency.',
-  cta1: { label: 'Apply for a Grant', href: '/partner' },
-  cta2: { label: 'Volunteer with Us', href: '/contact' }
+  headline: 'Get Involved.',
+  subStatement: 'Our amazing team of regulars and part-time volunteers are committed to helping others. We take our convictions and turn them into action. Think you would be a good fit? Get in touch for more information!',
+  cta1: { label: 'Partner With Us', href: '/partner' },
+  cta2: { label: 'Contact Us', href: '/contact' }
 };

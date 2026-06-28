@@ -3,9 +3,9 @@ import type { NavItem, FooterLink } from '@/types/content';
 export const siteConfig = {
   name: 'Stand Sustainable',
   fullName: 'Stand Sustainable Foundation',
-  tagline: 'Building a better architecture for poverty alleviation.',
-  description: 'Building a better architecture for poverty alleviation through structural change, community capacity building, and institutional transparency across India.',
-  copyright: '© 2026 Stand Sustainable Foundation. All rights reserved.',
+  tagline: 'Lets Stand Together.',
+  description: 'Working for sustainability',
+  copyright: 'Copyright © 2026 Stand Sustainable - All Rights Reserved.',
   url: 'https://standsustainable.org',
   locale: 'en_IN',
 };
@@ -15,7 +15,7 @@ export const navItems: NavItem[] = [
   { label: 'About', href: '/about' },
   { label: 'Projects & Impact', href: '/projects' },
   { label: 'Gallery', href: '/gallery' },
-  { label: 'Reports', href: '/reports' },
+
   { label: 'Contact', href: '/contact' },
 ];
 
@@ -24,7 +24,7 @@ export const mobileNavItems: NavItem[] = [
   { label: 'About Us', href: '/about' },
   { label: 'Projects & Impact', href: '/projects' },
   { label: 'Gallery', href: '/gallery' },
-  { label: 'Reports & Transparency', href: '/reports' },
+
   { label: 'Contact', href: '/contact' },
 ];
 
@@ -36,7 +36,7 @@ export const footerOrganizationLinks: FooterLink[] = [
 
 export const footerActionLinks: FooterLink[] = [
   { label: 'Partner With Us', href: '/partner' },
-  { label: 'Reports & Transparency', href: '/reports' },
+
   { label: 'Contact', href: '/contact' },
   { label: 'Donate', href: '/donate' },
 ];

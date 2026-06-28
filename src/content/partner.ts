@@ -1,20 +1,26 @@
+/* ============================================================
+   PARTNER PAGE CONTENT
+   Source: website-content-master.md
+   Partnership info derived from Collaborations program description.
+   ============================================================ */
+
 export const partnerHero = {
   headline: 'Partner With Us',
-  subtext: 'We collaborate with corporations, foundations, and institutional donors to deploy capital effectively for structural poverty alleviation.',
-  backgroundImage: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?q=80&w=2070&auto=format&fit=crop',
+  subtext: 'To partner with Government and non-Governmental agencies to support vulnerable and marginalised communities in exploring their capabilities.',
+  backgroundImage: '/images/content/stock-8609.jpg',
 };
 
 export const partnerModels = [
   {
-    title: 'Corporate Social Responsibility (CSR) Execution',
-    description: 'End-to-end implementation of your CSR mandates under Section 135 of the Companies Act, 2013, complete with rigorous impact measurement and transparent financial reporting.',
+    title: 'Government Partnerships',
+    description: 'We collaborate with Government agencies to support vulnerable and marginalised communities in exploring their capabilities and accessing essential services.',
   },
   {
-    title: 'Institutional Co-Funding',
-    description: 'Pool capital with Stand Sustainable Foundation to rapidly scale proven, high-impact interventions across aspirational districts in India.',
+    title: 'Non-Governmental Collaborations',
+    description: 'We work alongside non-Governmental agencies and civil society organisations to effectively engage with communities on issues related to sustainability, education, gender, and livelihoods.',
   },
   {
-    title: 'Technical & Knowledge Partnership',
-    description: 'Collaborate on on-ground research, technology deployment (such as solar grids or agritech), and capacity-building frameworks for rural communities.',
+    title: 'Skills & Training Partnerships',
+    description: 'We network with various skills based training Institutions including various vocational institutions to reach to vulnerable section of society and provide them pathways to sustainable livelihoods.',
   }
 ];
