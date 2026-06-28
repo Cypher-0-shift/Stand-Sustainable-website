@@ -230,14 +230,6 @@ export default function ProjectsPage() {
                         {project.description}
                       </p>
                       
-                      <div className="flex items-center justify-between pt-4 border-t" style={{ borderColor: 'var(--color-alabaster)' }}>
-                        <span className="text-label-caps" style={{ color: 'var(--color-accent-terracotta)', fontSize: '11px' }}>
-                          View Report
-                        </span>
-                        <span className="material-symbols-outlined" style={{ color: 'var(--color-accent-terracotta)', fontSize: '16px' }}>
-                          arrow_forward
-                        </span>
-                      </div>
                     </div>
                   </div>
                 </Link>
