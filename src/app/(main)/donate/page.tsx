@@ -411,6 +411,7 @@ export default function DonatePage() {
           style={{ backgroundColor: 'rgba(0, 64, 31, 0.02)' }}
           aria-hidden="true"
         />
+      </div>
     </>
   );
 }

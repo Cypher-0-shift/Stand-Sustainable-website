@@ -11,7 +11,7 @@ export default function PartnerForm() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const [selectedInterest, setSelectedInterest] = useState(INTEREST_OPTIONS[0]);
+  const [selectedInterest, setSelectedInterest] = useState<string>(INTEREST_OPTIONS[0]);
 
   const handleSubmit = async (formData: FormData) => {
     setIsSubmitting(true);
