@@ -3,7 +3,7 @@ import PageHero from '@/components/layout/PageHero';
 
 export const metadata: Metadata = {
   alternates: {
-    canonical: '/privacy',
+    canonical: '/privacy/',
   },
   title: 'Privacy Policy — Stand Sustainable Foundation',
 };

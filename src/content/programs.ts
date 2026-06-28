@@ -7,7 +7,7 @@
 export const programsHero = {
   headline: 'About Us',
   subtext: 'We are working on social project to ensure sustainability among all vulnerable and marginalised community, with key focus on Sustainable Development Goals.',
-  backgroundImage: '/images/content/stock-8609.jpg',
+  backgroundImage: '/images/content/stock-8609.webp',
 };
 
 export const programsList = [
@@ -40,7 +40,7 @@ export const programsList = [
     overview: 'To partner with Government and non-Governmental agencies to support vulnerable and marginalised communities in exploring their capabilities.',
     objectives: ['Partner with Government agencies', 'Collaborate with non-Governmental organisations'],
     outcomes: 'Partnerships supporting communities in exploring their capabilities.',
-    image: '/images/content/stock-10929.jpg',
+    image: '/images/content/stock-10929.webp',
     icon: 'handshake',
   },
   {
@@ -48,7 +48,7 @@ export const programsList = [
     overview: 'Provide innovative solutions for access to education for all.',
     objectives: ['Create innovative education access solutions', 'Ensure education reaches all communities'],
     outcomes: 'Working towards universal access to quality education.',
-    image: '/images/content/stock-103150.jpg',
+    image: '/images/content/stock-103150.webp',
     icon: 'school',
   },
 ];

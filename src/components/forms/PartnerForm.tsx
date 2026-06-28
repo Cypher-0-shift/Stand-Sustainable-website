@@ -107,7 +107,7 @@ export default function PartnerForm() {
           className="mt-1"
         />
         <label htmlFor="consent" className="text-body-sm" style={{ color: 'var(--color-on-surface-variant)' }}>
-          I agree to the <a href="/privacy" className="underline hover:opacity-80" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and consent to the processing of my personal data for the purpose of handling this inquiry in accordance with the DPDP Act 2023.
+          I agree to the <a href="/privacy/" className="underline hover:opacity-80" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and consent to the processing of my personal data for the purpose of handling this inquiry in accordance with the DPDP Act 2023.
         </label>
       </div>
       <button

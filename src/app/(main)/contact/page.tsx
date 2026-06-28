@@ -8,7 +8,7 @@ import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd';
 
 export const metadata: Metadata = {
   alternates: {
-    canonical: '/contact',
+    canonical: '/contact/',
   },
   title: 'Contact Us — Stand Sustainable Foundation',
   description: 'Better yet, see us in person! We are happy to connect. Reach us at 13 B Hauz Khas Village, New Delhi.',
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
-      <BreadcrumbJsonLd items={[{ name: 'Contact', url: '/contact' }]} />
+      <BreadcrumbJsonLd items={[{ name: 'Contact', url: '/contact/' }]} />
       <PageHero
         headline={contactHero.headline}
         subtext={contactHero.subtext}

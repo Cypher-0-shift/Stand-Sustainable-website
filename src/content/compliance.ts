@@ -14,7 +14,7 @@
 export const complianceHero = {
   headline: 'Legal & Security Compliance',
   subtext: 'Stand Sustainable Foundation maintains standards of institutional governance and transparency in all our operations.',
-  backgroundImage: '/images/content/stock-8609.jpg',
+  backgroundImage: '/images/content/stock-8609.webp',
 };
 
 export const complianceCategories = [

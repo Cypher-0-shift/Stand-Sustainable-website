@@ -1,8 +1,8 @@
 export const contactHero = {
   headline: 'Contact Us',
   subtext: 'Better yet, see us in person! We are happy to connect.',
-  // TODO: Ensure public/images/content/stock-contact.jpg exists (downloaded from Unsplash)
-  backgroundImage: '/images/content/stock-contact.jpg',
+  // TODO: Ensure public/images/content/stock-contact.webp exists (downloaded from Unsplash)
+  backgroundImage: '/images/content/stock-contact.webp',
 };
 
 export const officeLocations = [

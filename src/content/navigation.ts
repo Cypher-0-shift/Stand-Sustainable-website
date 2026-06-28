@@ -12,37 +12,37 @@ export const siteConfig = {
 
 export const navItems: NavItem[] = [
   { label: 'Home', href: '/' },
-  { label: 'About', href: '/about' },
-  { label: 'Projects & Impact', href: '/projects' },
-  { label: 'Gallery', href: '/gallery' },
+  { label: 'About', href: '/about/' },
+  { label: 'Projects & Impact', href: '/projects/' },
+  { label: 'Gallery', href: '/gallery/' },
 
-  { label: 'Contact', href: '/contact' },
+  { label: 'Contact', href: '/contact/' },
 ];
 
 export const mobileNavItems: NavItem[] = [
   { label: 'Home', href: '/' },
-  { label: 'About Us', href: '/about' },
-  { label: 'Projects & Impact', href: '/projects' },
-  { label: 'Gallery', href: '/gallery' },
+  { label: 'About Us', href: '/about/' },
+  { label: 'Projects & Impact', href: '/projects/' },
+  { label: 'Gallery', href: '/gallery/' },
 
-  { label: 'Contact', href: '/contact' },
+  { label: 'Contact', href: '/contact/' },
 ];
 
 export const footerOrganizationLinks: FooterLink[] = [
-  { label: 'About Us', href: '/about' },
-  { label: 'Projects & Impact', href: '/projects' },
-  { label: 'Gallery', href: '/gallery' },
+  { label: 'About Us', href: '/about/' },
+  { label: 'Projects & Impact', href: '/projects/' },
+  { label: 'Gallery', href: '/gallery/' },
 ];
 
 export const footerActionLinks: FooterLink[] = [
-  { label: 'Partner With Us', href: '/partner' },
+  { label: 'Partner With Us', href: '/partner/' },
 
-  { label: 'Contact', href: '/contact' },
-  { label: 'Donate', href: '/donate' },
+  { label: 'Contact', href: '/contact/' },
+  { label: 'Donate', href: '/donate/' },
 ];
 
 export const footerLegalLinks: FooterLink[] = [
-  { label: 'Privacy Policy', href: '/privacy' },
-  { label: 'Compliance & Security', href: '/compliance' },
-  { label: 'Terms of Service', href: '/terms' },
+  { label: 'Privacy Policy', href: '/privacy/' },
+  { label: 'Compliance & Security', href: '/compliance/' },
+  { label: 'Terms of Service', href: '/terms/' },
 ];

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: 'Projects & Impact — Stand Sustainable Foundation',
   description: 'Our work for sustainability across India — programs in education, gender empowerment, skills and livelihood, and community engagement.',
   alternates: {
-    canonical: '/projects',
+    canonical: '/projects/',
   },
 };
 
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 export default function ProjectsPage() {
   return (
     <>
-      <BreadcrumbJsonLd items={[{ name: 'Projects', url: '/projects' }]} />
+      <BreadcrumbJsonLd items={[{ name: 'Projects', url: '/projects/' }]} />
       <PageHero
         headline={projectsHero.headline}
         subtext={projectsHero.subtext}
@@ -147,7 +147,7 @@ export default function ProjectsPage() {
             <FadeUp className="md:col-span-8" delay={120}>
               <div className="ambient-shadow rounded-[6px] overflow-hidden h-full flex flex-col p-3 group cursor-pointer" style={{ backgroundColor: 'var(--color-surface)' }}>
                 <div className="relative overflow-hidden rounded-t-[4px] aspect-[2/1]">
-                  <Image src={heroProject.image} alt={heroProject.imageAlt} fill className="object-cover img-hover-scale" unoptimized />
+                  <Image src={heroProject.image} alt={heroProject.imageAlt} fill className="object-cover img-hover-scale" sizes="(max-width: 768px) 100vw, 50vw" unoptimized />
                   <div className="absolute bottom-4 left-4 backdrop-blur px-3 py-1 rounded-[2px]" style={{ backgroundColor: 'rgba(248, 250, 244, 0.9)' }}>
                     <span className="text-label-caps" style={{ color: 'var(--color-primary)' }}>{heroProject.location} · {heroProject.year}</span>
                   </div>
@@ -169,7 +169,7 @@ export default function ProjectsPage() {
               {supportingProjects.map((project) => (
                 <div key={project.title} className="ambient-shadow rounded-[6px] overflow-hidden group cursor-pointer p-3 flex-1" style={{ backgroundColor: 'var(--color-surface)' }}>
                   <div className="relative overflow-hidden rounded-t-[4px] aspect-video">
-                    <Image src={project.image} alt={project.imageAlt} fill className="object-cover img-hover-scale" unoptimized />
+                    <Image src={project.image} alt={project.imageAlt} fill className="object-cover img-hover-scale" sizes="(max-width: 768px) 100vw, 50vw" unoptimized />
                     <div className="absolute bottom-3 left-3 backdrop-blur px-2 py-1 rounded-[2px]" style={{ backgroundColor: 'rgba(248, 250, 244, 0.9)' }}>
                       <span className="text-label-caps tracking-wider" style={{ fontSize: '10px', color: 'var(--color-primary)' }}>{project.location} · {project.year}</span>
                     </div>
@@ -195,7 +195,7 @@ export default function ProjectsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[var(--spacing-gutter)]">
             {projectDirectory.map((project, index) => (
               <FadeUp key={project.slug} delay={index * 120}>
-                <Link href="/projects" className="block group h-full">
+                <Link href="/projects/" className="block group h-full">
                   <div
                     className="flex flex-col h-full rounded-[6px] overflow-hidden ambient-shadow transition-transform duration-300 group-hover:-translate-y-1"
                     style={{ backgroundColor: 'var(--color-surface)' }}

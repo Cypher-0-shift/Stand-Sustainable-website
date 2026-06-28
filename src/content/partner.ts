@@ -7,7 +7,7 @@
 export const partnerHero = {
   headline: 'Partner With Us',
   subtext: 'To partner with Government and non-Governmental agencies to support vulnerable and marginalised communities in exploring their capabilities.',
-  backgroundImage: '/images/content/stock-8609.jpg',
+  backgroundImage: '/images/content/stock-8609.webp',
 };
 
 export const partnerModels = [

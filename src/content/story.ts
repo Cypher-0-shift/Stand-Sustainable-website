@@ -11,14 +11,14 @@ export const storyHero = {
   headlineItalic: 'Together.',
   subtext: 'We are working on social project to ensure sustainability among all vulnerable and marginalised community, with key focus on Sustainable Development Goals.',
   caption: 'Stand Sustainable Foundation',
-  image: '/images/content/stock-8609.jpg',
+  image: '/images/content/stock-8609.webp',
   imageAlt: 'Community sustainability initiative by Stand Sustainable Foundation',
 };
 
 export const scaleOfChallenge = {
   headline: 'Stand Up Against COVID',
   body: 'We for past 1 year have been responding to COVID crisis in India. We have through our MHM program have been able raise 1500 re-usable pads for migrant workers and their family members. In the second wave of Covid-19 outbreak India is having an unprecedented impact on its people. There is a huge crisis of medical support leading chaos and confusion in the country. In the light of these challenges, Stand Sustainable Foundation with the help of its team and more than 50 volunteers is trying to support people in arranging Oxygen Cylinders, Concentrators, Medical devices, Hospital Beds, Ambulance support etc.',
-  image: '/images/content/mhm-training.jpg',
+  image: '/images/content/mhm-training.webp',
   imageAlt: 'MHM Training program by Stand Sustainable Foundation',
   caption: 'MHM Training Program',
 };
@@ -35,7 +35,7 @@ export const methodology = {
   eyebrow: 'Our Mission',
   headline: 'Making a Lasting Difference',
   body: 'We focus on making the maximum positive effort for our community. Our members and volunteers provide the momentum that helps us affect change. Using data driven models, we provide solutions that make a long-lasting difference.',
-  image: '/images/content/mhm.jpg',
+  image: '/images/content/mhm.webp',
   imageAlt: 'MHM program activity by Stand Sustainable Foundation',
   caption: 'MHM Program, Stand Sustainable Foundation',
 };
@@ -98,6 +98,6 @@ export const editorialNews = {
 export const actionCta = {
   headline: 'Get Involved.',
   subStatement: 'Our amazing team of regulars and part-time volunteers are committed to helping others. We take our convictions and turn them into action. Think you would be a good fit? Get in touch for more information!',
-  cta1: { label: 'Partner With Us', href: '/partner' },
-  cta2: { label: 'Contact Us', href: '/contact' }
+  cta1: { label: 'Partner With Us', href: '/partner/' },
+  cta2: { label: 'Contact Us', href: '/contact/' }
 };

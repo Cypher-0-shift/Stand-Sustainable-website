@@ -33,7 +33,7 @@ export const thankYouContent = {
   body: 'Your support has been received. We\'ve sent a receipt to your email, along with details on how your contribution is helping us work for sustainability in vulnerable and marginalised communities.',
   ctaLabel: 'Return Home',
   ctaHref: '/',
-  image: '/images/hero_india.png',
+  image: '/images/hero_india.webp',
   imageAlt: 'Stand Sustainable Foundation community impact',
 };
 

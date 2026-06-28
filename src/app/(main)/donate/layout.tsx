@@ -7,7 +7,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Donate — Stand Sustainable Foundation',
   alternates: {
-    canonical: '/donate',
+    canonical: '/donate/',
   },
 };
 

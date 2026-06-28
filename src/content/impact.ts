@@ -43,7 +43,7 @@ export const heroProject: ProjectItem = {
   location: 'India',
   year: '2020–2021',
   description: 'Stand Sustainable Foundation has been responding to the COVID crisis in India for over 1 year. Through the MHM program, we raised 1,500 re-usable pads for migrant workers and their family members. During the second wave, we mobilized 50+ volunteers to support people in arranging Oxygen Cylinders, Concentrators, Medical Devices, Hospital Beds, and Ambulance Support.',
-  image: '/images/content/mhm-training.jpg',
+  image: '/images/content/mhm-training.webp',
   imageAlt: 'MHM Training program by Stand Sustainable Foundation',
   ctaLabel: 'Learn More',
   ctaHref: '/projects',

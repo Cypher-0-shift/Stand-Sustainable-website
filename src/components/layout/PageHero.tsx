@@ -23,6 +23,7 @@ export default function PageHero({ headline, subtext, backgroundImage }: PageHer
           alt=""
           fill
           className="object-cover"
+          sizes="100vw"
           aria-hidden="true"
         />
         {/* Gradient Overlay for text readability */}

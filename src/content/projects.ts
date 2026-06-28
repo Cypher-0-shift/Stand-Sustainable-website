@@ -7,7 +7,7 @@
 export const projectsHero = {
   headline: 'Our Work',
   subtext: 'Stand Sustainable Foundation works on social projects to ensure sustainability among all vulnerable and marginalised communities, with key focus on Sustainable Development Goals.',
-  backgroundImage: '/images/content/stock-18309.jpg',
+  backgroundImage: '/images/content/stock-18309.webp',
 };
 
 export const projectDirectory = [
@@ -19,7 +19,7 @@ export const projectDirectory = [
     status: 'Completed',
     beneficiaries: 'Migrant workers and their families',
     description: 'Responding to the COVID crisis in India for over 1 year. Through the MHM program, raised 1,500 re-usable pads for migrant workers. During the second wave, mobilized 50+ volunteers to support people in arranging Oxygen Cylinders, Concentrators, Medical Devices, Hospital Beds, and Ambulance Support.',
-    image: '/images/content/mhm-training.jpg',
+    image: '/images/content/mhm-training.webp',
   },
   {
     slug: 'our-work',
@@ -59,7 +59,7 @@ export const projectDirectory = [
     status: 'Active',
     beneficiaries: 'Vulnerable and marginalised communities',
     description: 'To partner with Government and non-Governmental agencies to support vulnerable and marginalised communities in exploring their capabilities.',
-    image: '/images/content/stock-10929.jpg',
+    image: '/images/content/stock-10929.webp',
   },
   {
     slug: 'education',
@@ -69,6 +69,6 @@ export const projectDirectory = [
     status: 'Active',
     beneficiaries: 'Communities lacking access to education',
     description: 'Provide innovative solutions for access to education for all.',
-    image: '/images/content/stock-103150.jpg',
+    image: '/images/content/stock-103150.webp',
   },
 ];

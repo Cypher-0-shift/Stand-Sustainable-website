@@ -3,7 +3,7 @@ import PageHero from '@/components/layout/PageHero';
 
 export const metadata: Metadata = {
   alternates: {
-    canonical: '/terms',
+    canonical: '/terms/',
   },
   title: 'Terms of Service — Stand Sustainable Foundation',
 };

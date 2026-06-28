@@ -11,7 +11,7 @@ import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd';
 
 export const metadata: Metadata = {
   alternates: {
-    canonical: '/about',
+    canonical: '/about/',
   },
   title: 'About Us — Stand Sustainable Foundation',
   description: 'Working for sustainability among all vulnerable and marginalised communities, with a key focus on the Sustainable Development Goals.',
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <BreadcrumbJsonLd items={[{ name: 'About Us', url: '/about' }]} />
+      <BreadcrumbJsonLd items={[{ name: 'About Us', url: '/about/' }]} />
       {/* ====================================================
           SECTION 1 — OVERVIEW (DARK HERO)
           ==================================================== */}
@@ -33,6 +33,7 @@ export default function AboutPage() {
             alt="Organization Overview"
             fill
             className="object-cover"
+            sizes="100vw"
             priority
           />
           {/* Dark Overlay */}

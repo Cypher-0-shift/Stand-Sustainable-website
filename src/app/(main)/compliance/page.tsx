@@ -3,7 +3,7 @@ import PageHero from '@/components/layout/PageHero';
 
 export const metadata: Metadata = {
   alternates: {
-    canonical: '/compliance',
+    canonical: '/compliance/',
   },
   title: 'Legal & Security Compliance — Stand Sustainable Foundation',
   description: 'Our institutional governance, financial compliance, and data security standards.',

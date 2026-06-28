@@ -7,7 +7,7 @@ import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd';
 
 export const metadata: Metadata = {
   alternates: {
-    canonical: '/gallery',
+    canonical: '/gallery/',
   },
   title: 'Gallery — Stand Sustainable Foundation',
   description: 'Photos from our programs and initiatives across India, documenting our work in sustainability and community empowerment.',
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default function GalleryPage() {
   return (
     <>
-      <BreadcrumbJsonLd items={[{ name: 'Gallery', url: '/gallery' }]} />
+      <BreadcrumbJsonLd items={[{ name: 'Gallery', url: '/gallery/' }]} />
       <PageHero
         headline={galleryHero.headline}
         subtext={galleryHero.subtext}

@@ -6,7 +6,7 @@
 export const overviewSection = {
   headline: 'Working for Sustainability Across India.',
   body: 'We are working on a social project to ensure sustainability among all vulnerable and marginalised communities, with a key focus on the Sustainable Development Goals. We believe in the mainstreaming of climate change, gender equality, and access to education and livelihood as a necessity in development projects.',
-  backgroundImage: '/images/content/mhm.jpg', // From website-content-master.md Image 3
+  backgroundImage: '/images/content/mhm.webp', // From website-content-master.md Image 3
 };
 
 export const missionSection = {

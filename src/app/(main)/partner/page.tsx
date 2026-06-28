@@ -6,7 +6,7 @@ import { partnerHero, partnerModels } from '@/content/partner';
 
 export const metadata: Metadata = {
   alternates: {
-    canonical: '/partner',
+    canonical: '/partner/',
   },
   title: 'Partner With Us — Stand Sustainable Foundation',
   description: 'Partner with Government and non-Governmental agencies to support vulnerable and marginalised communities.',

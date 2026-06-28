@@ -48,8 +48,8 @@ const nextConfig: NextConfig = {
   /* Static export disabled to allow Resend Server Actions */
   // output: 'export',
 
-  /* Image optimization with external domains */
   images: {
+    formats: ['image/webp', 'image/avif'],
     remotePatterns: [
       {
         protocol: 'https',

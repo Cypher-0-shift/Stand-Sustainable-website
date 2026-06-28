@@ -32,15 +32,13 @@ export const metadata: Metadata = {
     siteName: 'Stand Sustainable Foundation',
     locale: 'en_IN',
     type: 'website',
-    images: [{ url: 'https://standsustainable.org/images/content/stock-8609.jpg', width: 1200, height: 630, alt: 'Stand Sustainable Foundation' }],
+    images: [{ url: 'https://standsustainable.org/images/content/stock-8609.webp', width: 1200, height: 630, alt: 'Stand Sustainable Foundation' }],
   },
   twitter: {
     card: 'summary_large_image',
-    site: '@standsustain',
-    creator: '@standsustain',
     title: 'Stand Sustainable Foundation',
     description: 'Lets Stand Together.',
-    images: [{ url: 'https://standsustainable.org/images/content/stock-8609.jpg', alt: 'Stand Sustainable Foundation' }],
+    images: [{ url: 'https://standsustainable.org/images/content/stock-8609.webp', alt: 'Stand Sustainable Foundation' }],
   },
   other: {
     'theme-color': '#111111',
@@ -98,7 +96,7 @@ export default function RootLayout({
                   // TODO: Replace with actual organization logo once created at /public/images/logo.png
                   "logo": {
                     "@type": "ImageObject",
-                    "url": "https://standsustainable.org/images/content/stock-8609.jpg",
+                    "url": "https://standsustainable.org/images/content/stock-8609.webp",
                     "width": 1200,
                     "height": 630
                   },
@@ -111,7 +109,6 @@ export default function RootLayout({
                     "availableLanguage": ["en", "hi"]
                   },
                   "sameAs": [
-                    "https://twitter.com/standsustain",
                     "https://www.linkedin.com/company/stand-sustainable-foundation"
                   ],
                   "areaServed": "IN"

@@ -374,7 +374,7 @@ export default function DonatePage() {
                   style={{ color: 'var(--color-on-surface-variant)' }}
                 >
                   I agree to the{' '}
-                  <a href="/privacy" className="underline hover:opacity-80" target="_blank" rel="noopener noreferrer">
+                  <a href="/privacy/" className="underline hover:opacity-80" target="_blank" rel="noopener noreferrer">
                     Privacy Policy
                   </a>{' '}
                   and consent to the processing of my personal data for the purpose of processing

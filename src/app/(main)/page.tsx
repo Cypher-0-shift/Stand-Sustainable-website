@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     description: 'We are working on a social project to ensure sustainability among all vulnerable and marginalised communities, with a key focus on the Sustainable Development Goals.',
     url: '/',
     type: 'website',
-    images: [{ url: 'https://standsustainable.org/images/content/stock-8609.jpg', width: 1200, height: 630, alt: 'Stand Sustainable Foundation — Community Sustainability Work' }],
+    images: [{ url: 'https://standsustainable.org/images/content/stock-8609.webp', width: 1200, height: 630, alt: 'Stand Sustainable Foundation — Community Sustainability Work' }],
   },
   alternates: {
     canonical: '/',
@@ -83,7 +83,7 @@ export default function StoryPage() {
             <FadeUp delay={240}>
               <div className="flex flex-col sm:flex-row gap-4 mt-10">
                 <Link
-                  href="/projects"
+                  href="/projects/"
                   className="inline-flex items-center justify-center text-label-caps rounded-[6px] transition-colors duration-300 border-2 border-transparent"
                   style={{
                     backgroundColor: 'var(--color-on-primary)',
@@ -150,6 +150,7 @@ export default function StoryPage() {
                 width={800}
                 height={600}
                 className="w-full h-auto object-cover img-hover-scale"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
             <span
@@ -257,10 +258,13 @@ export default function StoryPage() {
 
           <FadeUp delay={120}>
             <div className="relative overflow-hidden rounded-[6px] group">
-              <img
+              <Image
                 src={methodology.image}
                 alt={methodology.imageAlt}
+                width={1000}
+                height={1000}
                 className="w-full h-auto rounded-[6px] img-hover-scale transition-transform duration-500"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
             <span
@@ -340,6 +344,7 @@ export default function StoryPage() {
                   width={600}
                   height={800}
                   className="w-full h-[500px] object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
             </FadeUp>
@@ -469,9 +474,11 @@ export default function StoryPage() {
               <div className="animate-marquee flex items-center gap-16 md:gap-24">
                 {[...partnerStrip.partners, ...partnerStrip.partners].map((partner, index) => (
                   <div key={index} className="flex-shrink-0 flex items-center justify-center w-[160px] h-[80px]">
-                    <img 
+                    <Image 
                       src={partner.logo} 
                       alt={`${partner.name} Logo`} 
+                      width={160}
+                      height={80}
                       className="max-w-full max-h-full object-contain transition-transform duration-300 hover:scale-110"
                     />
                   </div>
@@ -514,6 +521,7 @@ export default function StoryPage() {
                     alt={article.title}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, 33vw"
                   />
                 </div>
                 <span className="text-label-caps mb-3 block" style={{ color: 'var(--color-stone)', fontSize: '11px' }}>

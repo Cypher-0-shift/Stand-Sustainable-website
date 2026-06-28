@@ -36,7 +36,7 @@ export default function CookieBanner() {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="text-body-sm flex-1" style={{ color: 'var(--color-on-surface-variant)' }}>
           We use cookies to improve your experience and analyze site traffic. 
-          By clicking &quot;Accept All&quot;, you consent to our use of cookies in accordance with our <Link href="/privacy" className="underline hover:opacity-80">Privacy Policy</Link> (DPDP Act 2023 compliant).
+          By clicking &quot;Accept All&quot;, you consent to our use of cookies in accordance with our <Link href="/privacy/" className="underline hover:opacity-80">Privacy Policy</Link> (DPDP Act 2023 compliant).
         </div>
         <div className="flex gap-3 shrink-0 w-full md:w-auto">
           <button 

@@ -94,7 +94,7 @@ export default function TopNavBar() {
         {/* Desktop CTAs */}
         <div className="hidden md:flex items-center gap-4">
           <Link
-            href="/partner"
+            href="/partner/"
             className="inline-flex items-center justify-center text-label-caps rounded-[6px] transition-colors duration-300 hover:opacity-90 border-2 whitespace-nowrap"
             style={{
               backgroundColor: 'transparent',
@@ -106,7 +106,7 @@ export default function TopNavBar() {
             Partner With Us
           </Link>
           <Link
-            href="/donate"
+            href="/donate/"
             className="inline-flex items-center justify-center text-label-caps rounded-[6px] transition-colors duration-300 hover:opacity-90"
             style={{
               backgroundColor: useWhiteText ? 'white' : 'var(--color-primary)',
@@ -200,7 +200,7 @@ export default function TopNavBar() {
           </nav>
           <div className="mt-auto flex flex-col gap-4">
             <Link
-              href="/partner"
+              href="/partner/"
               className="block text-center text-label-caps rounded-[6px] py-4 border-2 transition-colors hover:opacity-80"
               style={{
                 color: 'var(--color-on-primary)',
@@ -211,7 +211,7 @@ export default function TopNavBar() {
               Partner With Us
             </Link>
             <Link
-              href="/donate"
+              href="/donate/"
               className="block text-center text-label-caps rounded-[6px] py-4 transition-colors hover:opacity-90"
               style={{
                 backgroundColor: 'var(--color-on-primary)',
