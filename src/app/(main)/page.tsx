@@ -23,6 +23,7 @@ export const metadata: Metadata = {
     description: 'We are working on a social project to ensure sustainability among all vulnerable and marginalised communities, with a key focus on the Sustainable Development Goals.',
     url: '/',
     type: 'website',
+    images: [{ url: 'https://standsustainable.org/images/content/stock-8609.jpg', width: 1200, height: 630, alt: 'Stand Sustainable Foundation — Community Sustainability Work' }],
   },
   alternates: {
     canonical: '/',

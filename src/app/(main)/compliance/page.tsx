@@ -24,7 +24,7 @@ export default function CompliancePage() {
             Stand Sustainable Foundation is a registered non-profit organization operating in India. We adhere to all local and national regulations to ensure transparency and accountability in our operations.
           </p>
           <ul>
-            <li><strong>NGO Registration:</strong> Stand Sustainable Foundation is registered as a Section 8 Company (Not for Profit) under the Companies Act, 2013. Registration Number: U85300DL2021NPL385921. Jurisdiction: Registrar of Companies, New Delhi, India.</li>
+            <li><strong>NGO Registration:</strong> Stand Sustainable Foundation is a registered non-profit organization operating in India under applicable laws. Our registration documents are available upon request. Contact: standsustainable@gmail.com</li>
             <li><strong>Cookie Policy:</strong> We use cookies to analyze website traffic and optimize your website experience. By accepting our use of cookies, your data will be aggregated with all other user data.</li>
           </ul>
 

@@ -1,3 +1,8 @@
+/**
+ * @deprecated This module's data is no longer used by compliance/page.tsx.
+ * The page now renders prose directly. This file can be deleted once
+ * confirmed no other consumers exist.
+ */
 /* ============================================================
    COMPLIANCE PAGE CONTENT
    Source: website-content-master.md
@@ -19,7 +24,7 @@ export const complianceCategories = [
     items: [
       {
         title: 'NGO Registration',
-        description: 'Stand Sustainable Foundation is registered as a Section 8 Company (Not for Profit) under the Companies Act, 2013.\nRegistration Number: U85300DL2021NPL385921 (Mock).\nJurisdiction: Registrar of Companies, New Delhi, India.',
+        description: 'Stand Sustainable Foundation is a registered non-profit organization based in New Delhi, India. Our registration details are available upon request from our compliance team at standsustainable@gmail.com.',
         status: 'Registered',
         icon: 'gavel',
       },

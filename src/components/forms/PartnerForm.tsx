@@ -4,20 +4,18 @@ import { useState } from 'react';
 import { sendPartnerEmail } from '@/actions/sendEmail';
 import { InputField, TextAreaField } from './FormFields';
 
+const INTEREST_OPTIONS = ['CSR Implementation', 'Co-Funding', 'Knowledge Partnership', 'Other'] as const;
+
 export default function PartnerForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const [selectedInterest, setSelectedInterest] = useState('CSR Implementation');
-  const interestOptions = ['CSR Implementation', 'Co-Funding', 'Knowledge Partnership', 'Other'];
+  const [selectedInterest, setSelectedInterest] = useState(INTEREST_OPTIONS[0]);
 
   const handleSubmit = async (formData: FormData) => {
     setIsSubmitting(true);
     setErrorMessage('');
-    
-    // Add the custom selected interest to formData
-    formData.append('interest', selectedInterest);
     
     const response = await sendPartnerEmail(formData);
     
@@ -81,7 +79,7 @@ export default function PartnerForm() {
             style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
             required
           >
-            {interestOptions.map((option) => (
+            {INTEREST_OPTIONS.map((option) => (
               <option key={option} value={option}>
                 {option}
               </option>

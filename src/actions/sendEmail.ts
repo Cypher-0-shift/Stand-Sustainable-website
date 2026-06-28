@@ -1,5 +1,6 @@
 'use server';
 
+import { headers } from 'next/headers';
 import { Resend } from 'resend';
 
 /* ============================================================
@@ -18,19 +19,33 @@ const IS_DEV = process.env.NODE_ENV === 'development';
    RATE LIMITER  (in-memory, per-IP window)
    — 5 submissions per IP per 15 minutes
    ============================================================ */
-const RATE_WINDOW_MS = 15 * 60 * 1000; // 15 min
+const RATE_WINDOW_MS = 15 * 60 * 1000;
 const RATE_LIMIT = 5;
+
+// ⚠️ PRODUCTION TODO: Replace this in-memory rate limiter with Upstash Redis
+// or Vercel KV before launch. See: https://upstash.com/docs/redis/sdks/ratelimit-ts/overview
+// Required env vars: UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN
+
+// In-memory map retained as best-effort for single-instance deployments.
+// For production serverless deployments, replace with Upstash Redis:
+// https://upstash.com/docs/redis/sdks/ratelimit-ts/overview
+// Environment variables needed: UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN
 const submissions = new Map<string, { count: number; windowStart: number }>();
 
 function isRateLimited(ip: string): boolean {
+  // Purge stale entries to prevent unbounded memory growth
   const now = Date.now();
-  const entry = submissions.get(ip);
+  for (const [key, entry] of submissions.entries()) {
+    if (now - entry.windowStart > RATE_WINDOW_MS) {
+      submissions.delete(key);
+    }
+  }
 
+  const entry = submissions.get(ip);
   if (!entry || now - entry.windowStart > RATE_WINDOW_MS) {
     submissions.set(ip, { count: 1, windowStart: now });
     return false;
   }
-
   entry.count++;
   return entry.count > RATE_LIMIT;
 }
@@ -82,9 +97,20 @@ export async function sendContactEmail(
     return { success: true, message: 'Message sent successfully.' };
   }
 
-  /* --- rate limit --- */
-  const ip =
-    (formData.get('_ip') as string) ?? 'unknown'; // set by middleware if needed
+  /* --- consent validation --- */
+  const consent = formData.get('consent');
+  if (!consent) {
+    return {
+      success: false,
+      message: 'You must consent to the processing of your personal data to submit this form.',
+    };
+  }
+
+  /* --- rate limit (IP from server headers, not client) --- */
+  const headersList = await headers();
+  const ip = headersList.get('x-forwarded-for')?.split(',')[0].trim()
+    ?? headersList.get('x-real-ip')
+    ?? 'unknown';
   if (isRateLimited(ip)) {
     return {
       success: false,
@@ -155,9 +181,20 @@ export async function sendPartnerEmail(
     return { success: true, message: 'Message sent successfully.' };
   }
 
-  /* --- rate limit --- */
-  const ip =
-    (formData.get('_ip') as string) ?? 'unknown';
+  /* --- consent validation --- */
+  const consent = formData.get('consent');
+  if (!consent) {
+    return {
+      success: false,
+      message: 'You must consent to the processing of your personal data to submit this form.',
+    };
+  }
+
+  /* --- rate limit (IP from server headers, not client) --- */
+  const headersList = await headers();
+  const ip = headersList.get('x-forwarded-for')?.split(',')[0].trim()
+    ?? headersList.get('x-real-ip')
+    ?? 'unknown';
   if (isRateLimited(ip)) {
     return {
       success: false,

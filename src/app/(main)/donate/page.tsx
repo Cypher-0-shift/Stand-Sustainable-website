@@ -1,14 +1,11 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
 import {
   donateHero,
   donationAmounts,
   frequencyOptions,
   trustBadges,
-  thankYouContent,
   feeCoverOption,
 } from '@/content/donate';
 
@@ -20,17 +17,12 @@ export default function DonatePage() {
   const [frequency, setFrequency] = useState('one-time');
   const [selectedAmount, setSelectedAmount] = useState<number | 'custom'>(1000);
   const [customAmount, setCustomAmount] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showThankYou, setShowThankYou] = useState(false);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    // Simulate payment gateway routing / network request
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setShowThankYou(true);
-    }, 2000);
+    // Payment gateway integration pending.
+    // DO NOT implement fake success states.
+    alert('Thank you for your interest in donating. Our online payment system is currently being set up. Please contact us directly at standsustainable@gmail.com or call 011-47075730 to make a donation.');
   };
 
   return (
@@ -39,8 +31,32 @@ export default function DonatePage() {
       <div
         className="flex-grow flex flex-col items-center justify-center px-6 md:px-16 pb-16 md:pb-24 pt-[var(--spacing-nav-height)] relative"
       >
+        {/* Payment Status Notice */}
+        <div
+          className="w-full max-w-2xl mb-8 p-4 rounded-xl border text-center mt-12 md:mt-24"
+          style={{
+            backgroundColor: 'rgba(181, 69, 27, 0.05)',
+            borderColor: 'var(--color-accent-terracotta)',
+          }}
+          role="alert"
+        >
+          <p className="text-body-sm font-semibold" style={{ color: 'var(--color-accent-terracotta)' }}>
+            Online payments coming soon.
+          </p>
+          <p className="text-body-sm mt-1" style={{ color: 'var(--color-stone)' }}>
+            To donate now, please contact us at{' '}
+            <a href="mailto:standsustainable@gmail.com" className="underline">
+              standsustainable@gmail.com
+            </a>{' '}
+            or call{' '}
+            <a href="tel:011-47075730" className="underline">
+              011-47075730
+            </a>.
+          </p>
+        </div>
+
         {/* Emotive Intro */}
-        <section className="max-w-4xl w-full text-center mb-16 mt-12 md:mt-24">
+        <section className="max-w-4xl w-full text-center mb-16">
           <h1
             className="text-display-mobile md:text-display italic"
             style={{
@@ -344,6 +360,27 @@ export default function DonatePage() {
 
             {/* CTA & Trust */}
             <div className="pt-8 flex flex-col items-center gap-6">
+              <div className="flex items-start gap-3">
+                <input
+                  type="checkbox"
+                  id="donate-consent"
+                  required
+                  className="mt-1 w-4 h-4 flex-shrink-0"
+                  style={{ accentColor: 'var(--color-primary)' }}
+                />
+                <label
+                  htmlFor="donate-consent"
+                  className="text-body-sm"
+                  style={{ color: 'var(--color-on-surface-variant)' }}
+                >
+                  I agree to the{' '}
+                  <a href="/privacy" className="underline hover:opacity-80" target="_blank" rel="noopener noreferrer">
+                    Privacy Policy
+                  </a>{' '}
+                  and consent to the processing of my personal data for the purpose of processing
+                  this donation in accordance with the DPDP Act 2023.
+                </label>
+              </div>
               <button
                 type="submit"
                 className="w-full py-4 text-label-caps rounded-xl shadow-sm flex justify-center items-center gap-2 transition-colors duration-300 hover:opacity-90"
@@ -352,7 +389,7 @@ export default function DonatePage() {
                   color: 'var(--color-on-primary)',
                 }}
               >
-                <span>Make a Commitment</span>
+                <span>Express Interest in Donating</span>
                 <span className="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_forward</span>
               </button>
 
@@ -374,68 +411,6 @@ export default function DonatePage() {
           style={{ backgroundColor: 'rgba(0, 64, 31, 0.02)' }}
           aria-hidden="true"
         />
-      </div>
-
-      {/* Thank You Modal */}
-      {showThankYou && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center px-6"
-          style={{
-            backgroundColor: 'rgba(250, 247, 242, 0.95)',
-            backdropFilter: 'blur(4px)',
-          }}
-        >
-          <div
-            className="max-w-xl w-full p-12 rounded-xl shadow-lg border text-center"
-            style={{
-              backgroundColor: 'var(--color-surface-container-lowest)',
-              borderColor: 'var(--color-alabaster)',
-            }}
-          >
-            {/* Portrait */}
-            <div
-              className="w-32 h-32 mx-auto rounded-full overflow-hidden mb-8 border-4 shadow-sm"
-              style={{ borderColor: 'var(--color-surface-linen)' }}
-            >
-              <Image
-                src={thankYouContent.image}
-                alt={thankYouContent.imageAlt}
-                width={128}
-                height={128}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <h2
-              className="text-section-header-mobile mb-4"
-              style={{
-                fontFamily: 'var(--font-section-header)',
-                color: 'var(--color-primary)',
-              }}
-            >
-              {thankYouContent.headline}
-            </h2>
-            <p
-              className="text-body-lg mb-8"
-              style={{ color: 'var(--color-on-surface-variant)' }}
-            >
-              {thankYouContent.body}
-            </p>
-            <Link
-              href={thankYouContent.ctaHref}
-              className="inline-block px-8 py-3 border text-label-caps rounded-xl transition-colors"
-              style={{
-                borderColor: 'var(--color-primary)',
-                color: 'var(--color-primary)',
-                backgroundColor: 'transparent',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--color-surface-linen)')}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-            >
-              {thankYouContent.ctaLabel}
-            </Link>
-          </div>
-        </div>
-      )}
     </>
   );
 }

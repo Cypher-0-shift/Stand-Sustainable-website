@@ -29,12 +29,17 @@ const securityHeaders = [
     key: 'Content-Security-Policy',
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      // unsafe-inline required for Next.js inline styles; unsafe-eval removed.
+      // TODO: Migrate to nonce-based CSP to eliminate unsafe-inline.
+      "script-src 'self' 'unsafe-inline'",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-      "font-src 'self' https://fonts.gstatic.com",
-      "img-src 'self' data: blob: https://lh3.googleusercontent.com https://images.unsplash.com",
-      "frame-src 'self' https://www.google.com",
-      "connect-src 'self'",
+      "font-src 'self' https://fonts.gstatic.com data:",
+      // img-src covers all used external image sources
+      "img-src 'self' data: blob: https://images.unsplash.com https://maps.googleapis.com https://maps.gstatic.com https://streetviewpixels-pa.googleapis.com",
+      // frame-src for Google Maps consent iframe
+      "frame-src 'self' https://www.google.com https://maps.google.com",
+      // connect-src for Resend API calls from server actions
+      "connect-src 'self' https://api.resend.com",
     ].join('; '),
   },
 ];

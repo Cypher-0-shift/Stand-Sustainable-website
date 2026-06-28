@@ -1,4 +1,7 @@
-import { useMemo } from 'react';
+'use client';
+
+import { useEffect, useRef, useState, useMemo } from 'react';
+import { OBSERVER_OPTIONS, DURATIONS } from '@/lib/animations';
 
 interface StatCounterProps {
   target: number;
@@ -6,27 +9,72 @@ interface StatCounterProps {
   description: string;
 }
 
-/**
- * StatCounter — Animated count-up impact number using pure CSS.
- * Removes all client-side JS for the animation.
- */
 export default function StatCounter({ target, label, description }: StatCounterProps) {
-  const { suffix, baseTarget } = useMemo(() => {
+  const [displayValue, setDisplayValue] = useState('0');
+  const [hasCounted, setHasCounted] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  const { suffix, formattedFinal } = useMemo(() => {
     if (target >= 1000000) {
-      return { suffix: "M+", baseTarget: target / 1000000 };
+      return { suffix: 'M+', formattedFinal: (target / 1000000).toFixed(2) + 'M+' };
     }
     if (target >= 1000) {
-      return { suffix: "K+", baseTarget: Math.floor(target / 1000) };
+      return { suffix: 'K+', formattedFinal: Math.floor(target / 1000) + 'K+' };
     }
-    return { suffix: "", baseTarget: target };
+    return { suffix: '', formattedFinal: target.toLocaleString('en-IN') };
   }, [target]);
 
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || hasCounted) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !hasCounted) {
+          setHasCounted(true);
+          observer.unobserve(entry.target);
+
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            setDisplayValue(formattedFinal);
+            return;
+          }
+
+          let startTimestamp: number | null = null;
+          const duration = DURATIONS.counterAnimation;
+
+          const step = (timestamp: number) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            const easeProgress = 1 - Math.pow(1 - progress, 4);
+            const current = Math.floor(easeProgress * target);
+            setDisplayValue(current.toLocaleString('en-IN'));
+            if (progress < 1) {
+              requestAnimationFrame(step);
+            } else {
+              setDisplayValue(formattedFinal);
+            }
+          };
+
+          requestAnimationFrame(step);
+        }
+      });
+    }, OBSERVER_OPTIONS);
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [target, hasCounted, formattedFinal]);
+
   return (
-    <div className="border-t pt-6" style={{ borderColor: 'var(--color-alabaster)' }}>
+    <div ref={ref} className="border-t pt-6" style={{ borderColor: 'var(--color-alabaster)' }}>
       <div
-        className="text-impact-number animate-counter"
-        style={{ color: 'var(--color-primary)', '--target-num': baseTarget, '--suffix': `"${suffix}"` } as React.CSSProperties}
+        className="text-impact-number"
+        style={{ color: 'var(--color-primary)' }}
+        role="text"
+        aria-label={`${formattedFinal} ${label}`}
+        aria-live="polite"
+        aria-atomic="true"
       >
+        {displayValue}
       </div>
       <h3
         className="text-label-caps mt-2 tracking-widest"

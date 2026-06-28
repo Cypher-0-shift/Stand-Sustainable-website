@@ -7,6 +7,7 @@ import {
   historySection,
   programsSection,
 } from '@/content/about';
+import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd';
 
 export const metadata: Metadata = {
   alternates: {
@@ -16,7 +17,6 @@ export const metadata: Metadata = {
   description: 'Working for sustainability among all vulnerable and marginalised communities, with a key focus on the Sustainable Development Goals.',
 };
 
-import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd';
 
 export default function AboutPage() {
   return (

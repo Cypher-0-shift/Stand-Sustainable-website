@@ -4,8 +4,8 @@
   "description": "Working for sustainability among all vulnerable and marginalised communities.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#008390",
+  "background_color": "#FAF7F2",
+  "theme_color": "#111111",
   "icons": [
     {
       "src": "/icon-192x192.png",

@@ -19,7 +19,11 @@ export default function CookieBanner() {
   const handleAccept = () => {
     localStorage.setItem('cookie-consent', 'accepted');
     setShowBanner(false);
-    // Future analytics initialization goes here
+    // Analytics initialization must ONLY happen here, after explicit consent.
+    // Example (uncomment when analytics is added):
+    // if (typeof window !== 'undefined' && window.gtag) {
+    //   window.gtag('consent', 'update', { analytics_storage: 'granted' });
+    // }
   };
 
   const handleDecline = () => {
@@ -53,4 +57,9 @@ export default function CookieBanner() {
       </div>
     </div>
   );
+}
+
+export function hasAnalyticsConsent(): boolean {
+  if (typeof window === 'undefined') return false;
+  return localStorage.getItem('cookie-consent') === 'accepted';
 }

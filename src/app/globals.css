@@ -57,9 +57,9 @@
   --font-display: "Source Serif 4", Georgia, serif;
   --font-section-header: "Source Serif 4", Georgia, serif;
   --font-impact-number: "Source Serif 4", Georgia, serif;
-  --font-body-lg: "Public Sans", system-ui, sans-serif;
-  --font-body-md: "Public Sans", system-ui, sans-serif;
-  --font-label-caps: "Public Sans", system-ui, sans-serif;
+  --font-body-lg: var(--font-sans), system-ui, sans-serif;
+  --font-body-md: var(--font-sans), system-ui, sans-serif;
+  --font-label-caps: var(--font-sans), system-ui, sans-serif;
 
   /* === Spacing === */
   --spacing-base: 8px;
@@ -191,7 +191,7 @@
 
   .text-label-caps {
     font-family: var(--font-label-caps);
-    font-size: 13px;
+    font-size: clamp(0.75rem, 1vw + 0.25rem, 0.8125rem);
     line-height: 1.4;
     letter-spacing: 0.08em;
     font-weight: 600;

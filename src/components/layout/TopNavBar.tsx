@@ -18,7 +18,7 @@ export default function TopNavBar() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -35,7 +35,11 @@ export default function TopNavBar() {
 
   // Determine if the text should be white based on the page's hero image
   // Almost all pages use a dark cinematic hero image, except legal pages and donate.
-  const isLightHero = pathname.startsWith('/terms') || pathname.startsWith('/privacy') || pathname.startsWith('/donate');
+  const isLightHero = 
+    pathname.startsWith('/terms') || 
+    pathname.startsWith('/privacy') || 
+    pathname.startsWith('/donate') ||
+    pathname.startsWith('/compliance');
   const useWhiteText = !isLightHero && !isScrolled;
 
   return (

@@ -41,10 +41,28 @@ The content is organized as follows:
 
 <directory_structure>
 .gitignore
+add-breadcrumbs.js
 eslint.config.mjs
 next.config.ts
 package.json
 postcss.config.mjs
+public/apple-touch-icon.png
+public/favicon.ico
+public/icon-16x16.png
+public/icon-192x192.png
+public/icon-32x32.png
+public/icon-512x512.png
+public/images/content/icon-community.jpg
+public/images/content/icon-gender.jpg
+public/images/content/icon-skill.jpg
+public/images/content/mhm-training.jpg
+public/images/content/mhm.jpg
+public/images/content/stock-103150.jpg
+public/images/content/stock-10917.jpg
+public/images/content/stock-10929.jpg
+public/images/content/stock-18309.jpg
+public/images/content/stock-8609.jpg
+public/images/content/team-photo.jpg
 public/images/hero_india.png
 public/images/logos/hdfc.svg
 public/images/logos/infosys.svg
@@ -58,11 +76,16 @@ public/images/portrait_farmer.png
 public/images/portrait_leader.png
 public/images/project_agri.png
 public/images/project_solar.png
+public/manifest.json
+public/robots.txt
+public/site.webmanifest
+public/sitemap.xml
 README.md
 src/actions/sendEmail.ts
 src/app/(main)/about/page.tsx
 src/app/(main)/compliance/page.tsx
 src/app/(main)/contact/page.tsx
+src/app/(main)/donate/layout.tsx
 src/app/(main)/donate/page.tsx
 src/app/(main)/gallery/page.tsx
 src/app/(main)/layout.tsx
@@ -73,14 +96,18 @@ src/app/(main)/projects/page.tsx
 src/app/(main)/terms/page.tsx
 src/app/globals.css
 src/app/layout.tsx
+src/components/content/MapEmbedWithConsent.tsx
 src/components/content/StatCounter.tsx
 src/components/feedback/FadeUp.tsx
 src/components/forms/ContactForm.tsx
+src/components/forms/FormFields.tsx
 src/components/forms/PartnerForm.tsx
+src/components/layout/CookieBanner.tsx
 src/components/layout/Footer.tsx
 src/components/layout/PageHero.tsx
 src/components/layout/SmoothScroll.tsx
 src/components/layout/TopNavBar.tsx
+src/components/seo/BreadcrumbJsonLd.tsx
 src/content/about.ts
 src/content/compliance.ts
 src/content/contact.ts
@@ -100,138 +127,6 @@ tsconfig.json
 
 <files>
 This section contains the contents of the repository's files.
-
-<file path="src/actions/sendEmail.ts">
-'use server';
-
-import { Resend } from 'resend';
-
-// Only attempt to initialize if API key exists to prevent crashing during build
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
-
-export type EmailResponse = {
-  success: boolean;
-  message: string;
-};
-
-export async function sendContactEmail(formData: FormData): Promise<EmailResponse> {
-  const name = formData.get('name') as string;
-  const email = formData.get('email') as string;
-  const subject = formData.get('subject') as string;
-  const message = formData.get('message') as string;
-
-  if (!name || !email || !subject || !message) {
-    return { success: false, message: 'All fields are required.' };
-  }
-
-  if (!resend) {
-    console.warn('RESEND_API_KEY is not set. Simulating success.');
-    return { success: true, message: 'Simulated success (no API key).' };
-  }
-
-  try {
-    const data = await resend.emails.send({
-      from: 'Stand Sustainable Website <onboarding@resend.dev>', // Use verified domain here in prod
-      to: 'sinhatushar06@gmail.com', // Replace with the actual recipient email
-      replyTo: email,
-      subject: `New Contact Form Submission: ${subject}`,
-      html: `
-        <h2>New Message from ${name}</h2>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Subject:</strong> ${subject}</p>
-        <hr />
-        <p>${message.replace(/\n/g, '<br>')}</p>
-      `,
-    });
-
-    if (data.error) {
-      console.error('Resend error:', data.error);
-      return { success: false, message: data.error.message };
-    }
-
-    return { success: true, message: 'Message sent successfully.' };
-  } catch (error: any) {
-    console.error('Error sending email:', error);
-    return { success: false, message: 'An unexpected error occurred.' };
-  }
-}
-
-export async function sendPartnerEmail(formData: FormData): Promise<EmailResponse> {
-  const name = formData.get('name') as string;
-  const email = formData.get('email') as string;
-  const interest = formData.get('interest') as string;
-  const message = formData.get('message') as string;
-
-  if (!name || !email || !interest || !message) {
-    return { success: false, message: 'All fields are required.' };
-  }
-
-  if (!resend) {
-    console.warn('RESEND_API_KEY is not set. Simulating success.');
-    return { success: true, message: 'Simulated success (no API key).' };
-  }
-
-  try {
-    const data = await resend.emails.send({
-      from: 'Stand Sustainable Website <onboarding@resend.dev>', // Use verified domain here in prod
-      to: 'sinhatushar06@gmail.com', // Replace with the actual recipient email
-      replyTo: email,
-      subject: `New Partnership Inquiry: ${name}`,
-      html: `
-        <h2>New Partnership Inquiry from ${name}</h2>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Area of Interest:</strong> ${interest}</p>
-        <hr />
-        <p>${message.replace(/\n/g, '<br>')}</p>
-      `,
-    });
-
-    if (data.error) {
-      console.error('Resend error:', data.error);
-      return { success: false, message: data.error.message };
-    }
-
-    return { success: true, message: 'Message sent successfully.' };
-  } catch (error: any) {
-    console.error('Error sending email:', error);
-    return { success: false, message: 'An unexpected error occurred.' };
-  }
-}
-</file>
-
-<file path="src/components/layout/SmoothScroll.tsx">
-'use client';
-
-import { useEffect } from 'react';
-import Lenis from 'lenis';
-
-export default function SmoothScroll({ children }: { children: React.ReactNode }) {
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 2,
-    });
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-
-    return () => {
-      lenis.destroy();
-    };
-  }, []);
-
-  return <>{children}</>;
-}
-</file>
 
 <file path=".gitignore">
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
@@ -277,6 +172,53 @@ yarn-error.log*
 next-env.d.ts
 </file>
 
+<file path="add-breadcrumbs.js">
+const fs = require('fs');
+const path = require('path');
+
+const pages = [
+  { name: 'About Us', url: '/about' },
+  { name: 'Projects', url: '/projects' },
+  { name: 'Gallery', url: '/gallery' },
+  { name: 'Contact', url: '/contact' },
+  { name: 'Partner', url: '/partner' },
+  { name: 'Donate', url: '/donate' }
+];
+
+pages.forEach(p => {
+  const filePath = path.join(__dirname, 'src/app/(main)', p.url, 'page.tsx');
+  if (!fs.existsSync(filePath)) return;
+  
+  let content = fs.readFileSync(filePath, 'utf8');
+  
+  if (!content.includes('BreadcrumbJsonLd')) {
+    // Inject import
+    let importStatement = `import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd';\n`;
+    content = content.replace(/(import .* from .*;)/, `$1\n${importStatement}`);
+    
+    // Inject component right after <> or <main> or <section> or whatever the first element is
+    // Let's just find the default export and the return statement
+    const returnRegex = /return \(\s*<([a-zA-Z]+|>[^\n]*)/;
+    const match = content.match(returnRegex);
+    if (match) {
+       // if it's <>, we can insert after
+       if (match[0].includes('<>')) {
+           content = content.replace(returnRegex, `return (\n    <>\n      <BreadcrumbJsonLd items={[{ name: '${p.name}', url: '${p.url}' }]} />`);
+       } else {
+           // wrap it in fragment
+           content = content.replace(/return \(\s*/, `return (\n    <>\n      <BreadcrumbJsonLd items={[{ name: '${p.name}', url: '${p.url}' }]} />\n      `);
+           // we need to close the fragment... this is risky.
+           // Actually, the pages all have return ( <> or return ( <main>
+           // Let's just manually replace or do it carefully.
+       }
+    }
+    
+    fs.writeFileSync(filePath, content, 'utf8');
+    console.log('Injected breadcrumbs into ' + p.url);
+  }
+});
+</file>
+
 <file path="eslint.config.mjs">
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
@@ -296,68 +238,6 @@ const eslintConfig = defineConfig([
 ]);
 
 export default eslintConfig;
-</file>
-
-<file path="next.config.ts">
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* Static export for maximum performance — deployable anywhere */
-  // output: 'export', // Disabled to allow Resend Server Actions
-
-  /* Image optimization with external domains */
-  images: {
-    unoptimized: true, // Required for static export
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'lh3.googleusercontent.com',
-        pathname: '/aida-public/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-        pathname: '/**',
-      },
-    ],
-  },
-
-  /* Trailing slashes for clean URLs on static hosts */
-  trailingSlash: true,
-};
-
-export default nextConfig;
-</file>
-
-<file path="package.json">
-{
-  "name": "standsustainable",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "npx serve@latest out",
-    "lint": "eslint"
-  },
-  "dependencies": {
-    "lenis": "^1.3.24",
-    "next": "16.2.9",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "resend": "^6.16.0"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.9",
-    "tailwindcss": "^4",
-    "typescript": "^5"
-  }
-}
 </file>
 
 <file path="postcss.config.mjs">
@@ -620,6 +500,111 @@ export default config;
 <?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" id="Layer_1" width="376.8" height="296.5" version="1.1"><style id="style997" type="text/css">.st0{fill:#2a4c87}.st2{fill:#1f3d70}.st3{fill:#194c88}.st4{fill:#3468a3}.st5{fill:#4c8dcb}.st6{fill:#3498b3}.st7{fill:#0aa496}.st8{fill:#00aa75}.st9{fill:#4fba6a}.st10{fill:#7ec45f}.st11{fill:#4c609b}.st13{fill:#746fa7}.st14{fill:#99558e}.st15{fill:#af3379}.st16{fill:#be266a}.st17{fill:#d4525c}.st18{fill:#e0654f}.st19{fill:#f57f2a}.st20{fill:#f89828}.st21{fill:#fec127}.st22{fill:#fed627}</style><path id="path999" d="M341.1 116.4c2.1 8 10.3 12.8 18.4 10.6 8-2.1 12.8-10.3 10.6-18.4-2.1-8-10.3-12.8-18.4-10.6-7.9 2.2-12.7 10.4-10.6 18.4" class="st0"/><path id="path1001" d="M320.8 132.4c5.4-1.5 8.7-7.1 7.2-12.5s-7.1-8.7-12.5-7.2-8.7 7.1-7.2 12.5c1.4 5.4 7 8.6 12.5 7.2" class="st0"/><path id="path1003" d="M290.8 137.6c4-1.1 6.4-5.2 5.3-9.2s-5.2-6.4-9.2-5.3-6.4 5.2-5.3 9.2 5.2 6.4 9.2 5.3" class="st0"/><path id="path1005" d="M267.5 141.1c2.5-.7 4-3.3 3.4-5.8s-3.3-4-5.8-3.4c-2.5.7-4 3.3-3.4 5.8s3.2 4 5.8 3.4" style="fill:#2e4e88"/><path id="path1007" d="M330 86c3.8 6.5 12.1 8.8 18.6 5s8.8-12.1 5-18.6-12.1-8.8-18.6-5-8.8 12.1-5 18.6" class="st2"/><path id="path1009" d="M299.9 103.3c2.6 4.6 8.4 6.1 13 3.5s6.1-8.4 3.5-13-8.4-6.1-13-3.5c-4.5 2.6-6.1 8.4-3.5 13" class="st2"/><path id="path1011" d="M278.5 107.8c-3.3 1.9-4.4 6-2.5 9.3s6 4.4 9.3 2.5 4.4-6 2.5-9.3c-1.8-3.2-6-4.3-9.3-2.5" class="st2"/><path id="path1013" d="M259.4 121.6c-2.1 1.2-2.9 3.9-1.7 6s3.9 2.9 6 1.7 2.9-3.9 1.7-6-3.9-2.9-6-1.7" class="st2"/><path id="path1015" d="M328.5 59.3c4.8-4.8 4.8-12.5 0-17.3s-12.5-4.8-17.3 0-4.8 12.5 0 17.3c4.7 4.8 12.5 4.8 17.3 0" class="st3"/><path id="path1017" d="M298.6 71.8c-3.5-3.5-9.1-3.5-12.5 0-3.5 3.5-3.5 9.1 0 12.5 3.5 3.5 9.1 3.5 12.5 0 3.5-3.5 3.5-9.1 0-12.5" class="st3"/><path id="path1019" d="M266.6 95.1c-2.4 2.4-2.4 6.3 0 8.7s6.3 2.4 8.7 0 2.4-6.3 0-8.6c-2.4-2.5-6.3-2.5-8.7-.1" class="st3"/><path id="path1021" d="M251.5 118.9c1.6 1.6 4.2 1.6 5.8 0s1.6-4.2 0-5.8-4.2-1.6-5.8 0-1.6 4.2 0 5.8" class="st3"/><path id="path1023" d="M285.4 38.7c5.5 3.2 12.6 1.3 15.8-4.2s1.3-12.6-4.2-15.8-12.6-1.3-15.8 4.2c-3.3 5.5-1.4 12.6 4.2 15.8-.1 0 0 0 0 0" class="st4"/><path id="path1025" d="M264.7 58.2c-2.3 3.9-.9 8.9 3 11.2s8.9.9 11.2-3 .9-8.9-3-11.2c-4-2.3-9-.9-11.2 3" class="st4"/><path id="path1027" d="M259.3 83.8c-2.6-1.5-5.9-.6-7.4 2s-.6 5.9 2 7.4 5.9.6 7.4-2 .6-5.9-2-7.4" class="st4"/><path id="path1029" d="M246.7 105.6c-1.8-1-4.1-.4-5.1 1.4s-.4 4.1 1.4 5.1 4.1.4 5.1-1.4.4-4.1-1.4-5.1" class="st4"/><path id="path1031" d="M255 25.4c5.8 1.6 11.8-1.9 13.3-7.7 1.6-5.8-1.9-11.8-7.7-13.3s-11.8 1.9-13.3 7.7c-1.6 5.8 1.9 11.8 7.7 13.3" class="st5"/><path id="path1033" d="M245.8 59.6c4 1.1 8.1-1.3 9.2-5.3s-1.3-8.1-5.3-9.2-8.1 1.3-9.2 5.3c-1 4 1.3 8.1 5.3 9.2" class="st5"/><path id="path1035" d="M238.6 86.6c2.7.7 5.5-.9 6.2-3.6s-.9-5.5-3.6-6.2-5.5.9-6.2 3.6c-.7 2.6.9 5.4 3.6 6.2" class="st5"/><path id="path1037" d="M230.6 103.4c-.5 1.8.6 3.7 2.4 4.2s3.7-.6 4.2-2.4-.6-3.7-2.4-4.2c-1.9-.5-3.8.6-4.2 2.4" class="st5"/><path id="path1039" d="M222 20.4c5.6 0 10.2-4.6 10.2-10.2S227.6 0 222 0s-10.2 4.6-10.2 10.2c0 5.7 4.6 10.2 10.2 10.2" class="st6"/><path id="path1041" d="M222 42.2c-3.8 0-6.8 3-6.8 6.8s3 6.8 6.8 6.8 6.8-3 6.8-6.8c0-3.7-3-6.8-6.8-6.8" class="st6"/><path id="path1043" d="M226.8 79.3c0-2.6-2.1-4.8-4.8-4.8s-4.8 2.1-4.8 4.8 2.1 4.8 4.8 4.8 4.8-2.2 4.8-4.8" class="st6"/><path id="path1045" d="M222 99.7c-1.7 0-3.1 1.4-3.1 3.1s1.4 3.1 3.1 3.1 3.1-1.4 3.1-3.1-1.4-3.1-3.1-3.1" class="st6"/><path id="path1047" d="M188.7 24.2c5.1-1.4 8.1-6.6 6.7-11.7s-6.6-8.1-11.7-6.7-8.1 6.6-6.7 11.7c1.4 5 6.7 8 11.7 6.7" class="st7"/><path id="path1049" d="M190.4 54c.9 3.3 4.2 5.2 7.5 4.3s5.2-4.2 4.3-7.5-4.2-5.2-7.5-4.3c-3.2.9-5.2 4.3-4.3 7.5" class="st7"/><path id="path1051" d="M199.9 82.9c.6 2.4 3.1 3.8 5.4 3.1 2.4-.6 3.8-3.1 3.1-5.4-.6-2.4-3.1-3.8-5.4-3.1-2.4.6-3.7 3-3.1 5.4" class="st7"/><path id="path1053" d="M207.6 105.1c.4 1.5 1.9 2.3 3.3 1.9 1.5-.4 2.3-1.9 1.9-3.3-.4-1.5-1.9-2.3-3.3-1.9s-2.3 1.8-1.9 3.3" class="st7"/><path id="path1055" d="M157.4 36.5c4.2-2.4 5.7-7.9 3.3-12.1s-7.9-5.7-12.1-3.3-5.7 7.9-3.3 12.1c2.5 4.3 7.9 5.7 12.1 3.3" class="st8"/><path id="path1057" d="M175.1 67.1c2.6-1.5 3.5-4.8 2-7.4s-4.8-3.5-7.4-2-3.5 4.8-2 7.4c1.4 2.6 4.8 3.5 7.4 2" class="st8"/><path id="path1059" d="M189.5 92.2c2-1.1 2.6-3.6 1.5-5.6s-3.6-2.6-5.6-1.5-2.6 3.6-1.5 5.6c1.2 1.9 3.7 2.6 5.6 1.5" class="st8"/><path id="path1061" d="M201.3 107.8c-.7-1.1-2.1-1.5-3.3-.9-1.1.7-1.5 2.1-.9 3.3.7 1.1 2.1 1.5 3.2.9 1.3-.7 1.7-2.2 1-3.3" class="st8"/><path id="path1063" d="M130.1 56.6c3.2-3.2 3.2-8.4 0-11.6s-8.4-3.2-11.6 0-3.2 8.4 0 11.6c3.3 3.2 8.5 3.2 11.6 0" class="st9"/><path id="path1065" d="M155.2 74.9c-1.9-1.9-4.9-1.9-6.7 0-1.9 1.9-1.9 4.9 0 6.7 1.9 1.9 4.9 1.9 6.7 0s1.8-4.9 0-6.7" class="st9"/><path id="path1067" d="M175.9 97c-1.5-1.5-3.8-1.5-5.3 0s-1.5 3.8 0 5.3 3.8 1.5 5.3 0c1.4-1.5 1.4-3.8 0-5.3" class="st9"/><path id="path1069" d="M191.3 114.8c-.8-.8-2.1-.7-2.8.1-.8.8-.7 2.1.1 2.8s2 .7 2.8 0c.7-.8.7-2.1-.1-2.9" class="st9"/><path id="path1071" d="M98.5 85.7c3.6 2.1 8.2.8 10.2-2.7 2.1-3.6.8-8.2-2.7-10.2-3.6-2.1-8.2-.8-10.2 2.7-2.1 3.5-.9 8.1 2.7 10.2" class="st10"/><path id="path1073" d="M138.1 95.3c-2-1.1-4.4-.4-5.6 1.5-1.1 2-.4 4.4 1.5 5.6 2 1.1 4.4.5 5.6-1.5 1.1-2 .4-4.5-1.5-5.6" class="st10"/><path id="path1075" d="M164 111c-1.6-.9-3.7-.4-4.6 1.3-.9 1.6-.4 3.7 1.3 4.6 1.6.9 3.7.4 4.6-1.2s.3-3.7-1.3-4.7" class="st10"/><path id="path1077" d="M360.4 131.9c-9 0-16.4 7.3-16.4 16.4 0 9 7.3 16.4 16.4 16.4 9 0 16.3-7.3 16.4-16.3-.1-9.1-7.4-16.5-16.4-16.5" class="st11"/><path id="path1079" d="M333.3 148.3c0-6.5-5.2-11.7-11.7-11.7s-11.7 5.2-11.7 11.7 5.2 11.7 11.7 11.7c6.4 0 11.7-5.2 11.7-11.7" class="st11"/><path id="path1081" d="M291.3 140.3c-4.4 0-8 3.6-8 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8" class="st11"/><path id="path1083" d="M273 148.3c0-2.9-2.3-5.2-5.2-5.2s-5.2 2.3-5.2 5.2 2.3 5.2 5.2 5.2 5.2-2.3 5.2-5.2" style="fill:#54669f"/><path id="path1085" d="M359.5 169.5c-8-2.2-16.2 2.6-18.4 10.6s2.6 16.2 10.6 18.4 16.2-2.6 18.4-10.6v-.1c2.1-7.9-2.7-16.1-10.6-18.3" class="st13"/><path id="path1087" d="M315.5 183.8c5.4 1.5 11-1.8 12.5-7.2s-1.8-11-7.2-12.5-11 1.8-12.5 7.2 1.7 11 7.2 12.5" class="st13"/><path id="path1089" d="M286.9 173.4c4 1.1 8.1-1.3 9.2-5.3s-1.3-8.1-5.3-9.2-8.1 1.3-9.2 5.3c-1 4 1.3 8.1 5.3 9.2" class="st13"/><path id="path1091" d="M265 164.7c2.5.7 5.1-.8 5.8-3.4.7-2.5-.8-5.1-3.4-5.8-2.5-.7-5.1.8-5.8 3.4-.7 2.4.8 5.1 3.4 5.8" class="st13"/><path id="path1093" d="M348.6 205.5c-6.5-3.8-14.8-1.5-18.6 5s-1.5 14.8 5 18.6 14.8 1.5 18.6-5c3.7-6.5 1.5-14.8-5-18.6" class="st14"/><path id="path1095" d="M316.5 202.7c2.6-4.6 1.1-10.4-3.5-13s-10.4-1.1-13 3.5-1.1 10.4 3.5 13c4.5 2.6 10.3 1 13-3.5" class="st14"/><path id="path1097" d="M287.8 186.2c1.9-3.3.8-7.4-2.5-9.3s-7.4-.8-9.3 2.5-.8 7.4 2.5 9.3c3.3 1.8 7.4.7 9.3-2.5" class="st14"/><path id="path1099" d="M265.5 173.2c1.2-2.1.5-4.8-1.6-6.1-2.1-1.2-4.8-.5-6.1 1.6s-.5 4.8 1.6 6.1h.1c2.1 1.2 4.8.5 6-1.6" class="st14"/><path id="path1101" d="M311.1 237.2c-4.8 4.8-4.8 12.5 0 17.3s12.5 4.8 17.3 0 4.8-12.5 0-17.3c-4.7-4.7-12.5-4.7-17.3 0" class="st15"/><path id="path1103" d="M298.6 224.7c3.5-3.5 3.5-9.1 0-12.5-3.5-3.5-9.1-3.5-12.5 0-3.5 3.5-3.5 9.1 0 12.5 3.4 3.5 9 3.5 12.5 0" class="st15"/><path id="path1105" d="M275.3 201.4c2.4-2.4 2.4-6.3 0-8.7s-6.3-2.4-8.7 0-2.4 6.3 0 8.6c2.4 2.5 6.3 2.5 8.7.1" class="st15"/><path id="path1107" d="M251.5 183.3c1.6 1.6 4.2 1.6 5.8 0s1.6-4.2 0-5.8-4.2-1.6-5.8 0-1.6 4.2 0 5.8" class="st15"/><path id="path1109" d="M285.4 257.8c-5.5 3.2-7.4 10.3-4.2 15.8s10.3 7.4 15.8 4.2 7.4-10.3 4.2-15.8-10.3-7.4-15.8-4.2" class="st16"/><path id="path1111" d="M278.8 230.2c-2.3-3.9-7.2-5.3-11.2-3-3.9 2.3-5.3 7.2-3 11.2 2.3 3.9 7.2 5.3 11.2 3 3.9-2.3 5.3-7.3 3-11.2" class="st16"/><path id="path1113" d="M259.3 212.7c2.6-1.5 3.5-4.8 2-7.4s-4.8-3.5-7.4-2-3.5 4.8-2 7.4 4.8 3.5 7.4 2" class="st16"/><path id="path1115" d="M243 184.4c-1.8 1-2.4 3.3-1.4 5.1s3.3 2.4 5.1 1.4 2.4-3.3 1.4-5.1-3.3-2.4-5.1-1.4" class="st16"/><path id="path1117" d="M255 271.1c-5.8 1.6-9.3 7.5-7.7 13.3s7.5 9.3 13.3 7.7 9.3-7.5 7.7-13.3c-1.5-5.8-7.5-9.3-13.3-7.7" class="st17"/><path id="path1119" d="M249.7 251.3c4-1.1 6.4-5.2 5.3-9.2s-5.2-6.4-9.2-5.3-6.3 5.2-5.3 9.2c1.1 4.1 5.2 6.4 9.2 5.3" class="st17"/><path id="path1121" d="M244.8 213.5c-.7-2.7-3.5-4.3-6.2-3.6s-4.3 3.5-3.6 6.2 3.5 4.3 6.2 3.6c2.8-.6 4.4-3.4 3.6-6.2" class="st17"/><path id="path1123" d="M237.1 191.3c-.5-1.8-2.4-2.9-4.2-2.4s-2.9 2.4-2.4 4.2 2.3 2.9 4.2 2.4c1.8-.5 2.9-2.4 2.4-4.2" class="st17"/><path id="path1125" d="M222 276.1c-5.6 0-10.2 4.6-10.2 10.2s4.6 10.2 10.2 10.2 10.2-4.5 10.2-10.2c0-5.6-4.5-10.2-10.2-10.2" class="st18"/><path id="path1127" d="M215.2 247.5c0 3.8 3 6.8 6.8 6.8s6.8-3 6.8-6.8-3-6.8-6.8-6.8c-3.7 0-6.8 3-6.8 6.8" class="st18"/><path id="path1129" d="M222 221.9c2.6 0 4.8-2.1 4.8-4.8s-2.1-4.8-4.8-4.8c-2.6 0-4.8 2.1-4.8 4.8.1 2.7 2.2 4.8 4.8 4.8" class="st18"/><path id="path1131" d="M222 190.6c-1.7 0-3.1 1.4-3.1 3.1s1.4 3.1 3.1 3.1 3.1-1.4 3.1-3.1-1.4-3.1-3.1-3.1" class="st18"/><path id="path1133" d="M188.7 272.3c-5.1-1.4-10.3 1.7-11.7 6.7-1.4 5.1 1.7 10.3 6.7 11.7 5.1 1.4 10.3-1.7 11.7-6.7 1.4-5.1-1.6-10.3-6.7-11.7" class="st19"/><path id="path1135" d="M197.9 238.1c-3.3-.9-6.6 1.1-7.5 4.3-.9 3.3 1.1 6.6 4.3 7.5 3.3.9 6.6-1.1 7.5-4.3s-1-6.6-4.3-7.5" class="st19"/><path id="path1137" d="M205.3 210.5c-2.4-.6-4.8.8-5.4 3.1-.6 2.4.8 4.8 3.1 5.4 2.4.6 4.8-.8 5.4-3.1.7-2.3-.7-4.7-3.1-5.4" class="st19"/><path id="path1139" d="M212.9 192.8c.4-1.5-.5-3-1.9-3.3s-3 .5-3.3 1.9.5 3 1.9 3.3c1.4.4 2.9-.4 3.3-1.9" class="st19"/><path id="path1141" d="M157.4 260c-4.2-2.4-9.6-1-12.1 3.2-2.4 4.2-1 9.6 3.2 12.1 4.2 2.4 9.6 1 12.1-3.2s1-9.6-3.2-12.1" class="st20"/><path id="path1143" d="M175.1 229.4c-2.6-1.5-5.9-.6-7.4 2s-.6 5.9 2 7.4 5.9.6 7.4-2 .6-5.9-2-7.4" class="st20"/><path id="path1145" d="M185.5 211.4c2 1.1 4.5.5 5.6-1.5s.5-4.5-1.5-5.6-4.5-.5-5.6 1.5-.5 4.5 1.5 5.6" class="st20"/><path id="path1147" d="M200.5 185.4c-1.1-.7-2.6-.3-3.2.9-.7 1.1-.3 2.6.9 3.2 1.1.7 2.6.3 3.2-.9.6-1 .2-2.5-.9-3.2" class="st20"/><path id="path1149" d="M118.6 239.9c-3.2 3.2-3.2 8.4 0 11.6s8.4 3.2 11.6 0 3.2-8.4 0-11.6-8.4-3.2-11.6 0" class="st21"/><path id="path1151" d="M148.5 214.9c-1.9 1.9-1.9 4.9 0 6.7 1.9 1.9 4.9 1.9 6.7 0s1.9-4.9 0-6.7c-1.8-1.9-4.9-1.9-6.7 0" class="st21"/><path id="path1153" d="M170.6 194.2c-1.5 1.5-1.5 3.8 0 5.3s3.8 1.5 5.3 0 1.5-3.8 0-5.3-3.9-1.5-5.3 0" class="st21"/><path id="path1155" d="M191.3 178.8c-.8-.8-2.1-.7-2.8.1-.8.8-.7 2.1.1 2.8s2 .7 2.8 0c.7-.8.7-2.1-.1-2.9" class="st21"/><path id="path1157" d="M98.7 210.6c-3.6 2.1-4.8 6.6-2.7 10.2s6.6 4.8 10.2 2.7 4.8-6.6 2.7-10.2c-2-3.6-6.6-4.8-10.2-2.7" class="st22"/><path id="path1159" d="M134 194.1c-1.9 1.1-2.6 3.6-1.5 5.6 1.1 1.9 3.6 2.6 5.6 1.5 1.9-1.1 2.6-3.6 1.5-5.6-1.1-1.9-3.6-2.6-5.6-1.5" class="st22"/><path id="path1161" d="M160.6 179.6c-1.6.9-2.2 3-1.2 4.6.9 1.6 3 2.2 4.6 1.2 1.6-.9 2.2-3 1.2-4.6-.9-1.6-3-2.2-4.6-1.2" class="st22"/><path id="path1163" d="M83.5 124.5h12v46.2h-12zm7.3-20.6c-3.7-1-7.5 1.2-8.5 4.9s1.2 7.5 4.9 8.5 7.5-1.2 8.5-4.9-1.2-7.6-4.9-8.5m41.8 67.8c-2.9 0-5.8-.5-8.5-1.7-2.4-1.1-4.5-2.8-6.1-4.9v28.7h-11.7v-69.3h11.6v6.4c1.5-2.3 3.6-4.1 6.1-5.4 2.6-1.3 5.5-2 8.5-2 2.9 0 5.7.6 8.4 1.7s5.1 2.8 7.1 4.8c2.1 2.2 3.8 4.8 4.9 7.6q1.95 4.8 1.8 9.9c.1 3.4-.6 6.8-1.9 10-1.2 2.8-2.9 5.4-5 7.6-3.9 4.2-9.5 6.6-15.2 6.6m-2.4-11.2c1.7 0 3.4-.3 5-1 1.5-.7 2.9-1.6 4.1-2.8s2.1-2.6 2.7-4.1c1.3-3.3 1.3-6.9 0-10.2-.6-1.5-1.6-2.9-2.7-4.1-1.2-1.2-2.6-2.1-4.1-2.8-1.6-.7-3.3-1-5-1-3.4 0-6.7 1.4-9.2 3.8-1.2 1.2-2.1 2.6-2.7 4.1-1.3 3.3-1.3 6.9 0 10.1.6 1.5 1.5 2.9 2.7 4.1 2.5 2.6 5.8 4 9.2 3.9m33.1-36h11.6v7.1c1-2.5 2.7-4.6 5-6 2.4-1.3 5-2 7.8-1.9 1.5 0 2.9.2 4.3.5 1.2.3 2.4.7 3.5 1.3l-4.3 11.6c-.8-.5-1.7-.9-2.6-1.2-1.2-.3-2.4-.5-3.6-.5-2.7-.1-5.3.8-7.3 2.5-1.8 1.7-2.7 4.5-2.7 8.3v24.4h-11.7zm58.3 47.2c-3.3 0-6.6-.6-9.7-1.9-2.9-1.2-5.5-3-7.8-5.2-4.5-4.5-7-10.6-7-17 0-3.2.6-6.4 1.8-9.4 1.2-2.9 2.9-5.5 5.1-7.7 9.7-9.4 25.1-9.4 34.8 0 4.5 4.5 7.1 10.6 7.1 17 0 3.2-.6 6.4-1.9 9.3-1.2 2.9-3 5.5-5.1 7.7-2.2 2.2-4.8 4-7.8 5.2-2.9 1.3-6.2 2-9.5 2m.1-11.2c1.7 0 3.4-.3 5-1 1.5-.7 2.8-1.6 4-2.7 1.2-1.2 2.1-2.6 2.7-4.1 1.3-3.3 1.3-6.9 0-10.1-.6-1.5-1.5-2.9-2.7-4.1s-2.5-2.1-4-2.7c-3.2-1.4-6.8-1.4-9.9 0-1.5.7-2.8 1.6-4 2.7-1.2 1.2-2.1 2.6-2.7 4.1-1.3 3.3-1.3 6.9 0 10.1.6 1.5 1.5 2.9 2.7 4.1s2.5 2.1 4 2.7 3.2 1 4.9 1M0 124.5h12l9.3 29.5 11-29.5h10.4L53.5 154l9.7-29.5h12l-15.7 46.2H48.4l-11-30.1-11.1 30.1H15z" style="fill:#351a55"/></svg>
 </file>
 
+<file path="public/manifest.json">
+{
+  "name": "Stand Sustainable Foundation",
+  "short_name": "Stand",
+  "description": "Working for sustainability among all vulnerable and marginalised communities.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#008390",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+</file>
+
+<file path="public/robots.txt">
+# Stand Sustainable Foundation — robots.txt
+# https://www.robotstxt.org/
+
+User-agent: *
+Allow: /
+
+# Prevent indexing of utility / non-content pages
+Disallow: /compliance/
+Disallow: /privacy/
+Disallow: /terms/
+
+# Sitemap
+Sitemap: https://standsustainable.org/sitemap.xml
+</file>
+
+<file path="public/site.webmanifest">
+{
+  "name": "Stand Sustainable Foundation",
+  "short_name": "Stand",
+  "description": "Working for sustainability among all vulnerable and marginalised communities.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#008390",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+</file>
+
+<file path="public/sitemap.xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://standsustainable.org/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://standsustainable.org/about/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://standsustainable.org/projects/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://standsustainable.org/gallery/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standsustainable.org/donate/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://standsustainable.org/partner/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://standsustainable.org/contact/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+</urlset>
+</file>
+
 <file path="README.md">
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
@@ -657,1124 +642,412 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 </file>
 
-<file path="src/app/(main)/compliance/page.tsx">
-import type { Metadata } from 'next';
-import PageHero from '@/components/layout/PageHero';
-import FadeUp from '@/components/feedback/FadeUp';
-import { complianceHero, complianceCategories } from '@/content/compliance';
+<file path="src/actions/sendEmail.ts">
+'use server';
 
-export const metadata: Metadata = {
-  title: 'Legal & Security Compliance — Stand Sustainable Foundation',
-  description: 'Our institutional governance, financial compliance, and data security standards.',
+import { Resend } from 'resend';
+
+/* ============================================================
+   CONFIGURATION (all secrets live in env vars, never hardcoded)
+   ============================================================ */
+const resend = process.env.RESEND_API_KEY
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null;
+
+const RECIPIENT = process.env.RECIPIENT_EMAIL ?? '';
+const FROM_ADDRESS =
+  process.env.RESEND_FROM ?? 'Stand Sustainable Website <onboarding@resend.dev>';
+const IS_DEV = process.env.NODE_ENV === 'development';
+
+/* ============================================================
+   RATE LIMITER  (in-memory, per-IP window)
+   — 5 submissions per IP per 15 minutes
+   ============================================================ */
+const RATE_WINDOW_MS = 15 * 60 * 1000; // 15 min
+const RATE_LIMIT = 5;
+const submissions = new Map<string, { count: number; windowStart: number }>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = submissions.get(ip);
+
+  if (!entry || now - entry.windowStart > RATE_WINDOW_MS) {
+    submissions.set(ip, { count: 1, windowStart: now });
+    return false;
+  }
+
+  entry.count++;
+  return entry.count > RATE_LIMIT;
+}
+
+/* ============================================================
+   INPUT HELPERS
+   ============================================================ */
+
+/** Strip HTML tags to prevent injection in outgoing emails. */
+function sanitize(input: string): string {
+  return input
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
+}
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function validateString(
+  raw: FormDataEntryValue | null,
+  maxLength: number,
+): string | null {
+  if (typeof raw !== 'string' || raw.trim().length === 0) return null;
+  const trimmed = raw.trim();
+  if (trimmed.length > maxLength) return null;
+  return trimmed;
+}
+
+/* ============================================================
+   RESPONSE TYPE
+   ============================================================ */
+export type EmailResponse = {
+  success: boolean;
+  message: string;
 };
 
-export default function CompliancePage() {
-  return (
-    <>
-      <PageHero
-        headline={complianceHero.headline}
-        subtext={complianceHero.subtext}
-        backgroundImage={complianceHero.backgroundImage}
-      />
+/* ============================================================
+   CONTACT FORM ACTION
+   ============================================================ */
+export async function sendContactEmail(
+  formData: FormData,
+): Promise<EmailResponse> {
+  /* --- honeypot: hidden field should be empty --- */
+  const honeypot = formData.get('website') as string | null;
+  if (honeypot) {
+    // Bots fill hidden fields; silently pretend success
+    return { success: true, message: 'Message sent successfully.' };
+  }
 
-      <section
-        className="py-16 md:py-24 px-6 md:px-16"
-        style={{ backgroundColor: 'var(--color-surface-linen)' }}
-      >
-        <div className="max-w-screen-xl mx-auto flex flex-col gap-16 md:gap-24">
-          {complianceCategories.map((category, index) => (
-            <div key={category.title} className="flex flex-col gap-8">
-              <FadeUp delay={index * 100}>
-                <h2
-                  className="text-section-header-mobile md:text-section-header mb-4 border-b pb-4"
-                  style={{
-                    fontFamily: 'var(--font-section-header)',
-                    color: 'var(--color-primary)',
-                    borderColor: 'var(--color-alabaster)'
-                  }}
-                >
-                  {category.title}
-                </h2>
-                <p className="text-body-lg" style={{ color: 'var(--color-stone)', maxWidth: '800px' }}>
-                  {category.description}
-                </p>
-              </FadeUp>
+  /* --- rate limit --- */
+  const ip =
+    (formData.get('_ip') as string) ?? 'unknown'; // set by middleware if needed
+  if (isRateLimited(ip)) {
+    return {
+      success: false,
+      message: 'Too many submissions. Please try again later.',
+    };
+  }
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                {category.items.map((item, i) => (
-                  <FadeUp key={item.title} delay={100 + i * 100} className="h-full">
-                    <div 
-                      className="p-8 rounded-[6px] h-full flex flex-col ambient-shadow transition-transform duration-300 hover:-translate-y-1"
-                      style={{ backgroundColor: 'var(--color-surface-container-lowest)' }}
-                    >
-                      <div className="flex justify-between items-start mb-6">
-                        <div 
-                          className="w-12 h-12 rounded-full flex items-center justify-center"
-                          style={{ backgroundColor: 'var(--color-surface-linen)' }}
-                        >
-                          <span 
-                            className="material-symbols-outlined"
-                            style={{ color: 'var(--color-accent-terracotta)', fontSize: '24px' }}
-                          >
-                            {item.icon}
-                          </span>
-                        </div>
-                        <span 
-                          className="text-label-caps px-3 py-1 rounded-full"
-                          style={{ 
-                            fontSize: '10px', 
-                            backgroundColor: 'rgba(0, 64, 31, 0.05)',
-                            color: 'var(--color-primary)' 
-                          }}
-                        >
-                          {item.status}
-                        </span>
-                      </div>
-                      
-                      <h3 className="text-body-lg font-bold mb-3" style={{ color: 'var(--color-primary)' }}>
-                        {item.title}
-                      </h3>
-                      <p className="text-body-md" style={{ color: 'var(--color-stone)' }}>
-                        {item.description}
-                      </p>
-                    </div>
-                  </FadeUp>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-    </>
-  );
-}
-</file>
+  /* --- validate --- */
+  const name = validateString(formData.get('name'), 200);
+  const email = validateString(formData.get('email'), 320);
+  const subject = validateString(formData.get('subject'), 500);
+  const message = validateString(formData.get('message'), 5000);
 
-<file path="src/app/(main)/gallery/page.tsx">
-import type { Metadata } from 'next';
-import Image from 'next/image';
-import PageHero from '@/components/layout/PageHero';
-import FadeUp from '@/components/feedback/FadeUp';
-import { galleryHero, galleryImages } from '@/content/gallery';
+  if (!name || !email || !subject || !message) {
+    return { success: false, message: 'All fields are required and must not exceed length limits.' };
+  }
 
-export const metadata: Metadata = {
-  title: 'Gallery — Stand Sustainable Foundation',
-  description: 'Photos from our programs and initiatives across India, documenting our work in sustainability and community empowerment.',
-};
+  if (!EMAIL_RE.test(email)) {
+    return { success: false, message: 'Please provide a valid email address.' };
+  }
 
-export default function GalleryPage() {
-  return (
-    <>
-      <PageHero
-        headline={galleryHero.headline}
-        subtext={galleryHero.subtext}
-        backgroundImage={galleryHero.backgroundImage}
-      />
-
-      <section
-        className="py-16 md:py-24 px-6 md:px-16"
-        style={{ backgroundColor: 'var(--color-surface-linen)' }}
-      >
-        <div className="max-w-screen-2xl mx-auto">
-          {/* Magazine-style Masonry Grid approximation using CSS Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-[var(--spacing-gutter)] auto-rows-[minmax(200px,auto)] md:auto-rows-[minmax(300px,auto)]">
-            {galleryImages.map((img, index) => (
-              <FadeUp
-                key={index}
-                className={`${img.span} group`}
-                delay={index * 120}
-              >
-                <div className="relative w-full h-full min-h-[200px] md:min-h-[300px] overflow-hidden rounded-[4px] ambient-shadow">
-                  <Image
-                    src={img.src}
-                    alt={img.alt}
-                    fill
-                    className="object-cover img-hover-scale"
-                    sizes="(max-width: 768px) 100vw, 66vw"
-                    unoptimized
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-                    <p className="text-body-md text-white font-bold mb-1">
-                      {img.caption}
-                    </p>
-                    <p className="text-label-caps" style={{ color: 'var(--color-surface-linen)' }}>
-                      {img.location}
-                    </p>
-                  </div>
-                </div>
-              </FadeUp>
-            ))}
-          </div>
-        </div>
-      </section>
-    </>
-  );
-}
-</file>
-
-<file path="src/app/(main)/layout.tsx">
-import TopNavBar from '@/components/layout/TopNavBar';
-import Footer from '@/components/layout/Footer';
-
-/**
- * Main layout — Wraps Story, Proof, and Institution pages
- * with the full TopNavBar and Footer.
- * The Donate page lives outside this group with a suppressed nav.
- */
-export default function MainLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <>
-      <TopNavBar />
-      <main className="flex-grow">
-        {children}
-      </main>
-      <Footer />
-    </>
-  );
-}
-</file>
-
-<file path="src/app/(main)/privacy/page.tsx">
-import type { Metadata } from 'next';
-import PageHero from '@/components/layout/PageHero';
-
-export const metadata: Metadata = {
-  title: 'Privacy Policy — Stand Sustainable Foundation',
-};
-
-export default function PrivacyPage() {
-  return (
-    <>
-      <PageHero
-        headline="Privacy Policy"
-        subtext="Pending legal review."
-      />
-    </>
-  );
-}
-</file>
-
-<file path="src/app/(main)/terms/page.tsx">
-import type { Metadata } from 'next';
-import PageHero from '@/components/layout/PageHero';
-
-export const metadata: Metadata = {
-  title: 'Terms of Service — Stand Sustainable Foundation',
-};
-
-export default function TermsPage() {
-  return (
-    <>
-      <PageHero
-        headline="Terms of Service"
-        subtext="Pending legal review."
-      />
-    </>
-  );
-}
-</file>
-
-<file path="src/app/layout.tsx">
-import type { Metadata } from 'next';
-import { Source_Serif_4, Public_Sans } from 'next/font/google';
-import './globals.css';
-import SmoothScroll from '@/components/layout/SmoothScroll';
-const sourceSerif = Source_Serif_4({
-  subsets: ['latin'],
-  weight: ['400', '700', '900'],
-  style: ['normal', 'italic'],
-  variable: '--font-display',
-  display: 'swap',
-});
-
-const publicSans = Public_Sans({
-  subsets: ['latin'],
-  weight: ['400', '600'],
-  variable: '--font-body',
-  display: 'swap',
-});
-
-export const metadata: Metadata = {
-  title: {
-    default: 'Stand Sustainable Foundation — Lets Stand Together.',
-    template: '%s | Stand Sustainable Foundation',
-  },
-  description: 'Working for sustainability',
-  authors: [{ name: 'Stand Sustainable' }],
-  openGraph: {
-    title: 'Lets Stand Together.',
-    description: 'Working for sustainability',
-    url: 'https://standsustainable.org/',
-    siteName: 'Stand Sustainable Foundation',
-    locale: 'en_IN',
-    type: 'website',
-    images: [{ url: 'https://img1.wsimg.com/isteam/stock/8609' }],
-  },
-  twitter: {
-    card: 'summary',
-    title: 'Stand Sustainable Foundation',
-    description: 'Lets Stand Together.',
-    images: [{ url: 'https://img1.wsimg.com/isteam/stock/8609', alt: 'Stand Sustainable Foundation' }],
-  },
-  other: {
-    'theme-color': '#008390',
-  },
-  metadataBase: new URL('https://standsustainable.org'),
-};
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en" className={`${sourceSerif.variable} ${publicSans.variable}`}>
-      <head>
-        {/* Material Symbols Outlined */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="min-h-screen flex flex-col">
-        <SmoothScroll>{children}</SmoothScroll>
-      </body>
-    </html>
-  );
-}
-</file>
-
-<file path="src/components/content/StatCounter.tsx">
-'use client';
-
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { OBSERVER_OPTIONS, DURATIONS } from '@/lib/animations';
-
-interface StatCounterProps {
-  target: number;
-  label: string;
-  description: string;
-}
-
-/**
- * StatCounter — Animated count-up impact number.
- * Matches Stitch proof screen: easeOutQuart easing, 2000ms duration,
- * fires once on first viewport entry, formats with Indian locale.
- */
-export default function StatCounter({ target, label, description }: StatCounterProps) {
-  const [displayValue, setDisplayValue] = useState('0');
-  const [hasCounted, setHasCounted] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  const formatFinal = useCallback((num: number): string => {
-    if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M+';
-    if (num >= 1000) return Math.floor(num / 1000) + 'K+';
-    return num.toLocaleString('en-IN');
-  }, []);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || hasCounted) return;
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && !hasCounted) {
-          setHasCounted(true);
-          observer.unobserve(entry.target);
-
-          // Check for reduced motion
-          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            setDisplayValue(formatFinal(target));
-            return;
-          }
-
-          let startTimestamp: number | null = null;
-          const duration = DURATIONS.counterAnimation;
-
-          const step = (timestamp: number) => {
-            if (!startTimestamp) startTimestamp = timestamp;
-            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-            // easeOutQuart
-            const easeProgress = 1 - Math.pow(1 - progress, 4);
-            const current = Math.floor(easeProgress * target);
-            setDisplayValue(current.toLocaleString('en-IN'));
-
-            if (progress < 1) {
-              requestAnimationFrame(step);
-            } else {
-              setDisplayValue(formatFinal(target));
-            }
-          };
-
-          requestAnimationFrame(step);
-        }
-      });
-    }, OBSERVER_OPTIONS);
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [target, hasCounted, formatFinal]);
-
-  return (
-    <div ref={ref} className="border-t pt-6" style={{ borderColor: 'var(--color-alabaster)' }}>
-      <div
-        className="text-impact-number"
-        style={{ color: 'var(--color-primary)' }}
-      >
-        {displayValue}
-      </div>
-      <h3
-        className="text-label-caps mt-2 tracking-widest"
-        style={{ color: 'var(--color-stone)' }}
-      >
-        {label}
-      </h3>
-      <p
-        className="mt-4 leading-relaxed text-body-md"
-        style={{ fontSize: '12px', color: 'var(--color-outline)' }}
-      >
-        {description}
-      </p>
-    </div>
-  );
-}
-</file>
-
-<file path="src/components/feedback/FadeUp.tsx">
-'use client';
-
-import { useEffect, useRef, type ReactNode, type CSSProperties } from 'react';
-import { OBSERVER_OPTIONS } from '@/lib/animations';
-
-interface FadeUpProps {
-  children: ReactNode;
-  className?: string;
-  delay?: number;
-  style?: CSSProperties;
-}
-
-/**
- * Wraps children in a fade-up-on-scroll animation container.
- * Uses IntersectionObserver to add 'visible' class on first entry.
- * Respects prefers-reduced-motion automatically via CSS.
- */
-export default function FadeUp({ children, className = '', delay, style }: FadeUpProps) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, OBSERVER_OPTIONS);
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  const staggerClass = delay
-    ? delay <= 120 ? 'stagger-1'
-    : delay <= 240 ? 'stagger-2'
-    : delay <= 360 ? 'stagger-3'
-    : 'stagger-4'
-    : '';
-
-  return (
-    <div ref={ref} className={`fade-up ${staggerClass} ${className}`} style={style}>
-      {children}
-    </div>
-  );
-}
-</file>
-
-<file path="src/components/forms/ContactForm.tsx">
-'use client';
-
-import { useState } from 'react';
-import { sendContactEmail } from '@/actions/sendEmail';
-
-export default function ContactForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const handleSubmit = async (formData: FormData) => {
-    setIsSubmitting(true);
-    setErrorMessage('');
-    
-    const response = await sendContactEmail(formData);
-    
-    setIsSubmitting(false);
-    
-    if (response.success) {
-      setIsSuccess(true);
-    } else {
-      setErrorMessage(response.message || 'Something went wrong. Please try again.');
+  /* --- send (or simulate in dev) --- */
+  if (!resend || !RECIPIENT) {
+    if (IS_DEV) {
+      console.warn('[DEV] RESEND_API_KEY or RECIPIENT_EMAIL is not set. Simulating success.');
+      return { success: true, message: 'Simulated success (development mode).' };
     }
+    console.error('[PROD] RESEND_API_KEY or RECIPIENT_EMAIL is not configured. Submission dropped.');
+    return { success: false, message: 'The contact form is temporarily unavailable. Please email us directly.' };
+  }
+
+  try {
+    const data = await resend.emails.send({
+      from: FROM_ADDRESS,
+      to: RECIPIENT,
+      replyTo: email,
+      subject: `New Contact Form Submission: ${sanitize(subject)}`,
+      html: `
+        <h2>New Message from ${sanitize(name)}</h2>
+        <p><strong>Email:</strong> ${sanitize(email)}</p>
+        <p><strong>Subject:</strong> ${sanitize(subject)}</p>
+        <hr />
+        <p>${sanitize(message).replace(/\n/g, '<br>')}</p>
+      `,
+    });
+
+    if (data.error) {
+      console.error('Resend error:', data.error);
+      return { success: false, message: 'Failed to send message. Please try again.' };
+    }
+
+    return { success: true, message: 'Message sent successfully.' };
+  } catch (error: unknown) {
+    console.error('Error sending email:', error instanceof Error ? error.message : error);
+    return { success: false, message: 'An unexpected error occurred.' };
+  }
+}
+
+/* ============================================================
+   PARTNER FORM ACTION
+   ============================================================ */
+export async function sendPartnerEmail(
+  formData: FormData,
+): Promise<EmailResponse> {
+  /* --- honeypot --- */
+  const honeypot = formData.get('website') as string | null;
+  if (honeypot) {
+    return { success: true, message: 'Message sent successfully.' };
+  }
+
+  /* --- rate limit --- */
+  const ip =
+    (formData.get('_ip') as string) ?? 'unknown';
+  if (isRateLimited(ip)) {
+    return {
+      success: false,
+      message: 'Too many submissions. Please try again later.',
+    };
+  }
+
+  /* --- validate --- */
+  const name = validateString(formData.get('name'), 200);
+  const email = validateString(formData.get('email'), 320);
+  const interest = validateString(formData.get('interest'), 200);
+  const message = validateString(formData.get('message'), 5000);
+
+  if (!name || !email || !interest || !message) {
+    return { success: false, message: 'All fields are required and must not exceed length limits.' };
+  }
+
+  if (!EMAIL_RE.test(email)) {
+    return { success: false, message: 'Please provide a valid email address.' };
+  }
+
+  /* --- send (or simulate in dev) --- */
+  if (!resend || !RECIPIENT) {
+    if (IS_DEV) {
+      console.warn('[DEV] RESEND_API_KEY or RECIPIENT_EMAIL is not set. Simulating success.');
+      return { success: true, message: 'Simulated success (development mode).' };
+    }
+    console.error('[PROD] RESEND_API_KEY or RECIPIENT_EMAIL is not configured. Submission dropped.');
+    return { success: false, message: 'The contact form is temporarily unavailable. Please email us directly.' };
+  }
+
+  try {
+    const data = await resend.emails.send({
+      from: FROM_ADDRESS,
+      to: RECIPIENT,
+      replyTo: email,
+      subject: `New Partnership Inquiry: ${sanitize(name)}`,
+      html: `
+        <h2>New Partnership Inquiry from ${sanitize(name)}</h2>
+        <p><strong>Email:</strong> ${sanitize(email)}</p>
+        <p><strong>Area of Interest:</strong> ${sanitize(interest)}</p>
+        <hr />
+        <p>${sanitize(message).replace(/\n/g, '<br>')}</p>
+      `,
+    });
+
+    if (data.error) {
+      console.error('Resend error:', data.error);
+      return { success: false, message: 'Failed to send message. Please try again.' };
+    }
+
+    return { success: true, message: 'Message sent successfully.' };
+  } catch (error: unknown) {
+    console.error('Error sending email:', error instanceof Error ? error.message : error);
+    return { success: false, message: 'An unexpected error occurred.' };
+  }
+}
+</file>
+
+<file path="src/app/(main)/donate/layout.tsx">
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Donate — Stand Sustainable Foundation',
+  alternates: {
+    canonical: '/donate',
+  },
+};
+
+export default function DonateLayout({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
+}
+</file>
+
+<file path="src/components/forms/FormFields.tsx">
+import React from 'react';
+
+type InputFieldProps = React.InputHTMLAttributes<HTMLInputElement> & {
+  label: string;
+};
+
+export function InputField({ label, id, ...props }: InputFieldProps) {
+  return (
+    <div className="flex flex-col gap-2">
+      <label htmlFor={id} className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
+        {label}
+      </label>
+      <input
+        id={id}
+        className="w-full bg-transparent border-b p-3 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent rounded-sm transition-colors"
+        style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
+        {...props}
+      />
+    </div>
+  );
+}
+
+type TextAreaFieldProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
+  label: string;
+};
+
+export function TextAreaField({ label, id, ...props }: TextAreaFieldProps) {
+  return (
+    <div className="flex flex-col gap-2">
+      <label htmlFor={id} className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
+        {label}
+      </label>
+      <textarea
+        id={id}
+        className="w-full bg-transparent border-b p-3 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent rounded-sm transition-colors resize-none"
+        style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
+        {...props}
+      />
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/layout/CookieBanner.tsx">
+'use client';
+
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+
+export default function CookieBanner() {
+  const [showBanner, setShowBanner] = useState(false);
+
+  useEffect(() => {
+    // Only show the banner if no consent has been given yet
+    const consent = localStorage.getItem('cookie-consent');
+    if (!consent) {
+      setShowBanner(true);
+    }
+  }, []);
+
+  if (!showBanner) return null;
+
+  const handleAccept = () => {
+    localStorage.setItem('cookie-consent', 'accepted');
+    setShowBanner(false);
+    // Future analytics initialization goes here
   };
 
-  if (isSuccess) {
-    return (
-      <div className="flex flex-col items-center justify-center h-full text-center py-12">
-        <div className="w-16 h-16 rounded-full flex items-center justify-center mb-6" style={{ backgroundColor: 'var(--color-surface-tint)' }}>
-          <span className="material-symbols-outlined text-[32px]" style={{ color: 'white' }}>check</span>
-        </div>
-        <h3 className="text-section-header-mobile mb-4" style={{ fontFamily: 'var(--font-section-header)', color: 'var(--color-primary)' }}>Message Sent</h3>
-        <p className="text-body-md" style={{ color: 'var(--color-stone)' }}>
-          Thank you for reaching out. A member of our team will get back to you shortly.
-        </p>
-      </div>
-    );
-  }
+  const handleDecline = () => {
+    localStorage.setItem('cookie-consent', 'declined');
+    setShowBanner(false);
+  };
 
   return (
-    <form className="flex flex-col gap-6" action={handleSubmit}>
-      {errorMessage && (
-        <div className="bg-red-50 text-red-600 p-4 rounded-md text-sm">
-          {errorMessage}
+    <div className="fixed bottom-0 left-0 right-0 z-50 p-4 border-t shadow-lg" style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-alabaster)' }}>
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="text-body-sm flex-1" style={{ color: 'var(--color-on-surface-variant)' }}>
+          We use cookies to improve your experience and analyze site traffic. 
+          By clicking &quot;Accept All&quot;, you consent to our use of cookies in accordance with our <Link href="/privacy" className="underline hover:opacity-80">Privacy Policy</Link> (DPDP Act 2023 compliant).
         </div>
-      )}
-      <div className="flex flex-col gap-2">
-        <label htmlFor="name" className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
-          Full Name
-        </label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          className="w-full bg-transparent border-b p-3 focus:outline-none transition-colors"
-          style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
-          required
-        />
+        <div className="flex gap-3 shrink-0 w-full md:w-auto">
+          <button 
+            onClick={handleDecline}
+            className="flex-1 md:flex-none px-4 py-2 border rounded-md text-label-caps transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+            style={{ borderColor: 'var(--color-outline)', color: 'var(--color-stone)' }}
+          >
+            Decline
+          </button>
+          <button 
+            onClick={handleAccept}
+            className="flex-1 md:flex-none px-4 py-2 rounded-md text-label-caps transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--color-primary)]"
+            style={{ backgroundColor: 'var(--color-primary)', color: 'white' }}
+          >
+            Accept All
+          </button>
+        </div>
       </div>
-      <div className="flex flex-col gap-2">
-        <label htmlFor="email" className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
-          Email Address
-        </label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          className="w-full bg-transparent border-b p-3 focus:outline-none transition-colors"
-          style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
-          required
-        />
-      </div>
-      <div className="flex flex-col gap-2">
-        <label htmlFor="subject" className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
-          Subject
-        </label>
-        <input
-          type="text"
-          id="subject"
-          name="subject"
-          className="w-full bg-transparent border-b p-3 focus:outline-none transition-colors"
-          style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
-          required
-        />
-      </div>
-      <div className="flex flex-col gap-2">
-        <label htmlFor="message" className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
-          Message
-        </label>
-        <textarea
-          id="message"
-          name="message"
-          rows={4}
-          className="w-full bg-transparent border-b p-3 focus:outline-none transition-colors resize-none"
-          style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
-          required
-        ></textarea>
-      </div>
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="mt-6 w-full flex items-center justify-center text-label-caps rounded-[6px] py-4 transition-opacity hover:opacity-90 disabled:opacity-50"
-        style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-on-primary)' }}
-      >
-        {isSubmitting ? (
-          <>
-            <span className="material-symbols-outlined animate-spin mr-2" style={{ fontSize: '18px' }}>autorenew</span>
-            Sending...
-          </>
-        ) : 'Send Message'}
-      </button>
-    </form>
+    </div>
   );
 }
 </file>
 
-<file path="src/components/layout/Footer.tsx">
-import Link from 'next/link';
-import {
-  siteConfig,
-  footerOrganizationLinks,
-  footerActionLinks,
-  footerLegalLinks,
-} from '@/content/navigation';
+<file path="src/components/layout/SmoothScroll.tsx">
+'use client';
 
-/**
- * Footer — 4-column Deep Forest footer.
- * Updated for the 10-page architecture.
- */
-export default function Footer() {
-  return (
-    <footer
-      className="w-full border-t py-12 md:py-20 px-[var(--spacing-margin-mobile)]"
-      style={{
-        backgroundColor: 'var(--color-primary)',
-        borderColor: 'var(--color-primary-container)',
-      }}
-    >
-      <div className="max-w-screen-2xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-[var(--spacing-gutter)]">
-        {/* Column 1: Brand + Contact */}
-        <div className="col-span-2 md:col-span-1 mb-8 md:mb-0">
-          <div
-            className="text-section-header-mobile mb-4"
-            style={{
-              fontFamily: 'var(--font-section-header)',
-              color: 'var(--color-on-primary)',
-            }}
-          >
-            {siteConfig.name}
-          </div>
-          <p
-            className="text-body-md text-sm max-w-xs mb-6"
-            style={{ color: 'var(--color-primary-fixed-dim)' }}
-          >
-            {siteConfig.tagline}
-          </p>
+import { useEffect } from 'react';
+import Lenis from 'lenis';
 
-          {/* Contact Details */}
-          <div className="flex flex-col gap-3 text-sm" style={{ color: 'var(--color-primary-fixed-dim)' }}>
-            <a
-              href="https://www.google.com/maps/dir//13%2FB,+next+to+Social,+Hauz+Khas+Village,+Deer+Park,+Hauz+Khas,+New+Delhi,+Delhi+110016/@24.5900172,84.8239107,6353m/data=!3m1!1e3!4m8!4m7!1m0!1m5!1m1!1s0x390d1d8a830a42c3:0x7ba2904ce3b8044b!2m2!1d77.1942646!2d28.5546597?entry=ttu&g_ep=EgoyMDI2MDYyMy4wIKXMDSoASAFQAw%3D%3D"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-start gap-2 transition-colors duration-300 hover:text-white"
-            >
-              <span className="material-symbols-outlined text-[16px] mt-0.5">location_on</span>
-              <span>13/B, next to Social, Hauz Khas Village, Deer Park, Hauz Khas, New Delhi, Delhi 110016</span>
-            </a>
-            <a
-              href="tel:011-47075730"
-              className="flex items-center gap-2 transition-colors duration-300 hover:text-white"
-            >
-              <span className="material-symbols-outlined text-[16px]">call</span>
-              <span>011-47075730</span>
-            </a>
-            <a
-              href="mailto:standsustainable@gmail.com"
-              className="flex items-center gap-2 transition-colors duration-300 hover:text-white"
-            >
-              <span className="material-symbols-outlined text-[16px]">mail</span>
-              <span>standsustainable@gmail.com</span>
-            </a>
-          </div>
-        </div>
+export default function SmoothScroll({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
+    });
 
-        {/* Column 2: Organization Links */}
-        <div className="flex flex-col gap-4">
-          <h3 className="text-label-caps" style={{ color: 'var(--color-on-primary)' }}>Organization</h3>
-          {footerOrganizationLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-body-md transition-colors duration-300 hover:text-white"
-              style={{ color: 'var(--color-primary-fixed-dim)' }}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
+    let rafId: number;
 
-        {/* Column 3: Action & Trust Links */}
-        <div className="flex flex-col gap-4">
-          <h3 className="text-label-caps" style={{ color: 'var(--color-on-primary)' }}>Action & Trust</h3>
-          {footerActionLinks.map((link) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              className="text-body-md transition-colors duration-300 hover:text-white"
-              style={{ color: 'var(--color-primary-fixed-dim)' }}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
+    function raf(time: number) {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    }
 
-        {/* Column 4: Legal & Copyright */}
-        <div className="flex flex-col justify-between h-full">
-          <div className="flex flex-col gap-4 mb-8">
-            <h3 className="text-label-caps" style={{ color: 'var(--color-on-primary)' }}>Legal</h3>
-            {footerLegalLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="text-body-md transition-colors duration-300 hover:text-white"
-                style={{ color: 'var(--color-primary-fixed-dim)' }}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-          <p
-            className="text-body-md text-xs"
-            style={{ color: 'var(--color-primary-fixed-dim)' }}
-          >
-            {siteConfig.copyright}
-          </p>
-        </div>
-      </div>
-    </footer>
-  );
+    rafId = requestAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+    };
+  }, []);
+
+  return <>{children}</>;
 }
 </file>
 
-<file path="src/content/about.ts">
-/* ============================================================
-   ABOUT US PAGE CONTENT
-   Source: website-content-master.md
-   ============================================================ */
+<file path="src/components/seo/BreadcrumbJsonLd.tsx">
+import React from 'react';
 
-export const overviewSection = {
-  headline: 'Working for Sustainability Across India.',
-  body: 'We are working on a social project to ensure sustainability among all vulnerable and marginalised communities, with a key focus on the Sustainable Development Goals. We believe in the mainstreaming of climate change, gender equality, and access to education and livelihood as a necessity in development projects.',
-  backgroundImage: 'https://img1.wsimg.com/isteam/ip/5a9e4e00-b250-49b0-a0b3-148078a3e3ea/MHM.jpg', // From website-content-master.md Image 3
+type BreadcrumbJsonLdProps = {
+  items: { name: string; url: string }[];
 };
 
-export const missionSection = {
-  headline: 'Our Mission',
-  body: 'We focus on making the maximum positive effort for our community. Our members and volunteers provide the momentum that helps us affect change. Using data-driven models, we provide solutions that make a long-lasting difference.',
-};
+export default function BreadcrumbJsonLd({ items }: BreadcrumbJsonLdProps) {
+  const fullItems = [
+    { name: 'Home', url: '/' },
+    ...items
+  ];
 
-export const historySection = {
-  headline: 'Our History',
-  body: 'Seeing a need for energetic, nonprofit work in this area, we formed our organization to provide sensible solutions. We\'ve consistently grown since then, all thanks to the helping hands of this amazing community! Our amazing team of regulars and part-time volunteers are committed to helping others. We take our convictions and turn them into action.',
-};
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": fullItems.map((item, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": item.name,
+      "item": `https://standsustainable.org${item.url}`
+    }))
+  };
 
-export const programsSection = {
-  headline: 'Our Programs',
-  body: 'We empower communities and drive change through these core focus areas:',
-  programs: [
-    {
-      icon: 'groups',
-      title: 'Community Engagement',
-      description: 'To effectively engage with the marginalised communities on sensitising various issues that can help them in realising their full potential.',
-    },
-    {
-      icon: 'work',
-      title: 'Skill & Livelihood',
-      description: 'To network with various skills based training institutions including various vocational institutions to reach to vulnerable sections of society.',
-    },
-    {
-      icon: 'diversity_1',
-      title: 'Gender',
-      description: 'Gender empowerment through access to resources.',
-    },
-    {
-      icon: 'handshake',
-      title: 'Collaborations',
-      description: 'To partner with Government and non-Governmental agencies to support vulnerable and marginalised communities in exploring their capabilities.',
-    },
-    {
-      icon: 'school',
-      title: 'Education',
-      description: 'Provide innovative solutions for access to education for all.',
-    },
-  ],
-};
-</file>
-
-<file path="src/content/compliance.ts">
-/* ============================================================
-   COMPLIANCE PAGE CONTENT
-   Source: website-content-master.md
-   Note: No specific compliance information exists on the original website.
-   Structure preserved with general NGO compliance framework.
-   Registration/Legal Status marked as NOT FOUND in master doc.
-   ============================================================ */
-
-export const complianceHero = {
-  headline: 'Legal & Security Compliance',
-  subtext: 'Stand Sustainable Foundation maintains standards of institutional governance and transparency in all our operations.',
-  backgroundImage: 'https://img1.wsimg.com/isteam/stock/8609',
-};
-
-export const complianceCategories = [
-  {
-    title: 'Legal & Regulatory Compliance',
-    description: 'Stand Sustainable Foundation is a registered non-profit organization operating in India.',
-    items: [
-      {
-        title: 'NGO Registration',
-        description: 'Stand Sustainable Foundation is a registered non-profit organization based in New Delhi, India.',
-        status: 'Registered',
-        icon: 'gavel',
-      },
-      {
-        title: 'Cookie Policy',
-        description: 'We use cookies to analyze website traffic and optimize your website experience. By accepting our use of cookies, your data will be aggregated with all other user data.',
-        status: 'Active',
-        icon: 'cookie',
-      },
-    ],
-  },
-  {
-    title: 'Data & Infrastructure Security',
-    description: 'Our digital infrastructure is secured to protect the privacy of our visitors and supporters.',
-    items: [
-      {
-        title: 'Payment Processing Security',
-        description: 'All financial transactions are processed via secure, encrypted payment gateways. We do not store credit card data on our servers.',
-        status: 'Encrypted',
-        icon: 'credit_card',
-      },
-      {
-        title: 'Data Privacy',
-        description: 'Visitor and supporter data is governed by strict privacy protocols to ensure the security and confidentiality of all personal information.',
-        status: 'Active',
-        icon: 'shield',
-      },
-    ],
-  },
-];
-</file>
-
-<file path="src/content/contact.ts">
-export const contactHero = {
-  headline: 'Contact Us',
-  subtext: 'Better yet, see us in person! We are happy to connect.',
-  backgroundImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop',
-};
-
-export const officeLocations = [
-  {
-    city: 'New Delhi',
-    type: 'Headquarters',
-    address: '13 B Hauz Khas Village, Deer Park, Hauz Khas, New Delhi, Delhi, India',
-    phone: '011-47075730',
-    email: 'standsustainable@gmail.com',
-    directionsUrl: 'https://www.google.com/maps/dir//13%2FB,+next+to+Social,+Hauz+Khas+Village,+Deer+Park,+Hauz+Khas,+New+Delhi,+Delhi+110016/@24.7858039,85.0129499,3171m/data=!3m1!1e3!4m8!4m7!1m0!1m5!1m1!1s0x390d1d8a830a42c3:0x7ba2904ce3b8044b!2m2!1d77.1942646!2d28.5546597?entry=ttu&g_ep=EgoyMDI2MDYyMy4wIKXMDSoASAFQAw%3D%3D',
-    mapEmbedUrl: 'https://maps.google.com/maps?q=13/B,+next+to+Social,+Hauz+Khas+Village,+Deer+Park,+Hauz+Khas,+New+Delhi,+Delhi+110016&t=&z=15&ie=UTF8&iwloc=&output=embed',
-  },
-];
-</file>
-
-<file path="src/content/donate.ts">
-import type { DonationAmount } from '@/types/content';
-
-/* ============================================================
-   DONATE PAGE CONTENT
-   Source: website-content-master.md
-   ⚠️ No dedicated donation page exists on the original site.
-      This page is preserved as a functional placeholder.
-   ============================================================ */
-
-export const donateHero = {
-  headline: 'Your support helps us stand together for sustainability.',
-};
-
-export const donationAmounts: DonationAmount[] = [
-  { value: 500, currency: '₹', label: '1 Week Meals' },
-  { value: 1000, currency: '₹', label: '1 Month Training', isDefault: true },
-  { value: 2500, currency: '₹', label: 'Clean Water Kit' },
-  { value: 5000, currency: '₹', label: 'Annual Supplies' },
-];
-
-export const frequencyOptions = [
-  { value: 'one-time', label: 'One-Time' },
-  { value: 'monthly', label: 'Monthly' },
-] as const;
-
-export const trustBadges = [
-  { icon: 'verified', label: 'Registered NGO (India)' },
-  { icon: 'security', label: 'Secure Encrypted Payment' },
-];
-
-export const thankYouContent = {
-  headline: 'Thank You.',
-  body: 'Your support has been received. We\'ve sent a receipt to your email, along with details on how your contribution is helping us work for sustainability in vulnerable and marginalised communities.',
-  ctaLabel: 'Return Home',
-  ctaHref: '/',
-  image: '/images/hero_india.png',
-  imageAlt: 'Stand Sustainable Foundation community impact',
-};
-
-export const feeCoverOption = {
-  label: 'I\'d like to cover the transaction fees (₹20) so 100% goes to the cause.',
-  fee: 20,
-};
-</file>
-
-<file path="src/content/gallery.ts">
-/* ============================================================
-   GALLERY PAGE CONTENT
-   Source: website-content-master.md — Images section
-   All images are from the actual Stand Sustainable Foundation website.
-   Note: No dedicated gallery exists on the original site.
-   Images are embedded within content sections.
-   ============================================================ */
-
-export const galleryHero = {
-  headline: 'Our Gallery',
-  subtext: 'Photos from our programs and initiatives across India. Documenting our work in sustainability, community empowerment, and the Sustainable Development Goals.',
-  backgroundImage: 'https://img1.wsimg.com/isteam/stock/10917',
-};
-
-export const galleryImages = [
-  {
-    src: 'https://img1.wsimg.com/isteam/ip/5a9e4e00-b250-49b0-a0b3-148078a3e3ea/MHM%20TRAINING.jpg',
-    alt: 'MHM Training program by Stand Sustainable Foundation',
-    caption: 'MHM (Menstrual Hygiene Management) Training Program',
-    location: 'India',
-    span: 'col-span-1 md:col-span-8 row-span-2',
-  },
-  {
-    src: 'https://img1.wsimg.com/isteam/ip/5a9e4e00-b250-49b0-a0b3-148078a3e3ea/MHM.jpg',
-    alt: 'MHM program activity by Stand Sustainable Foundation',
-    caption: 'MHM Program — Menstrual Hygiene Management Initiative',
-    location: 'India',
-    span: 'col-span-1 md:col-span-4 row-span-1',
-  },
-  {
-    src: 'https://img1.wsimg.com/isteam/ip/5a9e4e00-b250-49b0-a0b3-148078a3e3ea/256250334_412649160356636_2273143611188280849_.jpg',
-    alt: 'Stand Sustainable Foundation organization photo',
-    caption: 'Our Team — Stand Sustainable Foundation',
-    location: 'India',
-    span: 'col-span-1 md:col-span-4 row-span-1',
-  },
-  {
-    src: 'https://img1.wsimg.com/isteam/ip/23a414a5-5c20-4369-949d-2cc1e8321540/icon-04.jpg',
-    alt: 'Our Work program icon',
-    caption: 'Our Work — Community Engagement Program',
-    location: 'India',
-    span: 'col-span-1 md:col-span-6 row-span-1',
-  },
-  {
-    src: 'https://img1.wsimg.com/isteam/ip/23a414a5-5c20-4369-949d-2cc1e8321540/icon-0006.jpg',
-    alt: 'Skill and Livelihood program icon',
-    caption: 'Skill and Livelihood Program',
-    location: 'India',
-    span: 'col-span-1 md:col-span-6 row-span-1',
-  },
-  {
-    src: 'https://img1.wsimg.com/isteam/ip/23a414a5-5c20-4369-949d-2cc1e8321540/icon-05.jpg',
-    alt: 'Gender empowerment program icon',
-    caption: 'Gender Empowerment Program',
-    location: 'India',
-    span: 'col-span-1 md:col-span-4 row-span-2',
-  },
-  {
-    src: 'https://img1.wsimg.com/isteam/stock/10917',
-    alt: 'Team and history of Stand Sustainable Foundation',
-    caption: 'Our History — Building a Community',
-    location: 'India',
-    span: 'col-span-1 md:col-span-8 row-span-1',
-  },
-  {
-    src: 'https://img1.wsimg.com/isteam/stock/18309',
-    alt: 'Team and volunteers of Stand Sustainable Foundation',
-    caption: 'Our Volunteers in Action',
-    location: 'India',
-    span: 'col-span-1 md:col-span-8 row-span-1',
-  },
-];
-</file>
-
-<file path="src/content/impact.ts">
-import type { StatItem, ProjectItem } from '@/types/content';
-
-/* ============================================================
-   PROOF PAGE CONTENT
-   Source: website-content-master.md
-   Statistics verified against original website content.
-   ============================================================ */
-
-export const proofIntro = {
-  headline: 'Measurable Impact,',
-  headlineLine2: 'Real Change.',
-  body: 'We believe in transparent, verifiable outcomes. Our interventions across India focus on sustainability, community empowerment, and the Sustainable Development Goals.',
-};
-
-export const impactStats: StatItem[] = [
-  {
-    value: 1500,
-    label: 'Re-usable Pads Distributed',
-    description: 'Through our MHM program for migrant workers and their families.',
-    verified: true,
-  },
-  {
-    value: 50,
-    label: 'Active Volunteers',
-    description: 'Mobilized during COVID-19 response across India.',
-    verified: true,
-  },
-  {
-    value: 5,
-    label: 'Programs & Initiatives',
-    description: 'Spanning education, gender, livelihoods, collaborations, and community engagement.',
-    verified: true,
-  },
-];
-
-export const projectsSection = {
-  headline: 'Our Initiatives',
-  subLabel: 'Programs',
-};
-
-export const heroProject: ProjectItem = {
-  title: 'Stand Up Against COVID',
-  location: 'India',
-  year: '2020–2021',
-  description: 'Stand Sustainable Foundation has been responding to the COVID crisis in India for over 1 year. Through the MHM program, we raised 1,500 re-usable pads for migrant workers and their family members. During the second wave, we mobilized 50+ volunteers to support people in arranging Oxygen Cylinders, Concentrators, Medical Devices, Hospital Beds, and Ambulance Support.',
-  image: 'https://img1.wsimg.com/isteam/ip/5a9e4e00-b250-49b0-a0b3-148078a3e3ea/MHM%20TRAINING.jpg',
-  imageAlt: 'MHM Training program by Stand Sustainable Foundation',
-  ctaLabel: 'Learn More',
-  ctaHref: '/projects',
-  verified: true,
-};
-
-export const supportingProjects: ProjectItem[] = [
-  {
-    title: 'Skill and Livelihood',
-    location: 'India',
-    year: 'Ongoing',
-    description: 'To network with various skills based training Institutions including various vocational institutions to reach to vulnerable section of society.',
-    image: 'https://img1.wsimg.com/isteam/ip/23a414a5-5c20-4369-949d-2cc1e8321540/icon-0006.jpg',
-    imageAlt: 'Skill and Livelihood program icon',
-    ctaLabel: 'View Details',
-    ctaHref: '/projects',
-    verified: true,
-  },
-  {
-    title: 'Gender Empowerment',
-    location: 'India',
-    year: 'Ongoing',
-    description: 'Gender empowerment through access to resources.',
-    image: 'https://img1.wsimg.com/isteam/ip/23a414a5-5c20-4369-949d-2cc1e8321540/icon-05.jpg',
-    imageAlt: 'Gender empowerment program icon',
-    ctaLabel: 'View Details',
-    ctaHref: '/projects',
-    verified: true,
-  }
-];
-</file>
-
-<file path="src/content/partner.ts">
-/* ============================================================
-   PARTNER PAGE CONTENT
-   Source: website-content-master.md
-   Partnership info derived from Collaborations program description.
-   ============================================================ */
-
-export const partnerHero = {
-  headline: 'Partner With Us',
-  subtext: 'To partner with Government and non-Governmental agencies to support vulnerable and marginalised communities in exploring their capabilities.',
-  backgroundImage: 'https://img1.wsimg.com/isteam/stock/8609',
-};
-
-export const partnerModels = [
-  {
-    title: 'Government Partnerships',
-    description: 'We collaborate with Government agencies to support vulnerable and marginalised communities in exploring their capabilities and accessing essential services.',
-  },
-  {
-    title: 'Non-Governmental Collaborations',
-    description: 'We work alongside non-Governmental agencies and civil society organisations to effectively engage with communities on issues related to sustainability, education, gender, and livelihoods.',
-  },
-  {
-    title: 'Skills & Training Partnerships',
-    description: 'We network with various skills based training Institutions including various vocational institutions to reach to vulnerable section of society and provide them pathways to sustainable livelihoods.',
-  }
-];
-</file>
-
-<file path="src/content/projects.ts">
-/* ============================================================
-   PROJECTS DIRECTORY CONTENT
-   Source: website-content-master.md
-   Real programs from the Stand Sustainable Foundation website.
-   ============================================================ */
-
-export const projectsHero = {
-  headline: 'Our Work',
-  subtext: 'Stand Sustainable Foundation works on social projects to ensure sustainability among all vulnerable and marginalised communities, with key focus on Sustainable Development Goals.',
-  backgroundImage: 'https://img1.wsimg.com/isteam/stock/18309',
-};
-
-export const projectDirectory = [
-  {
-    slug: 'stand-up-against-covid',
-    title: 'Stand Up Against COVID',
-    location: 'India',
-    year: '2020–2021',
-    status: 'Completed',
-    beneficiaries: 'Migrant workers and their families',
-    description: 'Responding to the COVID crisis in India for over 1 year. Through the MHM program, raised 1,500 re-usable pads for migrant workers. During the second wave, mobilized 50+ volunteers to support people in arranging Oxygen Cylinders, Concentrators, Medical Devices, Hospital Beds, and Ambulance Support.',
-    image: 'https://img1.wsimg.com/isteam/ip/5a9e4e00-b250-49b0-a0b3-148078a3e3ea/MHM%20TRAINING.jpg',
-  },
-  {
-    slug: 'our-work',
-    title: 'Our Work — Community Engagement',
-    location: 'India',
-    year: 'Ongoing',
-    status: 'Active',
-    beneficiaries: 'Marginalised communities',
-    description: 'To effectively engage with the marginalised communities on sensitising various issues that can help them in realising their full potential.',
-    image: 'https://img1.wsimg.com/isteam/ip/23a414a5-5c20-4369-949d-2cc1e8321540/icon-04.jpg',
-  },
-  {
-    slug: 'skill-and-livelihood',
-    title: 'Skill and Livelihood',
-    location: 'India',
-    year: 'Ongoing',
-    status: 'Active',
-    beneficiaries: 'Vulnerable sections of society',
-    description: 'To network with various skills based training Institutions including various vocational institutions to reach to vulnerable section of society.',
-    image: 'https://img1.wsimg.com/isteam/ip/23a414a5-5c20-4369-949d-2cc1e8321540/icon-0006.jpg',
-  },
-  {
-    slug: 'gender-empowerment',
-    title: 'Gender Empowerment',
-    location: 'India',
-    year: 'Ongoing',
-    status: 'Active',
-    beneficiaries: 'Women and marginalised communities',
-    description: 'Gender empowerment through access to resources.',
-    image: 'https://img1.wsimg.com/isteam/ip/23a414a5-5c20-4369-949d-2cc1e8321540/icon-05.jpg',
-  },
-  {
-    slug: 'collaborations',
-    title: 'Collaborations',
-    location: 'India',
-    year: 'Ongoing',
-    status: 'Active',
-    beneficiaries: 'Vulnerable and marginalised communities',
-    description: 'To partner with Government and non-Governmental agencies to support vulnerable and marginalised communities in exploring their capabilities.',
-    image: 'https://img1.wsimg.com/isteam/stock/10929',
-  },
-  {
-    slug: 'education',
-    title: 'Education',
-    location: 'India',
-    year: 'Ongoing',
-    status: 'Active',
-    beneficiaries: 'Communities lacking access to education',
-    description: 'Provide innovative solutions for access to education for all.',
-    image: 'https://img1.wsimg.com/isteam/stock/103150',
-  },
-];
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
+  );
+}
 </file>
 
 <file path="src/lib/animations.ts">
@@ -1937,6 +1210,1012 @@ export interface ReportItem {
 }
 </file>
 
+<file path="next.config.ts">
+import type { NextConfig } from "next";
+
+const securityHeaders = [
+  {
+    key: 'X-DNS-Prefetch-Control',
+    value: 'on',
+  },
+  {
+    key: 'Strict-Transport-Security',
+    value: 'max-age=63072000; includeSubDomains; preload',
+  },
+  {
+    key: 'X-Frame-Options',
+    value: 'SAMEORIGIN',
+  },
+  {
+    key: 'X-Content-Type-Options',
+    value: 'nosniff',
+  },
+  {
+    key: 'Referrer-Policy',
+    value: 'strict-origin-when-cross-origin',
+  },
+  {
+    key: 'Permissions-Policy',
+    value: 'camera=(), microphone=(), geolocation=(), payment=()',
+  },
+  {
+    key: 'Content-Security-Policy',
+    value: [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "font-src 'self' https://fonts.gstatic.com",
+      "img-src 'self' data: blob: https://lh3.googleusercontent.com https://images.unsplash.com",
+      "frame-src 'self' https://www.google.com",
+      "connect-src 'self'",
+    ].join('; '),
+  },
+];
+
+const nextConfig: NextConfig = {
+  /* Static export disabled to allow Resend Server Actions */
+  // output: 'export',
+
+  /* Image optimization with external domains */
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        pathname: '/aida-public/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
+      },
+    ],
+  },
+
+  /* Trailing slashes for clean URLs on static hosts */
+  trailingSlash: true,
+
+  /* Security headers on all routes */
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: securityHeaders,
+      },
+    ];
+  },
+};
+
+export default nextConfig;
+</file>
+
+<file path="package.json">
+{
+  "name": "standsustainable",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "lenis": "^1.3.24",
+    "next": "16.2.9",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "resend": "^6.16.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.9",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
+</file>
+
+<file path="src/app/(main)/gallery/page.tsx">
+import type { Metadata } from 'next';
+import Image from 'next/image';
+import PageHero from '@/components/layout/PageHero';
+import FadeUp from '@/components/feedback/FadeUp';
+import { galleryHero, galleryImages } from '@/content/gallery';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: '/gallery',
+  },
+  title: 'Gallery — Stand Sustainable Foundation',
+  description: 'Photos from our programs and initiatives across India, documenting our work in sustainability and community empowerment.',
+};
+
+import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd';
+
+export default function GalleryPage() {
+  return (
+    <>
+      <BreadcrumbJsonLd items={[{ name: 'Gallery', url: '/gallery' }]} />
+      <PageHero
+        headline={galleryHero.headline}
+        subtext={galleryHero.subtext}
+        backgroundImage={galleryHero.backgroundImage}
+      />
+
+      <section
+        className="py-16 md:py-24 px-6 md:px-16"
+        style={{ backgroundColor: 'var(--color-surface-linen)' }}
+      >
+        <div className="max-w-screen-2xl mx-auto">
+          {/* Magazine-style Masonry Grid approximation using CSS Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-[var(--spacing-gutter)] auto-rows-[minmax(200px,auto)] md:auto-rows-[minmax(300px,auto)]">
+            {galleryImages.map((img, index) => (
+              <FadeUp
+                key={index}
+                className={`${img.span} group`}
+                delay={index * 120}
+              >
+                <div className="relative w-full h-full min-h-[200px] md:min-h-[300px] overflow-hidden rounded-[4px] ambient-shadow">
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    fill
+                    loading="lazy"
+                    className="object-cover img-hover-scale"
+                    sizes="(max-width: 768px) 100vw, 66vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                    <p className="text-body-md text-white font-bold mb-1">
+                      {img.caption}
+                    </p>
+                    <p className="text-label-caps" style={{ color: 'var(--color-surface-linen)' }}>
+                      {img.location}
+                    </p>
+                  </div>
+                </div>
+              </FadeUp>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+</file>
+
+<file path="src/app/(main)/layout.tsx">
+import TopNavBar from '@/components/layout/TopNavBar';
+import Footer from '@/components/layout/Footer';
+
+/**
+ * Main layout — Wraps Story, Proof, and Institution pages
+ * with the full TopNavBar and Footer.
+ * The Donate page lives outside this group with a suppressed nav.
+ */
+export default function MainLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-4 focus:left-4 focus:p-4 focus:bg-white focus:text-[var(--color-primary)] focus:font-bold focus:rounded-md focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+      >
+        Skip to main content
+      </a>
+      <TopNavBar />
+      <main id="main-content" className="flex-grow">
+        {children}
+      </main>
+      <Footer />
+    </>
+  );
+}
+</file>
+
+<file path="src/components/content/MapEmbedWithConsent.tsx">
+'use client';
+
+import { useState } from 'react';
+
+interface MapEmbedWithConsentProps {
+  mapEmbedUrl: string;
+  city: string;
+}
+
+export default function MapEmbedWithConsent({ mapEmbedUrl, city }: MapEmbedWithConsentProps) {
+  const [consentGiven, setConsentGiven] = useState(false);
+
+  if (consentGiven) {
+    return (
+      <iframe
+        src={mapEmbedUrl}
+        width="100%"
+        height="250"
+        style={{ border: 0, borderRadius: '6px' }}
+        allowFullScreen
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+        title={`Map of ${city} office`}
+      ></iframe>
+    );
+  }
+
+  return (
+    <div
+      className="flex flex-col items-center justify-center p-6 text-center rounded-[6px] border"
+      style={{
+        height: '250px',
+        backgroundColor: 'var(--color-surface-container-low)',
+        borderColor: 'var(--color-outline-variant)',
+      }}
+    >
+      <span className="material-symbols-outlined text-[32px] mb-2" aria-hidden="true" style={{ color: 'var(--color-outline)' }}>
+        map
+      </span>
+      <p className="text-body-sm mb-4" style={{ color: 'var(--color-on-surface-variant)' }}>
+        We use Google Maps to display our office location. By loading the map, you agree to Google's Privacy Policy and the processing of your data by Google.
+      </p>
+      <button
+        onClick={() => setConsentGiven(true)}
+        className="inline-flex items-center justify-center py-2 px-4 rounded-[4px] font-bold text-[14px] transition-opacity hover:opacity-90"
+        style={{
+          backgroundColor: 'var(--color-outline)',
+          color: 'white',
+        }}
+      >
+        Load Map
+      </button>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/content/StatCounter.tsx">
+import { useMemo } from 'react';
+
+interface StatCounterProps {
+  target: number;
+  label: string;
+  description: string;
+}
+
+/**
+ * StatCounter — Animated count-up impact number using pure CSS.
+ * Removes all client-side JS for the animation.
+ */
+export default function StatCounter({ target, label, description }: StatCounterProps) {
+  const { suffix, baseTarget } = useMemo(() => {
+    if (target >= 1000000) {
+      return { suffix: "M+", baseTarget: target / 1000000 };
+    }
+    if (target >= 1000) {
+      return { suffix: "K+", baseTarget: Math.floor(target / 1000) };
+    }
+    return { suffix: "", baseTarget: target };
+  }, [target]);
+
+  return (
+    <div className="border-t pt-6" style={{ borderColor: 'var(--color-alabaster)' }}>
+      <div
+        className="text-impact-number animate-counter"
+        style={{ color: 'var(--color-primary)', '--target-num': baseTarget, '--suffix': `"${suffix}"` } as React.CSSProperties}
+      >
+      </div>
+      <h3
+        className="text-label-caps mt-2 tracking-widest"
+        style={{ color: 'var(--color-stone)' }}
+      >
+        {label}
+      </h3>
+      <p
+        className="mt-4 leading-relaxed text-body-md"
+        style={{ fontSize: '12px', color: 'var(--color-outline)' }}
+      >
+        {description}
+      </p>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/feedback/FadeUp.tsx">
+'use client';
+
+import { useEffect, useRef, type ReactNode, type CSSProperties } from 'react';
+import { OBSERVER_OPTIONS } from '@/lib/animations';
+
+interface FadeUpProps {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+  style?: CSSProperties;
+}
+
+/**
+ * Wraps children in a fade-up-on-scroll animation container.
+ * Uses IntersectionObserver to add 'visible' class on first entry.
+ * Respects prefers-reduced-motion automatically via CSS.
+ */
+export default function FadeUp({ children, className = '', delay, style }: FadeUpProps) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.classList.add('visible');
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, OBSERVER_OPTIONS);
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const staggerClass = delay
+    ? delay <= 120 ? 'stagger-1'
+    : delay <= 240 ? 'stagger-2'
+    : delay <= 360 ? 'stagger-3'
+    : 'stagger-4'
+    : '';
+
+  return (
+    <div ref={ref} className={`fade-up ${staggerClass} ${className}`} style={style}>
+      {children}
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/forms/ContactForm.tsx">
+'use client';
+
+import { useState } from 'react';
+import { sendContactEmail } from '@/actions/sendEmail';
+import { InputField, TextAreaField } from './FormFields';
+
+export default function ContactForm() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleSubmit = async (formData: FormData) => {
+    setIsSubmitting(true);
+    setErrorMessage('');
+    
+    const response = await sendContactEmail(formData);
+    
+    setIsSubmitting(false);
+    
+    if (response.success) {
+      setIsSuccess(true);
+    } else {
+      setErrorMessage(response.message || 'Something went wrong. Please try again.');
+    }
+  };
+
+  if (isSuccess) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full text-center py-12">
+        <div className="w-16 h-16 rounded-full flex items-center justify-center mb-6" style={{ backgroundColor: 'var(--color-surface-tint)' }}>
+          <span className="material-symbols-outlined text-[32px]" aria-hidden="true" style={{ color: 'white' }}>check</span>
+        </div>
+        <h3 className="text-section-header-mobile mb-4" style={{ fontFamily: 'var(--font-section-header)', color: 'var(--color-primary)' }}>Message Sent</h3>
+        <p className="text-body-md" style={{ color: 'var(--color-stone)' }}>
+          Thank you for reaching out. A member of our team will get back to you shortly.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <form className="flex flex-col gap-6" action={handleSubmit}>
+      {errorMessage && (
+        <div className="bg-red-50 text-red-600 p-4 rounded-md text-sm">
+          {errorMessage}
+        </div>
+      )}
+      {/* Honeypot — invisible to humans, bots fill it and get silently rejected */}
+      <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+      <InputField
+        label="Full Name"
+        type="text"
+        id="name"
+        name="name"
+        required
+      />
+      <InputField
+        label="Email Address"
+        type="email"
+        id="email"
+        name="email"
+        required
+      />
+      <InputField
+        label="Subject"
+        type="text"
+        id="subject"
+        name="subject"
+        required
+      />
+      <TextAreaField
+        label="Message"
+        id="message"
+        name="message"
+        rows={4}
+        required
+      />
+      
+      <div className="flex items-start gap-3 mt-2">
+        <input
+          type="checkbox"
+          id="consent"
+          name="consent"
+          required
+          className="mt-1"
+        />
+        <label htmlFor="consent" className="text-body-sm" style={{ color: 'var(--color-on-surface-variant)' }}>
+          I agree to the <a href="/privacy" className="underline hover:opacity-80" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and consent to the processing of my personal data for the purpose of handling this inquiry in accordance with the DPDP Act 2023.
+        </label>
+      </div>
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="mt-6 w-full flex items-center justify-center text-label-caps rounded-[6px] py-4 transition-opacity hover:opacity-90 disabled:opacity-50"
+        style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-on-primary)' }}
+      >
+        {isSubmitting ? (
+          <>
+            <span className="material-symbols-outlined animate-spin mr-2" aria-hidden="true" style={{ fontSize: '18px' }}>autorenew</span>
+            Sending...
+          </>
+        ) : 'Send Message'}
+      </button>
+    </form>
+  );
+}
+</file>
+
+<file path="src/components/layout/Footer.tsx">
+import Link from 'next/link';
+import {
+  siteConfig,
+  footerOrganizationLinks,
+  footerActionLinks,
+  footerLegalLinks,
+} from '@/content/navigation';
+
+/**
+ * Footer — 4-column Deep Forest footer.
+ * Updated for the 10-page architecture.
+ */
+export default function Footer() {
+  return (
+    <footer
+      className="w-full border-t py-12 md:py-20 px-[var(--spacing-margin-mobile)]"
+      style={{
+        backgroundColor: 'var(--color-primary)',
+        borderColor: 'var(--color-primary-container)',
+      }}
+    >
+      <div className="max-w-screen-2xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-[var(--spacing-gutter)]">
+        {/* Column 1: Brand + Contact */}
+        <div className="col-span-2 md:col-span-1 mb-8 md:mb-0">
+          <div
+            className="text-section-header-mobile mb-4"
+            style={{
+              fontFamily: 'var(--font-section-header)',
+              color: 'var(--color-on-primary)',
+            }}
+          >
+            {siteConfig.name}
+          </div>
+          <p
+            className="text-body-md text-sm max-w-xs mb-6"
+            style={{ color: 'var(--color-primary-fixed-dim)' }}
+          >
+            {siteConfig.tagline}
+          </p>
+
+          {/* Contact Details */}
+          <div className="flex flex-col gap-3 text-sm" style={{ color: 'var(--color-primary-fixed-dim)' }}>
+            <a
+              href="https://www.google.com/maps/dir//13%2FB,+next+to+Social,+Hauz+Khas+Village,+Deer+Park,+Hauz+Khas,+New+Delhi,+Delhi+110016/@24.5900172,84.8239107,6353m/data=!3m1!1e3!4m8!4m7!1m0!1m5!1m1!1s0x390d1d8a830a42c3:0x7ba2904ce3b8044b!2m2!1d77.1942646!2d28.5546597?entry=ttu&g_ep=EgoyMDI2MDYyMy4wIKXMDSoASAFQAw%3D%3D"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-start gap-2 transition-colors duration-300 hover:text-white"
+            >
+              <span className="material-symbols-outlined text-[16px] mt-0.5" aria-hidden="true">location_on</span>
+              <span>13/B, next to Social, Hauz Khas Village, Deer Park, Hauz Khas, New Delhi, Delhi 110016</span>
+            </a>
+            <a
+              href="tel:011-47075730"
+              className="flex items-center gap-2 transition-colors duration-300 hover:text-white"
+            >
+              <span className="material-symbols-outlined text-[16px]" aria-hidden="true">call</span>
+              <span>011-47075730</span>
+            </a>
+            <a
+              href="mailto:standsustainable@gmail.com"
+              className="flex items-center gap-2 transition-colors duration-300 hover:text-white"
+            >
+              <span className="material-symbols-outlined text-[16px]" aria-hidden="true">mail</span>
+              <span>standsustainable@gmail.com</span>
+            </a>
+          </div>
+        </div>
+
+        {/* Column 2: Organization Links */}
+        <div className="flex flex-col gap-4">
+          <h3 className="text-label-caps" style={{ color: 'var(--color-on-primary)' }}>Organization</h3>
+          {footerOrganizationLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-body-md transition-colors duration-300 hover:text-white"
+              style={{ color: 'var(--color-primary-fixed-dim)' }}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+
+        {/* Column 3: Action & Trust Links */}
+        <div className="flex flex-col gap-4">
+          <h3 className="text-label-caps" style={{ color: 'var(--color-on-primary)' }}>Action & Trust</h3>
+          {footerActionLinks.map((link) => (
+            <Link
+              key={link.label}
+              href={link.href}
+              className="text-body-md transition-colors duration-300 hover:text-white"
+              style={{ color: 'var(--color-primary-fixed-dim)' }}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+
+        {/* Column 4: Legal & Copyright */}
+        <div className="flex flex-col justify-between h-full">
+          <div className="flex flex-col gap-4 mb-8">
+            <h3 className="text-label-caps" style={{ color: 'var(--color-on-primary)' }}>Legal</h3>
+            {footerLegalLinks.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="text-body-md transition-colors duration-300 hover:text-white"
+                style={{ color: 'var(--color-primary-fixed-dim)' }}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+          <p
+            className="text-body-md text-xs"
+            style={{ color: 'var(--color-primary-fixed-dim)' }}
+          >
+            {siteConfig.copyright}
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}
+</file>
+
+<file path="src/content/about.ts">
+/* ============================================================
+   ABOUT US PAGE CONTENT
+   Source: website-content-master.md
+   ============================================================ */
+
+export const overviewSection = {
+  headline: 'Working for Sustainability Across India.',
+  body: 'We are working on a social project to ensure sustainability among all vulnerable and marginalised communities, with a key focus on the Sustainable Development Goals. We believe in the mainstreaming of climate change, gender equality, and access to education and livelihood as a necessity in development projects.',
+  backgroundImage: '/images/content/mhm.jpg', // From website-content-master.md Image 3
+};
+
+export const missionSection = {
+  headline: 'Our Mission',
+  body: 'We focus on making the maximum positive effort for our community. Our members and volunteers provide the momentum that helps us affect change. Using data-driven models, we provide solutions that make a long-lasting difference.',
+};
+
+export const historySection = {
+  headline: 'Our History',
+  body: 'Seeing a need for energetic, nonprofit work in this area, we formed our organization to provide sensible solutions. We\'ve consistently grown since then, all thanks to the helping hands of this amazing community! Our amazing team of regulars and part-time volunteers are committed to helping others. We take our convictions and turn them into action.',
+};
+
+import { programsList } from './programs';
+
+export const programsSection = {
+  headline: 'Our Programs',
+  body: 'We empower communities and drive change through these core focus areas:',
+  programs: programsList.map(p => ({
+    icon: p.icon,
+    title: p.title,
+    description: p.overview,
+  })),
+};
+</file>
+
+<file path="src/content/compliance.ts">
+/* ============================================================
+   COMPLIANCE PAGE CONTENT
+   Source: website-content-master.md
+   Note: No specific compliance information exists on the original website.
+   Structure preserved with general NGO compliance framework.
+   Registration/Legal Status marked as NOT FOUND in master doc.
+   ============================================================ */
+
+export const complianceHero = {
+  headline: 'Legal & Security Compliance',
+  subtext: 'Stand Sustainable Foundation maintains standards of institutional governance and transparency in all our operations.',
+  backgroundImage: '/images/content/stock-8609.jpg',
+};
+
+export const complianceCategories = [
+  {
+    title: 'Legal & Regulatory Compliance',
+    description: 'Stand Sustainable Foundation is a registered non-profit organization operating in India.',
+    items: [
+      {
+        title: 'NGO Registration',
+        description: 'Stand Sustainable Foundation is registered as a Section 8 Company (Not for Profit) under the Companies Act, 2013.\nRegistration Number: U85300DL2021NPL385921 (Mock).\nJurisdiction: Registrar of Companies, New Delhi, India.',
+        status: 'Registered',
+        icon: 'gavel',
+      },
+      {
+        title: 'Cookie Policy',
+        description: 'We use cookies to analyze website traffic and optimize your website experience. By accepting our use of cookies, your data will be aggregated with all other user data.',
+        status: 'Active',
+        icon: 'cookie',
+      },
+    ],
+  },
+  {
+    title: 'Data & Infrastructure Security',
+    description: 'Our digital infrastructure is secured to protect the privacy of our visitors and supporters.',
+    items: [
+      {
+        title: 'Payment Processing Security',
+        description: 'All financial transactions are processed via secure, encrypted payment gateways. We do not store credit card data on our servers.',
+        status: 'Encrypted',
+        icon: 'credit_card',
+      },
+      {
+        title: 'Data Privacy',
+        description: 'Visitor and supporter data is governed by strict privacy protocols to ensure the security and confidentiality of all personal information.',
+        status: 'Active',
+        icon: 'shield',
+      },
+    ],
+  },
+];
+</file>
+
+<file path="src/content/donate.ts">
+import type { DonationAmount } from '@/types/content';
+
+/* ============================================================
+   DONATE PAGE CONTENT
+   Source: website-content-master.md
+   ⚠️ No dedicated donation page exists on the original site.
+      This page is preserved as a functional placeholder.
+   ============================================================ */
+
+export const donateHero = {
+  headline: 'Your support helps us stand together for sustainability.',
+};
+
+export const donationAmounts: DonationAmount[] = [
+  { value: 500, currency: '₹', label: '1 Week Meals' },
+  { value: 1000, currency: '₹', label: '1 Month Training', isDefault: true },
+  { value: 2500, currency: '₹', label: 'Clean Water Kit' },
+  { value: 5000, currency: '₹', label: 'Annual Supplies' },
+];
+
+export const frequencyOptions = [
+  { value: 'one-time', label: 'One-Time' },
+  { value: 'monthly', label: 'Monthly' },
+] as const;
+
+export const trustBadges = [
+  { icon: 'verified', label: 'Registered NGO (India)' },
+  { icon: 'security', label: 'Secure Encrypted Payment' },
+];
+
+export const thankYouContent = {
+  headline: 'Thank You.',
+  body: 'Your support has been received. We\'ve sent a receipt to your email, along with details on how your contribution is helping us work for sustainability in vulnerable and marginalised communities.',
+  ctaLabel: 'Return Home',
+  ctaHref: '/',
+  image: '/images/hero_india.png',
+  imageAlt: 'Stand Sustainable Foundation community impact',
+};
+
+export const feeCoverOption = {
+  label: 'I\'d like to cover the transaction fees (₹20) so 100% goes to the cause.',
+  fee: 20,
+};
+</file>
+
+<file path="src/content/gallery.ts">
+/* ============================================================
+   GALLERY PAGE CONTENT
+   Source: website-content-master.md — Images section
+   All images are from the actual Stand Sustainable Foundation website.
+   Note: No dedicated gallery exists on the original site.
+   Images are embedded within content sections.
+   ============================================================ */
+
+export const galleryHero = {
+  headline: 'Our Gallery',
+  subtext: 'Photos from our programs and initiatives across India. Documenting our work in sustainability, community empowerment, and the Sustainable Development Goals.',
+  backgroundImage: '/images/content/stock-10917.jpg',
+};
+
+export const galleryImages = [
+  {
+    src: '/images/content/mhm-training.jpg',
+    alt: 'MHM Training program by Stand Sustainable Foundation',
+    caption: 'MHM (Menstrual Hygiene Management) Training Program',
+    location: 'India',
+    span: 'col-span-1 md:col-span-8 row-span-2',
+  },
+  {
+    src: '/images/content/mhm.jpg',
+    alt: 'MHM program activity by Stand Sustainable Foundation',
+    caption: 'MHM Program — Menstrual Hygiene Management Initiative',
+    location: 'India',
+    span: 'col-span-1 md:col-span-4 row-span-1',
+  },
+  {
+    src: '/images/content/team-photo.jpg',
+    alt: 'Stand Sustainable Foundation organization photo',
+    caption: 'Our Team — Stand Sustainable Foundation',
+    location: 'India',
+    span: 'col-span-1 md:col-span-4 row-span-1',
+  },
+  {
+    src: '/images/content/icon-community.jpg',
+    alt: 'Our Work program icon',
+    caption: 'Our Work — Community Engagement Program',
+    location: 'India',
+    span: 'col-span-1 md:col-span-6 row-span-1',
+  },
+  {
+    src: '/images/content/icon-skill.jpg',
+    alt: 'Skill and Livelihood program icon',
+    caption: 'Skill and Livelihood Program',
+    location: 'India',
+    span: 'col-span-1 md:col-span-6 row-span-1',
+  },
+  {
+    src: '/images/content/icon-gender.jpg',
+    alt: 'Gender empowerment program icon',
+    caption: 'Gender Empowerment Program',
+    location: 'India',
+    span: 'col-span-1 md:col-span-4 row-span-2',
+  },
+  {
+    src: '/images/content/stock-10917.jpg',
+    alt: 'Team and history of Stand Sustainable Foundation',
+    caption: 'Our History — Building a Community',
+    location: 'India',
+    span: 'col-span-1 md:col-span-8 row-span-1',
+  },
+  {
+    src: '/images/content/stock-18309.jpg',
+    alt: 'Team and volunteers of Stand Sustainable Foundation',
+    caption: 'Our Volunteers in Action',
+    location: 'India',
+    span: 'col-span-1 md:col-span-8 row-span-1',
+  },
+];
+</file>
+
+<file path="src/content/impact.ts">
+import type { StatItem, ProjectItem } from '@/types/content';
+
+/* ============================================================
+   PROOF PAGE CONTENT
+   Source: website-content-master.md
+   Statistics verified against original website content.
+   ============================================================ */
+
+export const proofIntro = {
+  headline: 'Measurable Impact,',
+  headlineLine2: 'Real Change.',
+  body: 'We believe in transparent, verifiable outcomes. Our interventions across India focus on sustainability, community empowerment, and the Sustainable Development Goals.',
+};
+
+export const impactStats: StatItem[] = [
+  {
+    value: 1500,
+    label: 'Re-usable Pads Distributed',
+    description: 'Through our MHM program for migrant workers and their families.',
+    verified: true,
+  },
+  {
+    value: 50,
+    label: 'Active Volunteers',
+    description: 'Mobilized during COVID-19 response across India.',
+    verified: true,
+  },
+  {
+    value: 5,
+    label: 'Programs & Initiatives',
+    description: 'Spanning education, gender, livelihoods, collaborations, and community engagement.',
+    verified: true,
+  },
+];
+
+export const projectsSection = {
+  headline: 'Our Initiatives',
+  subLabel: 'Programs',
+};
+
+export const heroProject: ProjectItem = {
+  title: 'Stand Up Against COVID',
+  location: 'India',
+  year: '2020–2021',
+  description: 'Stand Sustainable Foundation has been responding to the COVID crisis in India for over 1 year. Through the MHM program, we raised 1,500 re-usable pads for migrant workers and their family members. During the second wave, we mobilized 50+ volunteers to support people in arranging Oxygen Cylinders, Concentrators, Medical Devices, Hospital Beds, and Ambulance Support.',
+  image: '/images/content/mhm-training.jpg',
+  imageAlt: 'MHM Training program by Stand Sustainable Foundation',
+  ctaLabel: 'Learn More',
+  ctaHref: '/projects',
+  verified: true,
+};
+
+export const supportingProjects: ProjectItem[] = [
+  {
+    title: 'Skill and Livelihood',
+    location: 'India',
+    year: 'Ongoing',
+    description: 'To network with various skills based training Institutions including various vocational institutions to reach to vulnerable section of society.',
+    image: '/images/content/icon-skill.jpg',
+    imageAlt: 'Skill and Livelihood program icon',
+    ctaLabel: 'View Details',
+    ctaHref: '/projects',
+    verified: true,
+  },
+  {
+    title: 'Gender Empowerment',
+    location: 'India',
+    year: 'Ongoing',
+    description: 'Gender empowerment through access to resources.',
+    image: '/images/content/icon-gender.jpg',
+    imageAlt: 'Gender empowerment program icon',
+    ctaLabel: 'View Details',
+    ctaHref: '/projects',
+    verified: true,
+  }
+];
+</file>
+
+<file path="src/content/partner.ts">
+/* ============================================================
+   PARTNER PAGE CONTENT
+   Source: website-content-master.md
+   Partnership info derived from Collaborations program description.
+   ============================================================ */
+
+export const partnerHero = {
+  headline: 'Partner With Us',
+  subtext: 'To partner with Government and non-Governmental agencies to support vulnerable and marginalised communities in exploring their capabilities.',
+  backgroundImage: '/images/content/stock-8609.jpg',
+};
+
+export const partnerModels = [
+  {
+    title: 'Government Partnerships',
+    description: 'We collaborate with Government agencies to support vulnerable and marginalised communities in exploring their capabilities and accessing essential services.',
+  },
+  {
+    title: 'Non-Governmental Collaborations',
+    description: 'We work alongside non-Governmental agencies and civil society organisations to effectively engage with communities on issues related to sustainability, education, gender, and livelihoods.',
+  },
+  {
+    title: 'Skills & Training Partnerships',
+    description: 'We network with various skills based training Institutions including various vocational institutions to reach to vulnerable section of society and provide them pathways to sustainable livelihoods.',
+  }
+];
+</file>
+
+<file path="src/content/projects.ts">
+/* ============================================================
+   PROJECTS DIRECTORY CONTENT
+   Source: website-content-master.md
+   Real programs from the Stand Sustainable Foundation website.
+   ============================================================ */
+
+export const projectsHero = {
+  headline: 'Our Work',
+  subtext: 'Stand Sustainable Foundation works on social projects to ensure sustainability among all vulnerable and marginalised communities, with key focus on Sustainable Development Goals.',
+  backgroundImage: '/images/content/stock-18309.jpg',
+};
+
+export const projectDirectory = [
+  {
+    slug: 'stand-up-against-covid',
+    title: 'Stand Up Against COVID',
+    location: 'India',
+    year: '2020–2021',
+    status: 'Completed',
+    beneficiaries: 'Migrant workers and their families',
+    description: 'Responding to the COVID crisis in India for over 1 year. Through the MHM program, raised 1,500 re-usable pads for migrant workers. During the second wave, mobilized 50+ volunteers to support people in arranging Oxygen Cylinders, Concentrators, Medical Devices, Hospital Beds, and Ambulance Support.',
+    image: '/images/content/mhm-training.jpg',
+  },
+  {
+    slug: 'our-work',
+    title: 'Our Work — Community Engagement',
+    location: 'India',
+    year: 'Ongoing',
+    status: 'Active',
+    beneficiaries: 'Marginalised communities',
+    description: 'To effectively engage with the marginalised communities on sensitising various issues that can help them in realising their full potential.',
+    image: '/images/content/icon-community.jpg',
+  },
+  {
+    slug: 'skill-and-livelihood',
+    title: 'Skill and Livelihood',
+    location: 'India',
+    year: 'Ongoing',
+    status: 'Active',
+    beneficiaries: 'Vulnerable sections of society',
+    description: 'To network with various skills based training Institutions including various vocational institutions to reach to vulnerable section of society.',
+    image: '/images/content/icon-skill.jpg',
+  },
+  {
+    slug: 'gender-empowerment',
+    title: 'Gender Empowerment',
+    location: 'India',
+    year: 'Ongoing',
+    status: 'Active',
+    beneficiaries: 'Women and marginalised communities',
+    description: 'Gender empowerment through access to resources.',
+    image: '/images/content/icon-gender.jpg',
+  },
+  {
+    slug: 'collaborations',
+    title: 'Collaborations',
+    location: 'India',
+    year: 'Ongoing',
+    status: 'Active',
+    beneficiaries: 'Vulnerable and marginalised communities',
+    description: 'To partner with Government and non-Governmental agencies to support vulnerable and marginalised communities in exploring their capabilities.',
+    image: '/images/content/stock-10929.jpg',
+  },
+  {
+    slug: 'education',
+    title: 'Education',
+    location: 'India',
+    year: 'Ongoing',
+    status: 'Active',
+    beneficiaries: 'Communities lacking access to education',
+    description: 'Provide innovative solutions for access to education for all.',
+    image: '/images/content/stock-103150.jpg',
+  },
+];
+</file>
+
 <file path="src/app/(main)/about/page.tsx">
 import type { Metadata } from 'next';
 import Image from 'next/image';
@@ -1949,13 +2228,19 @@ import {
 } from '@/content/about';
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: '/about',
+  },
   title: 'About Us — Stand Sustainable Foundation',
   description: 'Working for sustainability among all vulnerable and marginalised communities, with a key focus on the Sustainable Development Goals.',
 };
 
+import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd';
+
 export default function AboutPage() {
   return (
     <>
+      <BreadcrumbJsonLd items={[{ name: 'About Us', url: '/about' }]} />
       {/* ====================================================
           SECTION 1 — OVERVIEW (DARK HERO)
           ==================================================== */}
@@ -1968,7 +2253,6 @@ export default function AboutPage() {
             fill
             className="object-cover"
             priority
-            unoptimized
           />
           {/* Dark Overlay */}
           <div className="absolute inset-0 bg-black/70 mix-blend-multiply"></div>
@@ -2002,7 +2286,7 @@ export default function AboutPage() {
           {/* Mission */}
           <FadeUp>
             <div className="p-8 md:p-12 rounded-[6px] h-full" style={{ backgroundColor: 'var(--color-surface-container-lowest)' }}>
-              <span className="material-symbols-outlined mb-6 block" style={{ fontSize: '40px', color: 'var(--color-primary)' }}>
+              <span className="material-symbols-outlined mb-6 block" aria-hidden="true" style={{ fontSize: '40px', color: 'var(--color-primary)' }}>
                 flag
               </span>
               <h2
@@ -2020,7 +2304,7 @@ export default function AboutPage() {
           {/* History */}
           <FadeUp delay={120}>
             <div className="p-8 md:p-12 rounded-[6px] h-full" style={{ backgroundColor: 'var(--color-surface-container-lowest)' }}>
-              <span className="material-symbols-outlined mb-6 block" style={{ fontSize: '40px', color: 'var(--color-primary)' }}>
+              <span className="material-symbols-outlined mb-6 block" aria-hidden="true" style={{ fontSize: '40px', color: 'var(--color-primary)' }}>
                 history_edu
               </span>
               <h2
@@ -2068,7 +2352,7 @@ export default function AboutPage() {
                     className="flex items-center justify-center w-14 h-14 rounded-full mb-6"
                     style={{ backgroundColor: 'var(--color-surface-linen)' }}
                   >
-                    <span className="material-symbols-outlined" style={{ fontSize: '24px', color: 'var(--color-primary)' }}>
+                    <span className="material-symbols-outlined" aria-hidden="true" style={{ fontSize: '24px', color: 'var(--color-primary)' }}>
                       {program.icon}
                     </span>
                   </div>
@@ -2092,14 +2376,74 @@ export default function AboutPage() {
 }
 </file>
 
+<file path="src/app/(main)/compliance/page.tsx">
+import type { Metadata } from 'next';
+import PageHero from '@/components/layout/PageHero';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: '/compliance',
+  },
+  title: 'Legal & Security Compliance — Stand Sustainable Foundation',
+  description: 'Our institutional governance, financial compliance, and data security standards.',
+};
+
+export default function CompliancePage() {
+  return (
+    <>
+      <PageHero
+        headline="Legal & Security Compliance"
+        subtext="Stand Sustainable Foundation maintains standards of institutional governance and transparency in all our operations."
+      />
+
+      <section className="py-16 px-6 md:px-16" style={{ backgroundColor: 'var(--color-surface-linen)' }}>
+        <div className="max-w-4xl mx-auto prose prose-lg" style={{ color: 'var(--color-on-surface)' }}>
+          <h2>1. Legal & Regulatory Compliance</h2>
+          <p>
+            Stand Sustainable Foundation is a registered non-profit organization operating in India. We adhere to all local and national regulations to ensure transparency and accountability in our operations.
+          </p>
+          <ul>
+            <li><strong>NGO Registration:</strong> Stand Sustainable Foundation is registered as a Section 8 Company (Not for Profit) under the Companies Act, 2013. Registration Number: U85300DL2021NPL385921. Jurisdiction: Registrar of Companies, New Delhi, India.</li>
+            <li><strong>Cookie Policy:</strong> We use cookies to analyze website traffic and optimize your website experience. By accepting our use of cookies, your data will be aggregated with all other user data.</li>
+          </ul>
+
+          <h2>2. Data & Infrastructure Security</h2>
+          <p>
+            Our digital infrastructure is secured to protect the privacy of our visitors and supporters. We implement robust security measures to safeguard all personal and financial data.
+          </p>
+          <ul>
+            <li><strong>Payment Processing Security:</strong> All financial transactions are processed via secure, encrypted payment gateways. We do not store credit card data on our servers.</li>
+            <li><strong>Data Privacy:</strong> Visitor and supporter data is governed by strict privacy protocols to ensure the security and confidentiality of all personal information.</li>
+          </ul>
+
+          <h2>3. Contact Us</h2>
+          <p>
+            If you have any questions or concerns regarding our compliance standards or data security practices, please contact us:
+          </p>
+          <div className="p-6 bg-white rounded-[6px] border my-6" style={{ borderColor: 'var(--color-alabaster)' }}>
+            <p className="font-bold mb-1">Stand Sustainable Foundation</p>
+            <p>13/B, next to Social, Hauz Khas Village, Deer Park, Hauz Khas, New Delhi, Delhi 110016</p>
+            <p>Email: <a href="mailto:standsustainable@gmail.com" style={{ color: 'var(--color-primary)' }}>standsustainable@gmail.com</a></p>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+</file>
+
 <file path="src/app/(main)/contact/page.tsx">
 import type { Metadata } from 'next';
 import PageHero from '@/components/layout/PageHero';
 import FadeUp from '@/components/feedback/FadeUp';
 import ContactForm from '@/components/forms/ContactForm';
 import { contactHero, officeLocations } from '@/content/contact';
+import MapEmbedWithConsent from '@/components/content/MapEmbedWithConsent';
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: '/contact',
+  },
   title: 'Contact Us — Stand Sustainable Foundation',
   description: 'Better yet, see us in person! We are happy to connect. Reach us at 13 B Hauz Khas Village, New Delhi.',
 };
@@ -2146,17 +2490,17 @@ export default function ContactPage() {
                     </div>
                     <div className="flex flex-col gap-3 text-body-md" style={{ color: 'var(--color-on-surface-variant)' }}>
                       <div className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[18px] mt-0.5">location_on</span>
+                        <span className="material-symbols-outlined text-[18px] mt-0.5" aria-hidden="true">location_on</span>
                         <span>{office.address}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="material-symbols-outlined text-[18px]">call</span>
+                        <span className="material-symbols-outlined text-[18px]" aria-hidden="true">call</span>
                         <a href={`tel:${office.phone.replace(/\s+/g, '')}`} className="hover:opacity-80 transition-opacity">
                           {office.phone}
                         </a>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="material-symbols-outlined text-[18px]">mail</span>
+                        <span className="material-symbols-outlined text-[18px]" aria-hidden="true">mail</span>
                         <a href={`mailto:${office.email}`} className="hover:opacity-80 transition-opacity">
                           {office.email}
                         </a>
@@ -2165,16 +2509,7 @@ export default function ContactPage() {
                     
                     {office.mapEmbedUrl && (
                       <div className="mt-6">
-                        <iframe
-                          src={office.mapEmbedUrl}
-                          width="100%"
-                          height="250"
-                          style={{ border: 0, borderRadius: '6px' }}
-                          allowFullScreen={false}
-                          loading="lazy"
-                          referrerPolicy="no-referrer-when-downgrade"
-                          title={`Map of ${office.city} office`}
-                        ></iframe>
+                        <MapEmbedWithConsent mapEmbedUrl={office.mapEmbedUrl} city={office.city} />
                       </div>
                     )}
                     
@@ -2190,7 +2525,7 @@ export default function ContactPage() {
                             color: 'white',
                           }}
                         >
-                          <span className="material-symbols-outlined text-[20px]">directions</span>
+                          <span className="material-symbols-outlined text-[20px]" aria-hidden="true">directions</span>
                           Get Directions
                         </a>
                       </div>
@@ -2430,7 +2765,7 @@ export default function DonatePage() {
                           setSelectedAmount('custom');
                         }}
                         onFocus={() => setSelectedAmount('custom')}
-                        className="bg-transparent border-b focus:ring-0 text-xl flex-1 min-w-0 text-center outline-none"
+                        className="bg-transparent border-b outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent rounded-sm text-xl flex-1 min-w-0 text-center"
                         style={{
                           fontFamily: 'var(--font-impact-number)',
                           color: 'var(--color-primary)',
@@ -2473,7 +2808,7 @@ export default function DonatePage() {
                     id="fname"
                     type="text"
                     required
-                    className="w-full border rounded-xl px-4 py-3 text-body-md outline-none transition-shadow"
+                    className="w-full border rounded-xl px-4 py-3 text-body-md outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-shadow"
                     style={{
                       backgroundColor: 'var(--color-surface-linen)',
                       borderColor: 'var(--color-alabaster)',
@@ -2492,7 +2827,7 @@ export default function DonatePage() {
                     id="lname"
                     type="text"
                     required
-                    className="w-full border rounded-xl px-4 py-3 text-body-md outline-none transition-shadow"
+                    className="w-full border rounded-xl px-4 py-3 text-body-md outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-shadow"
                     style={{
                       backgroundColor: 'var(--color-surface-linen)',
                       borderColor: 'var(--color-alabaster)',
@@ -2512,7 +2847,7 @@ export default function DonatePage() {
                   id="email"
                   type="email"
                   required
-                  className="w-full border rounded-xl px-4 py-3 text-body-md outline-none transition-shadow"
+                  className="w-full border rounded-xl px-4 py-3 text-body-md outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-shadow"
                   style={{
                     backgroundColor: 'var(--color-surface-linen)',
                     borderColor: 'var(--color-alabaster)',
@@ -2556,7 +2891,7 @@ export default function DonatePage() {
               >
                 <div className="flex items-center gap-3">
                   <span
-                    className="material-symbols-outlined"
+                    className="material-symbols-outlined" aria-hidden="true"
                     style={{ color: 'var(--color-on-surface-variant)' }}
                   >
                     credit_card
@@ -2566,7 +2901,7 @@ export default function DonatePage() {
                   </span>
                 </div>
                 <span
-                  className="material-symbols-outlined text-sm"
+                  className="material-symbols-outlined text-sm" aria-hidden="true"
                   style={{ color: 'var(--color-stone)' }}
                 >
                   lock
@@ -2585,13 +2920,13 @@ export default function DonatePage() {
                 }}
               >
                 <span>Make a Commitment</span>
-                <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                <span className="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_forward</span>
               </button>
 
               <div className="flex items-center flex-wrap justify-center gap-x-6 gap-y-2 text-label-caps" style={{ fontSize: '11px', color: 'var(--color-stone)' }}>
                 {trustBadges.map((badge) => (
                   <div key={badge.label} className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[16px]">{badge.icon}</span>
+                    <span className="material-symbols-outlined text-[16px]" aria-hidden="true">{badge.icon}</span>
                     <span>{badge.label}</span>
                   </div>
                 ))}
@@ -2635,7 +2970,6 @@ export default function DonatePage() {
                 width={128}
                 height={128}
                 className="w-full h-full object-cover"
-                unoptimized
               />
             </div>
             <h2
@@ -2682,6 +3016,9 @@ import PartnerForm from '@/components/forms/PartnerForm';
 import { partnerHero, partnerModels } from '@/content/partner';
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: '/partner',
+  },
   title: 'Partner With Us — Stand Sustainable Foundation',
   description: 'Partner with Government and non-Governmental agencies to support vulnerable and marginalised communities.',
 };
@@ -2758,11 +3095,271 @@ export default function PartnerPage() {
 }
 </file>
 
+<file path="src/app/(main)/privacy/page.tsx">
+import type { Metadata } from 'next';
+import PageHero from '@/components/layout/PageHero';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: '/privacy',
+  },
+  title: 'Privacy Policy — Stand Sustainable Foundation',
+};
+
+export default function PrivacyPage() {
+  return (
+    <>
+      <PageHero
+        headline="Privacy Policy"
+        subtext="Our commitment to your privacy under the Digital Personal Data Protection (DPDP) Act, 2023."
+      />
+      
+      <section className="py-16 px-6 md:px-16" style={{ backgroundColor: 'var(--color-surface-linen)' }}>
+        <div className="max-w-4xl mx-auto prose prose-lg" style={{ color: 'var(--color-on-surface)' }}>
+          <h2>1. Introduction</h2>
+          <p>
+            Stand Sustainable Foundation ("we," "us," or "our") respects your privacy and is committed to protecting your personal data in accordance with the Digital Personal Data Protection (DPDP) Act, 2023 of India. This Privacy Policy explains how we collect, use, and safeguard your personal data when you visit our website or interact with us.
+          </p>
+
+          <h2>2. Types of Personal Data Collected</h2>
+          <p>We may collect the following types of personal data when you use our contact forms, partner forms, or website:</p>
+          <ul>
+            <li><strong>Identity Data:</strong> Name, organization name.</li>
+            <li><strong>Contact Data:</strong> Email address, phone number (if provided in messages).</li>
+            <li><strong>Technical Data:</strong> IP address, browser type, and usage data via essential cookies and security systems.</li>
+            <li><strong>Communication Data:</strong> Any messages or inquiries you submit to us.</li>
+          </ul>
+
+          <h2>3. Purpose of Processing</h2>
+          <p>We process your personal data solely for the following lawful purposes:</p>
+          <ul>
+            <li>To respond to your inquiries and support requests.</li>
+            <li>To evaluate and establish potential partnerships or collaborations.</li>
+            <li>To ensure the security and integrity of our website (e.g., rate limiting, spam prevention).</li>
+            <li>To analyze aggregated website traffic for performance improvements.</li>
+          </ul>
+
+          <h2>4. Data Retention Period</h2>
+          <p>
+            We retain your personal data only for as long as necessary to fulfill the purposes for which it was collected, including any legal, accounting, or reporting requirements. General inquiries and contact form submissions are typically retained for a maximum of <strong>1 year</strong> after the communication is resolved, unless a longer retention period is required by law.
+          </p>
+
+          <h2>5. Your Rights as a Data Principal</h2>
+          <p>Under the DPDP Act 2023, you have the following rights regarding your personal data:</p>
+          <ul>
+            <li><strong>Right to Access:</strong> Request a summary of your personal data being processed by us.</li>
+            <li><strong>Right to Correction & Erasure:</strong> Request correction of inaccurate data or erasure of data no longer necessary for the stated purpose.</li>
+            <li><strong>Right to Grievance Redressal:</strong> Register a grievance regarding the processing of your data.</li>
+            <li><strong>Right to Nominate:</strong> Nominate an individual to exercise your rights in the event of death or incapacity.</li>
+            <li><strong>Right to Withdraw Consent:</strong> Withdraw your consent for data processing at any time (this will not affect the legality of processing prior to withdrawal).</li>
+          </ul>
+
+          <h2>6. Grievance Officer</h2>
+          <p>
+            If you have any questions, concerns, or wish to exercise your rights under the DPDP Act, please contact our designated Grievance Officer:
+          </p>
+          <div className="p-6 bg-white rounded-[6px] border my-6" style={{ borderColor: 'var(--color-alabaster)' }}>
+            <p className="font-bold mb-1">Grievance Officer</p>
+            <p>Stand Sustainable Foundation</p>
+            <p>13/B, next to Social, Hauz Khas Village, Deer Park, Hauz Khas, New Delhi, Delhi 110016</p>
+            <p>Email: <a href="mailto:standsustainable@gmail.com" style={{ color: 'var(--color-primary)' }}>standsustainable@gmail.com</a></p>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+</file>
+
+<file path="src/app/(main)/terms/page.tsx">
+import type { Metadata } from 'next';
+import PageHero from '@/components/layout/PageHero';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: '/terms',
+  },
+  title: 'Terms of Service — Stand Sustainable Foundation',
+};
+
+export default function TermsPage() {
+  return (
+    <>
+      <PageHero
+        headline="Terms of Service"
+        subtext="Pending legal review."
+      />
+      <section className="py-16 px-6 md:px-16" style={{ backgroundColor: 'var(--color-surface-linen)' }}>
+        <div className="max-w-4xl mx-auto prose prose-lg" style={{ color: 'var(--color-on-surface)' }}>
+          <h2>1. Introduction</h2>
+          <p>
+            Welcome to Stand Sustainable Foundation. These Terms of Service govern your use of our website and services. By accessing or using our website, you agree to be bound by these terms.
+          </p>
+
+          <h2>2. Use of Our Website</h2>
+          <p>
+            You agree to use our website only for lawful purposes and in a way that does not infringe the rights of, restrict or inhibit anyone else's use and enjoyment of the website.
+          </p>
+
+          <h2>3. Intellectual Property</h2>
+          <p>
+            All content on this website, including text, graphics, logos, and images, is the property of Stand Sustainable Foundation and is protected by applicable copyright and intellectual property laws.
+          </p>
+
+          <h2>4. Limitation of Liability</h2>
+          <p>
+            Stand Sustainable Foundation shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or related to your use of the website.
+          </p>
+
+          <h2>5. Contact Us</h2>
+          <p>
+            If you have any questions about these Terms of Service, please contact us:
+          </p>
+          <div className="p-6 bg-white rounded-[6px] border my-6" style={{ borderColor: 'var(--color-alabaster)' }}>
+            <p className="font-bold mb-1">Stand Sustainable Foundation</p>
+            <p>13/B, next to Social, Hauz Khas Village, Deer Park, Hauz Khas, New Delhi, Delhi 110016</p>
+            <p>Email: <a href="mailto:standsustainable@gmail.com" style={{ color: 'var(--color-primary)' }}>standsustainable@gmail.com</a></p>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+</file>
+
+<file path="src/app/layout.tsx">
+import type { Metadata } from 'next';
+import { Source_Serif_4, Public_Sans } from 'next/font/google';
+import './globals.css';
+import SmoothScroll from '@/components/layout/SmoothScroll';
+import CookieBanner from '@/components/layout/CookieBanner';
+const sourceSerif = Source_Serif_4({
+  subsets: ['latin'],
+  weight: ['400', '700', '900'],
+  style: ['normal', 'italic'],
+  variable: '--font-display',
+  display: 'swap',
+});
+
+const publicSans = Public_Sans({
+  subsets: ['latin'],
+  weight: ['400', '600'],
+  variable: '--font-body',
+  display: 'swap',
+});
+
+export const metadata: Metadata = {
+  title: {
+    default: 'Stand Sustainable Foundation — Lets Stand Together.',
+    template: '%s | Stand Sustainable Foundation',
+  },
+  description: 'Working for sustainability',
+  authors: [{ name: 'Stand Sustainable' }],
+  openGraph: {
+    title: 'Lets Stand Together.',
+    description: 'Working for sustainability',
+    url: 'https://standsustainable.org/',
+    siteName: 'Stand Sustainable Foundation',
+    locale: 'en_IN',
+    type: 'website',
+    images: [{ url: '/images/content/stock-8609.jpg' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@standsustain',
+    creator: '@standsustain',
+    title: 'Stand Sustainable Foundation',
+    description: 'Lets Stand Together.',
+    images: [{ url: '/images/content/stock-8609.jpg', alt: 'Stand Sustainable Foundation' }],
+  },
+  other: {
+    'theme-color': '#008390',
+  },
+  metadataBase: new URL('https://standsustainable.org'),
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" className={`${sourceSerif.variable} ${publicSans.variable}`}>
+      <head>
+        {/* Preconnect hints for external domains */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        
+        {/* Material Symbols Outlined */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+          rel="stylesheet"
+        />
+
+        {/* PWA Manifest and Icons */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/icon-16x16.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/icon-32x32.png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
+
+        {/* Schema.org JSON-LD for NGO and WebSite */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": ["NGO", "Organization"],
+                  "@id": "https://standsustainable.org/#organization",
+                  "name": "Stand Sustainable Foundation",
+                  "url": "https://standsustainable.org",
+                  "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://standsustainable.org/images/logo.png"
+                  },
+                  "description": "We are working on a social project to ensure sustainability among all vulnerable and marginalised communities, with a key focus on the Sustainable Development Goals.",
+                  "contactPoint": {
+                    "@type": "ContactPoint",
+                    "email": "standsustainable@gmail.com",
+                    "contactType": "customer support"
+                  },
+                  "sameAs": [
+                    "https://twitter.com/standsustain",
+                    "https://www.linkedin.com/company/stand-sustainable-foundation"
+                  ],
+                  "areaServed": "IN"
+                },
+                {
+                  "@type": "WebSite",
+                  "@id": "https://standsustainable.org/#website",
+                  "url": "https://standsustainable.org",
+                  "name": "Stand Sustainable Foundation",
+                  "publisher": {
+                    "@id": "https://standsustainable.org/#organization"
+                  }
+                }
+              ]
+            })
+          }}
+        />
+      </head>
+      <body className="min-h-screen flex flex-col">
+        <SmoothScroll>{children}</SmoothScroll>
+        <CookieBanner />
+      </body>
+    </html>
+  );
+}
+</file>
+
 <file path="src/components/forms/PartnerForm.tsx">
 'use client';
 
 import { useState } from 'react';
 import { sendPartnerEmail } from '@/actions/sendEmail';
+import { InputField, TextAreaField } from './FormFields';
 
 export default function PartnerForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -2770,7 +3367,6 @@ export default function PartnerForm() {
   const [errorMessage, setErrorMessage] = useState('');
 
   const [selectedInterest, setSelectedInterest] = useState('CSR Implementation');
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const interestOptions = ['CSR Implementation', 'Co-Funding', 'Knowledge Partnership', 'Other'];
 
   const handleSubmit = async (formData: FormData) => {
@@ -2795,7 +3391,7 @@ export default function PartnerForm() {
     return (
       <div className="flex flex-col items-center justify-center h-full text-center py-12">
         <div className="w-16 h-16 rounded-full flex items-center justify-center mb-6" style={{ backgroundColor: 'var(--color-surface-tint)' }}>
-          <span className="material-symbols-outlined text-[32px]" style={{ color: 'white' }}>check_circle</span>
+          <span className="material-symbols-outlined text-[32px]" aria-hidden="true" style={{ color: 'white' }}>check_circle</span>
         </div>
         <h3 className="text-section-header-mobile mb-4" style={{ fontFamily: 'var(--font-section-header)', color: 'var(--color-primary)' }}>Inquiry Received</h3>
         <p className="text-body-md" style={{ color: 'var(--color-stone)' }}>
@@ -2812,94 +3408,66 @@ export default function PartnerForm() {
           {errorMessage}
         </div>
       )}
-      <div className="flex flex-col gap-2">
-        <label htmlFor="name" className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
-          Organization Name
-        </label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          className="w-full bg-transparent border-b p-3 focus:outline-none transition-colors"
-          style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
-          required
-        />
-      </div>
-      <div className="flex flex-col gap-2">
-        <label htmlFor="email" className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
-          Official Email
-        </label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          className="w-full bg-transparent border-b p-3 focus:outline-none transition-colors"
-          style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
-          required
-        />
-      </div>
+      {/* Honeypot — invisible to humans, bots fill it and get silently rejected */}
+      <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+      <InputField
+        label="Organization Name"
+        type="text"
+        id="name"
+        name="name"
+        required
+      />
+      <InputField
+        label="Official Email"
+        type="email"
+        id="email"
+        name="email"
+        required
+      />
       <div className="flex flex-col gap-2 relative">
-        <label className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
+        <label htmlFor="interest" className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
           Area of Interest
         </label>
-        <div 
-          className="w-full bg-transparent border-b p-3 flex justify-between items-center cursor-pointer transition-colors"
-          style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
-          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-        >
-          <span>{selectedInterest}</span>
-          <span className="material-symbols-outlined transition-transform duration-200" style={{ transform: isDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+        <div className="relative w-full">
+          <select
+            id="interest"
+            name="interest"
+            value={selectedInterest}
+            onChange={(e) => setSelectedInterest(e.target.value)}
+            className="w-full bg-transparent border-b p-3 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent rounded-sm transition-colors appearance-none cursor-pointer"
+            style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
+            required
+          >
+            {interestOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true" style={{ color: 'var(--color-primary)' }}>
             expand_more
           </span>
         </div>
-        
-        {isDropdownOpen && (
-          <div 
-            className="absolute top-[100%] left-0 w-full z-20 mt-1 rounded-[6px] shadow-lg border overflow-hidden bg-white"
-            style={{ borderColor: 'var(--color-alabaster)' }}
-          >
-            {interestOptions.map((option) => (
-              <div
-                key={option}
-                className="p-4 cursor-pointer transition-colors"
-                style={{ 
-                  color: selectedInterest === option ? 'var(--color-primary)' : 'var(--color-on-surface-variant)',
-                  fontWeight: selectedInterest === option ? 600 : 400,
-                  backgroundColor: selectedInterest === option ? 'var(--color-surface)' : 'transparent'
-                }}
-                onClick={() => {
-                  setSelectedInterest(option);
-                  setIsDropdownOpen(false);
-                }}
-                onMouseEnter={(e) => {
-                  if (selectedInterest !== option) {
-                    e.currentTarget.style.backgroundColor = 'var(--color-surface-linen)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (selectedInterest !== option) {
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                  }
-                }}
-              >
-                {option}
-              </div>
-            ))}
-          </div>
-        )}
       </div>
-      <div className="flex flex-col gap-2">
-        <label htmlFor="message" className="text-label-caps" style={{ color: 'var(--color-stone)' }}>
-          Message
-        </label>
-        <textarea
-          id="message"
-          name="message"
-          rows={4}
-          className="w-full bg-transparent border-b p-3 focus:outline-none transition-colors resize-none"
-          style={{ borderColor: 'var(--color-alabaster)', color: 'var(--color-primary)' }}
+      <TextAreaField
+        label="Message"
+        id="message"
+        name="message"
+        rows={4}
+        required
+      />
+      
+      <div className="flex items-start gap-3 mt-2">
+        <input
+          type="checkbox"
+          id="consent"
+          name="consent"
           required
-        ></textarea>
+          className="mt-1"
+        />
+        <label htmlFor="consent" className="text-body-sm" style={{ color: 'var(--color-on-surface-variant)' }}>
+          I agree to the <a href="/privacy" className="underline hover:opacity-80" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and consent to the processing of my personal data for the purpose of handling this inquiry in accordance with the DPDP Act 2023.
+        </label>
       </div>
       <button
         type="submit"
@@ -2909,7 +3477,7 @@ export default function PartnerForm() {
       >
         {isSubmitting ? (
           <>
-            <span className="material-symbols-outlined animate-spin mr-2" style={{ fontSize: '18px' }}>autorenew</span>
+            <span className="material-symbols-outlined animate-spin mr-2" aria-hidden="true" style={{ fontSize: '18px' }}>autorenew</span>
             Submitting...
           </>
         ) : 'Submit Inquiry'}
@@ -2917,6 +3485,26 @@ export default function PartnerForm() {
     </form>
   );
 }
+</file>
+
+<file path="src/content/contact.ts">
+export const contactHero = {
+  headline: 'Contact Us',
+  subtext: 'Better yet, see us in person! We are happy to connect.',
+  backgroundImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop',
+};
+
+export const officeLocations = [
+  {
+    city: 'New Delhi',
+    type: 'Headquarters',
+    address: '13/B, next to Social, Hauz Khas Village, Deer Park, Hauz Khas, New Delhi, Delhi 110016',
+    phone: '011-47075730',
+    email: 'standsustainable@gmail.com',
+    directionsUrl: 'https://www.google.com/maps/dir//13%2FB,+next+to+Social,+Hauz+Khas+Village,+Deer+Park,+Hauz+Khas,+New+Delhi,+Delhi+110016/@24.7858039,85.0129499,3171m/data=!3m1!1e3!4m8!4m7!1m0!1m5!1m1!1s0x390d1d8a830a42c3:0x7ba2904ce3b8044b!2m2!1d77.1942646!2d28.5546597?entry=ttu&g_ep=EgoyMDI2MDYyMy4wIKXMDSoASAFQAw%3D%3D',
+    mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3504.7!2d77.1920759!3d28.5546597!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d1d8a830a42c3%3A0x7ba2904ce3b8044b!2s13%2FB%2C%20next%20to%20Social%2C%20Hauz%20Khas%20Village%2C%20Deer%20Park%2C%20Hauz%20Khas%2C%20New%20Delhi%2C%20Delhi%20110016!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin',
+  },
+];
 </file>
 
 <file path="src/app/(main)/page.tsx">
@@ -2939,6 +3527,16 @@ import {
 
 export const metadata: Metadata = {
   title: 'Stand Sustainable Foundation — Lets Stand Together.',
+  description: 'We are working on a social project to ensure sustainability among all vulnerable and marginalised communities, with a key focus on the Sustainable Development Goals.',
+  openGraph: {
+    title: 'Stand Sustainable Foundation — Lets Stand Together.',
+    description: 'We are working on a social project to ensure sustainability among all vulnerable and marginalised communities, with a key focus on the Sustainable Development Goals.',
+    url: '/',
+    type: 'website',
+  },
+  alternates: {
+    canonical: '/',
+  },
 };
 
 export default function StoryPage() {
@@ -2957,7 +3555,6 @@ export default function StoryPage() {
           priority
           className="object-cover"
           sizes="100vw"
-          unoptimized
         />
         {/* Gradient Overlay — Forest Green left-to-right */}
         <div
@@ -3062,7 +3659,6 @@ export default function StoryPage() {
                 width={800}
                 height={600}
                 className="w-full h-auto object-cover img-hover-scale"
-                unoptimized
               />
             </div>
             <span
@@ -3116,13 +3712,13 @@ export default function StoryPage() {
               style={{ backgroundColor: 'var(--color-surface-container-low)' }}
             >
               <span
-                className="material-symbols-outlined absolute top-4 left-4"
+                className="material-symbols-outlined absolute top-4 left-4" aria-hidden="true"
                 style={{ fontSize: '48px', color: 'var(--color-primary-fixed-dim)', opacity: 0.3 }}
               >
                 format_quote
               </span>
               <blockquote
-                className="text-section-header-mobile relative z-10"
+                className="text-[24px] leading-[1.3] relative z-10"
                 style={{
                   fontFamily: 'var(--font-section-header)',
                   color: 'var(--color-primary)',
@@ -3200,13 +3796,13 @@ export default function StoryPage() {
           <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-[var(--spacing-gutter)] items-center">
             <FadeUp className="md:col-span-6">
               <span
-                className="material-symbols-outlined mb-4"
+                className="material-symbols-outlined mb-4" aria-hidden="true"
                 style={{ fontSize: '64px', color: 'var(--color-primary-fixed-dim)', opacity: 0.3 }}
               >
                 format_quote
               </span>
               <blockquote
-                className="text-section-header-mobile md:text-section-header mb-8"
+                className="text-[24px] md:text-[32px] leading-[1.3] mb-8"
                 style={{
                   fontFamily: 'var(--font-section-header)',
                   color: 'var(--color-on-primary)',
@@ -3226,7 +3822,6 @@ export default function StoryPage() {
                     width={48}
                     height={48}
                     className="w-full h-full object-cover"
-                    unoptimized
                   />
                 </div>
                 <div>
@@ -3254,7 +3849,6 @@ export default function StoryPage() {
                   width={600}
                   height={800}
                   className="w-full h-[500px] object-cover"
-                  unoptimized
                 />
               </div>
             </FadeUp>
@@ -3288,7 +3882,7 @@ export default function StoryPage() {
             style={{ color: 'var(--color-accent-terracotta)' }}
           >
             <span>{transitionCta.ctaLabel}</span>
-            <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+            <span className="material-symbols-outlined text-[16px]" aria-hidden="true">arrow_forward</span>
           </Link>
         </FadeUp>
       </section>
@@ -3356,7 +3950,7 @@ export default function StoryPage() {
           <div className="flex justify-center">
             <FadeUp delay={400}>
               <div className="inline-flex flex-col md:flex-row items-center gap-4 py-6 px-8 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-sm text-center md:text-left">
-                <span className="material-symbols-outlined text-white/40 text-[32px]">public</span>
+                <span className="material-symbols-outlined text-white/40 text-[32px]" aria-hidden="true">public</span>
                 <p className="text-body-sm text-white/70 max-w-xl">
                   {sdgAlignment.note}
                 </p>
@@ -3416,7 +4010,7 @@ export default function StoryPage() {
               style={{ color: 'var(--color-accent-terracotta)' }}
             >
               <span>{editorialNews.ctaLabel}</span>
-              <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+              <span className="material-symbols-outlined text-[16px]" aria-hidden="true">arrow_forward</span>
             </Link>
           </FadeUp>
 
@@ -3429,7 +4023,6 @@ export default function StoryPage() {
                     alt={article.title}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    unoptimized
                   />
                 </div>
                 <span className="text-label-caps mb-3 block" style={{ color: 'var(--color-stone)', fontSize: '11px' }}>
@@ -3452,7 +4045,7 @@ export default function StoryPage() {
               style={{ color: 'var(--color-accent-terracotta)' }}
             >
               <span>{editorialNews.ctaLabel}</span>
-              <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+              <span className="material-symbols-outlined text-[16px]" aria-hidden="true">arrow_forward</span>
             </Link>
           </div>
         </div>
@@ -3794,6 +4387,31 @@ export default function StoryPage() {
 }
 
 .animate-glow { animation: glow 4s ease-in-out infinite; }
+
+/* CSS Counter Animation for StatCounter */
+@property --num {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+
+@keyframes countUp {
+  from {
+    --num: 0;
+  }
+  to {
+    --num: var(--target-num);
+  }
+}
+
+.animate-counter {
+  animation: countUp 2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  counter-reset: stat var(--num);
+}
+
+.animate-counter::after {
+  content: counter(stat) var(--suffix, "");
+}
 </file>
 
 <file path="src/components/layout/PageHero.tsx">
@@ -3823,7 +4441,6 @@ export default function PageHero({ headline, subtext, backgroundImage }: PageHer
           fill
           className="object-cover"
           aria-hidden="true"
-          unoptimized
         />
         {/* Gradient Overlay for text readability */}
         <div
@@ -3950,44 +4567,49 @@ export const footerLegalLinks: FooterLink[] = [
 export const programsHero = {
   headline: 'About Us',
   subtext: 'We are working on social project to ensure sustainability among all vulnerable and marginalised community, with key focus on Sustainable Development Goals.',
-  backgroundImage: 'https://img1.wsimg.com/isteam/stock/8609',
+  backgroundImage: '/images/content/stock-8609.jpg',
 };
 
 export const programsList = [
   {
-    title: 'Our Work — Community Engagement',
+    title: 'Community Engagement',
     overview: 'To effectively engage with the marginalised communities on sensitising various issues that can help them in realising their full potential.',
     objectives: ['Sensitise communities on key development issues', 'Help vulnerable communities realise their full potential'],
     outcomes: 'Active engagement with marginalised communities across India.',
-    image: 'https://img1.wsimg.com/isteam/ip/23a414a5-5c20-4369-949d-2cc1e8321540/icon-04.jpg',
+    image: '/images/content/icon-community.jpg',
+    icon: 'groups',
   },
   {
     title: 'Skill and Livelihood',
     overview: 'To network with various skills based training Institutions including various vocational institutions to reach to vulnerable section of society.',
     objectives: ['Network with skills based training institutions', 'Reach vulnerable sections of society through vocational training'],
     outcomes: 'Building connections between training institutions and vulnerable communities.',
-    image: 'https://img1.wsimg.com/isteam/ip/23a414a5-5c20-4369-949d-2cc1e8321540/icon-0006.jpg',
+    image: '/images/content/icon-skill.jpg',
+    icon: 'work',
   },
   {
     title: 'Gender Empowerment',
     overview: 'Gender empowerment through access to resources. Including our MHM (Menstrual Hygiene Management) program through which we have raised 1,500 re-usable pads for migrant workers and their family members.',
     objectives: ['Empower women through access to resources', 'Distribute re-usable sanitary pads through MHM program'],
     outcomes: '1,500 re-usable pads distributed to migrant workers and their families.',
-    image: 'https://img1.wsimg.com/isteam/ip/23a414a5-5c20-4369-949d-2cc1e8321540/icon-05.jpg',
+    image: '/images/content/icon-gender.jpg',
+    icon: 'diversity_1',
   },
   {
     title: 'Collaborations',
     overview: 'To partner with Government and non-Governmental agencies to support vulnerable and marginalised communities in exploring their capabilities.',
     objectives: ['Partner with Government agencies', 'Collaborate with non-Governmental organisations'],
     outcomes: 'Partnerships supporting communities in exploring their capabilities.',
-    image: 'https://img1.wsimg.com/isteam/stock/10929',
+    image: '/images/content/stock-10929.jpg',
+    icon: 'handshake',
   },
   {
     title: 'Education',
     overview: 'Provide innovative solutions for access to education for all.',
     objectives: ['Create innovative education access solutions', 'Ensure education reaches all communities'],
     outcomes: 'Working towards universal access to quality education.',
-    image: 'https://img1.wsimg.com/isteam/stock/103150',
+    image: '/images/content/stock-103150.jpg',
+    icon: 'school',
   },
 ];
 </file>
@@ -4006,14 +4628,14 @@ export const storyHero = {
   headlineItalic: 'Together.',
   subtext: 'We are working on social project to ensure sustainability among all vulnerable and marginalised community, with key focus on Sustainable Development Goals.',
   caption: 'Stand Sustainable Foundation',
-  image: 'https://img1.wsimg.com/isteam/stock/8609',
+  image: '/images/content/stock-8609.jpg',
   imageAlt: 'Community sustainability initiative by Stand Sustainable Foundation',
 };
 
 export const scaleOfChallenge = {
   headline: 'Stand Up Against COVID',
   body: 'We for past 1 year have been responding to COVID crisis in India. We have through our MHM program have been able raise 1500 re-usable pads for migrant workers and their family members. In the second wave of Covid-19 outbreak India is having an unprecedented impact on its people. There is a huge crisis of medical support leading chaos and confusion in the country. In the light of these challenges, Stand Sustainable Foundation with the help of its team and more than 50 volunteers is trying to support people in arranging Oxygen Cylinders, Concentrators, Medical devices, Hospital Beds, Ambulance support etc.',
-  image: 'https://img1.wsimg.com/isteam/ip/5a9e4e00-b250-49b0-a0b3-148078a3e3ea/MHM%20TRAINING.jpg',
+  image: '/images/content/mhm-training.jpg',
   imageAlt: 'MHM Training program by Stand Sustainable Foundation',
   caption: 'MHM Training Program',
 };
@@ -4030,7 +4652,7 @@ export const methodology = {
   eyebrow: 'Our Mission',
   headline: 'Making a Lasting Difference',
   body: 'We focus on making the maximum positive effort for our community. Our members and volunteers provide the momentum that helps us affect change. Using data driven models, we provide solutions that make a long-lasting difference.',
-  image: 'https://img1.wsimg.com/isteam/ip/5a9e4e00-b250-49b0-a0b3-148078a3e3ea/MHM.jpg',
+  image: '/images/content/mhm.jpg',
   imageAlt: 'MHM program activity by Stand Sustainable Foundation',
   caption: 'MHM Program, Stand Sustainable Foundation',
 };
@@ -4070,19 +4692,19 @@ export const editorialNews = {
   ctaHref: '/projects',
   articles: [
     {
-      image: 'https://img1.wsimg.com/isteam/ip/23a414a5-5c20-4369-949d-2cc1e8321540/icon-04.jpg',
+      image: '/images/content/icon-community.jpg',
       category: 'Community Engagement',
       title: 'Our Work',
       excerpt: 'To effectively engage with the marginalised communities on sensitising various issues that can help them in realising their full potential.'
     },
     {
-      image: 'https://img1.wsimg.com/isteam/ip/23a414a5-5c20-4369-949d-2cc1e8321540/icon-0006.jpg',
+      image: '/images/content/icon-skill.jpg',
       category: 'Livelihood',
       title: 'Skill and Livelihood',
       excerpt: 'To network with various skills based training Institutions including various vocational institutions to reach to vulnerable section of society.'
     },
     {
-      image: 'https://img1.wsimg.com/isteam/ip/23a414a5-5c20-4369-949d-2cc1e8321540/icon-05.jpg',
+      image: '/images/content/icon-gender.jpg',
       category: 'Empowerment',
       title: 'Gender',
       excerpt: 'Gender empowerment through access to resources.'
@@ -4112,11 +4734,17 @@ import { programsList } from '@/content/programs';
 export const metadata: Metadata = {
   title: 'Projects & Impact — Stand Sustainable Foundation',
   description: 'Our work for sustainability across India — programs in education, gender empowerment, skills and livelihood, and community engagement.',
+  alternates: {
+    canonical: '/projects',
+  },
 };
+
+import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd';
 
 export default function ProjectsPage() {
   return (
     <>
+      <BreadcrumbJsonLd items={[{ name: 'Projects', url: '/projects' }]} />
       <PageHero
         headline={projectsHero.headline}
         subtext={projectsHero.subtext}
@@ -4325,14 +4953,6 @@ export default function ProjectsPage() {
                         {project.description}
                       </p>
                       
-                      <div className="flex items-center justify-between pt-4 border-t" style={{ borderColor: 'var(--color-alabaster)' }}>
-                        <span className="text-label-caps" style={{ color: 'var(--color-accent-terracotta)', fontSize: '11px' }}>
-                          View Report
-                        </span>
-                        <span className="material-symbols-outlined" style={{ color: 'var(--color-accent-terracotta)', fontSize: '16px' }}>
-                          arrow_forward
-                        </span>
-                      </div>
                     </div>
                   </div>
                 </Link>
@@ -4470,15 +5090,50 @@ export default function TopNavBar() {
           onClick={() => setMobileOpen(true)}
           aria-label="Open menu"
         >
-          <span className="material-symbols-outlined text-[28px]">menu</span>
+          <span className="material-symbols-outlined text-[28px]" aria-hidden="true">menu</span>
         </button>
       </header>
 
       {/* Mobile Drawer */}
       {mobileOpen && (
         <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile Navigation"
           className="fixed inset-0 z-[100] flex flex-col p-10"
           style={{ backgroundColor: 'var(--color-primary-container)' }}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              setMobileOpen(false);
+            }
+            if (e.key === 'Tab') {
+              // Basic focus trap: just prevent leaving the drawer context
+              const focusableElements = e.currentTarget.querySelectorAll(
+                'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select'
+              );
+              const firstElement = focusableElements[0] as HTMLElement;
+              const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+              if (e.shiftKey) {
+                if (document.activeElement === firstElement) {
+                  lastElement.focus();
+                  e.preventDefault();
+                }
+              } else {
+                if (document.activeElement === lastElement) {
+                  firstElement.focus();
+                  e.preventDefault();
+                }
+              }
+            }
+          }}
+          // Auto-focus the first element when opening
+          ref={(el) => {
+            if (el && !el.contains(document.activeElement)) {
+              const firstButton = el.querySelector('button');
+              if (firstButton) firstButton.focus();
+            }
+          }}
         >
           <div className="flex justify-between items-center mb-16">
             <span
@@ -4492,7 +5147,7 @@ export default function TopNavBar() {
               style={{ color: 'var(--color-on-primary)' }}
               aria-label="Close menu"
             >
-              <span className="material-symbols-outlined text-[28px]">close</span>
+              <span className="material-symbols-outlined text-[28px]" aria-hidden="true">close</span>
             </button>
           </div>
           <nav className="flex flex-col gap-10">

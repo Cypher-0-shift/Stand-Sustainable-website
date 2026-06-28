@@ -1,13 +1,4 @@
 # Stand Sustainable Foundation — robots.txt
-# https://www.robotstxt.org/
-
 User-agent: *
 Allow: /
-
-# Prevent indexing of utility / non-content pages
-Disallow: /compliance/
-Disallow: /privacy/
-Disallow: /terms/
-
-# Sitemap
 Sitemap: https://standsustainable.org/sitemap.xml

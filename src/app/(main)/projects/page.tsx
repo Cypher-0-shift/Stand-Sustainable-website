@@ -7,6 +7,7 @@ import StatCounter from '@/components/content/StatCounter';
 import { projectsHero, projectDirectory } from '@/content/projects';
 import { proofIntro, impactStats, projectsSection, heroProject, supportingProjects } from '@/content/impact';
 import { programsList } from '@/content/programs';
+import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd';
 
 export const metadata: Metadata = {
   title: 'Projects & Impact — Stand Sustainable Foundation',
@@ -16,7 +17,6 @@ export const metadata: Metadata = {
   },
 };
 
-import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd';
 
 export default function ProjectsPage() {
   return (
@@ -186,14 +186,16 @@ export default function ProjectsPage() {
       </section>
 
       {/* ====================================================
-          SECTION 3 — ALL PROJECTS DIRECTORY
+          SECTION 4 — ALL PROJECTS DIRECTORY
           ==================================================== */}
       <section className="py-16 md:py-24 px-6 md:px-16" style={{ backgroundColor: 'var(--color-surface-linen)' }}>
         <div className="max-w-screen-2xl mx-auto">
+          {/* TODO: Create src/app/(main)/projects/[slug]/page.tsx dynamic route 
+              before replacing these links with per-project pages */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[var(--spacing-gutter)]">
             {projectDirectory.map((project, index) => (
               <FadeUp key={project.slug} delay={index * 120}>
-                <Link href={`/projects/${project.slug}`} className="block group h-full">
+                <Link href="/projects" className="block group h-full">
                   <div
                     className="flex flex-col h-full rounded-[6px] overflow-hidden ambient-shadow transition-transform duration-300 group-hover:-translate-y-1"
                     style={{ backgroundColor: 'var(--color-surface)' }}

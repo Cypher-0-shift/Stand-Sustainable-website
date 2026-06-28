@@ -17,14 +17,14 @@ export default function BreadcrumbJsonLd({ items }: BreadcrumbJsonLdProps) {
       "@type": "ListItem",
       "position": index + 1,
       "name": item.name,
-      "item": `https://standsustainable.org${item.url}`
+      "item": `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://standsustainable.org'}${item.url}`
     }))
   };
 
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026') }}
     />
   );
 }

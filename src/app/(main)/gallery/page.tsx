@@ -3,6 +3,7 @@ import Image from 'next/image';
 import PageHero from '@/components/layout/PageHero';
 import FadeUp from '@/components/feedback/FadeUp';
 import { galleryHero, galleryImages } from '@/content/gallery';
+import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd';
 
 export const metadata: Metadata = {
   alternates: {
@@ -12,7 +13,6 @@ export const metadata: Metadata = {
   description: 'Photos from our programs and initiatives across India, documenting our work in sustainability and community empowerment.',
 };
 
-import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd';
 
 export default function GalleryPage() {
   return (

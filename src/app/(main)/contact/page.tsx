@@ -4,6 +4,7 @@ import FadeUp from '@/components/feedback/FadeUp';
 import ContactForm from '@/components/forms/ContactForm';
 import { contactHero, officeLocations } from '@/content/contact';
 import MapEmbedWithConsent from '@/components/content/MapEmbedWithConsent';
+import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd';
 
 export const metadata: Metadata = {
   alternates: {
@@ -11,11 +12,16 @@ export const metadata: Metadata = {
   },
   title: 'Contact Us — Stand Sustainable Foundation',
   description: 'Better yet, see us in person! We are happy to connect. Reach us at 13 B Hauz Khas Village, New Delhi.',
+  other: {
+    'link-preconnect-maps': 'https://maps.googleapis.com',
+    'link-preconnect-static': 'https://maps.gstatic.com',
+  },
 };
 
 export default function ContactPage() {
   return (
     <>
+      <BreadcrumbJsonLd items={[{ name: 'Contact', url: '/contact' }]} />
       <PageHero
         headline={contactHero.headline}
         subtext={contactHero.subtext}
@@ -74,6 +80,9 @@ export default function ContactPage() {
                     
                     {office.mapEmbedUrl && (
                       <div className="mt-6">
+                        {/* TODO: Add <link rel="preconnect" href="https://maps.googleapis.com" /> 
+                            and <link rel="preconnect" href="https://maps.gstatic.com" crossOrigin="anonymous" />
+                            in layout.tsx or via middleware if Google Maps performance is a concern. */}
                         <MapEmbedWithConsent mapEmbedUrl={office.mapEmbedUrl} city={office.city} />
                       </div>
                     )}
